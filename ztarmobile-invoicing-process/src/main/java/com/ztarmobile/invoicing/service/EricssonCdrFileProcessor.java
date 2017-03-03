@@ -9,8 +9,6 @@ package com.ztarmobile.invoicing.service;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 import static java.util.Calendar.DAY_OF_MONTH;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -79,24 +77,6 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      * {@inheritDoc}
      */
     @Override
-    protected FilenameFilter createFileNameFilter() {
-        return new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                // valid ericsson files.
-                if (name.endsWith(FILE_EXT)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String getSourceDirectoryCdrFile() {
         return sourceEricssonCdrs;
     }
@@ -107,5 +87,21 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
     @Override
     protected String getTargetDirectoryCdrFile() {
         return targetEricssonCdrs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void incrementFrecuency(Calendar calendarNow) {
+        calendarNow.add(DAY_OF_MONTH, 1); // files are dropped every day.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isFileCompressed() {
+        return true;
     }
 }

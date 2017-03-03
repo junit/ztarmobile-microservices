@@ -7,9 +7,8 @@
 package com.ztarmobile.invoicing.service;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmFormat;
+import static java.util.Calendar.MONTH;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -70,31 +69,32 @@ public class SprintCdrFileProcessor extends AbstractCdrFileProcessor {
      * {@inheritDoc}
      */
     @Override
-    protected FilenameFilter createFileNameFilter() {
-        return new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                // valid sprint files.
-                if (name.endsWith(FILE_EXT)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
+    protected String getSourceDirectoryCdrFile() {
+        return sourceSprintCdrs;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String getSourceDirectoryCdrFile() {
-        return sourceSprintCdrs;
-    }
-
-    @Override
     protected String getTargetDirectoryCdrFile() {
         return targetSprintCdrs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void incrementFrecuency(Calendar calendarNow) {
+        calendarNow.add(MONTH, 1); // files are dropped every month.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isFileCompressed() {
+        return false;
     }
 
 }

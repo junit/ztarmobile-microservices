@@ -6,12 +6,12 @@
  */
 package com.ztarmobile.invoicing.service;
 
-import static com.ztarmobile.invoicing.common.CommonUtils.getMaximumDayOfMonth;
-import static com.ztarmobile.invoicing.common.CommonUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.LAST_HOUR;
 import static com.ztarmobile.invoicing.common.DateUtils.LAST_MIN_SEC;
+import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;

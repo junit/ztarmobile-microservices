@@ -6,14 +6,17 @@
  */
 package com.ztarmobile.invoicing.service;
 
-import static com.ztarmobile.invoicing.common.CommonUtils.getMaximumDayOfMonth;
-import static com.ztarmobile.invoicing.common.CommonUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
+import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.FileUtils.copy;
+import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
 import static java.util.Calendar.MONTH;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -105,15 +108,69 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
         if (!(file.exists() && file.isDirectory())) {
             invalidInput("Cannot proceed further..., the ericsson directory cannot be read: " + file);
         }
+        log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = calendarStart;
         String expectedFileName = null;
-        for (File currentFile : file.listFiles(createFileNameFilter())) {
-            log.debug(currentFile);
+        File[] files = file.listFiles(createFileNameFilter());
+        Arrays.sort(files); // make sure the files are ordered lexicographically
+
+        boolean foundFileInRange = false;
+        for (File currentFile : files) {
+            // the expected file name ...
             expectedFileName = getExpectedFileName(calendarNow);
-            log.debug(expectedFileName);
-            // ztar-711_data_dump_20170221_20170223.txt
+
+            if (expectedFileName.equals(currentFile.getName())) {
+                foundFileInRange = true;
+            } else {
+                if (foundFileInRange) {
+                    // the process can't continue because a file is missing...
+                    invalidInput("This file could not be found: " + getSourceDirectoryCdrFile() + File.separator
+                            + expectedFileName);
+                }
+            }
+
+            if (foundFileInRange) {
+                // process currentFile
+                extractCurrentFile(currentFile);
+                incrementFrecuency(calendarNow);
+                if (calendarNow.after(calendarEnd)) {
+                    // no more files to process, the process is done
+                    break;
+                }
+            }
         }
+    }
+
+    /**
+     * Now, we proceed to extract the file...
+     * 
+     * @param currentFile
+     *            The current file.
+     */
+    private void extractCurrentFile(File currentFile) {
+        log.info("==> The following file will be extracted... " + currentFile);
+        // copy the current file into the extracted directory
+        File targetFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
+        copy(currentFile, targetFile);
+        if (isFileCompressed()) {
+            // ungzip it
+            gunzipIt(targetFile);
+        }
+    }
+
+    /**
+     * Creates the file name filter.
+     * 
+     * @return The file name filter.
+     */
+    private FilenameFilter createFileNameFilter() {
+        return new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(getFileExtension());
+            }
+        };
     }
 
     /**
@@ -133,13 +190,6 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
     protected abstract String getExpectedFileName(Calendar calendarNow);
 
     /**
-     * Creates the file name filter.
-     * 
-     * @return The file name filter.
-     */
-    protected abstract FilenameFilter createFileNameFilter();
-
-    /**
      * Gets the source directory where the cdrs files are located.
      * 
      * @return The directory of the cdrs source files.
@@ -152,4 +202,19 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
      * @return The directory of the cdrs target files.
      */
     protected abstract String getTargetDirectoryCdrFile();
+
+    /**
+     * Increments the frecuency of the calendar based on the type of file.
+     * 
+     * @param calendarNow
+     *            The calendar.
+     */
+    protected abstract void incrementFrecuency(Calendar calendarNow);
+
+    /**
+     * Indicates whether the source file is compressed or not.
+     * 
+     * @return true, it's compressed, false it's not.
+     */
+    protected abstract boolean isFileCompressed();
 }

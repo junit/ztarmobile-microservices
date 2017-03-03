@@ -6,11 +6,6 @@
  */
 package com.ztarmobile.invoicing.common;
 
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-
-import java.util.Calendar;
-
 /**
  * Utility to handle some common operations.
  *
@@ -117,33 +112,4 @@ public class CommonUtils {
         return elements;
     }
 
-    /**
-     * This method returns the first day of a month passed in the arguments.
-     * 
-     * @param month
-     *            A month.
-     * @return The first day of a month.
-     * @see CommonUtils#getMaximumDayOfMonth(int)
-     */
-    public static Calendar getMinimunDayOfMonth(int month) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(MONTH, month);
-        calendar.set(DAY_OF_MONTH, calendar.getActualMinimum(DAY_OF_MONTH));
-        return calendar;
-    }
-
-    /**
-     * This method returns the last day of a month passed in the arguments.
-     * 
-     * @param month
-     *            A month.
-     * @return The last day of a month.
-     * @see CommonUtils#getMinimunDayOfMonth(int)
-     */
-    public static Calendar getMaximumDayOfMonth(int month) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(MONTH, month);
-        calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(DAY_OF_MONTH));
-        return calendar;
-    }
 }

@@ -7,17 +7,16 @@
 package com.ztarmobile.invoicing.dao;
 
 import com.ztarmobile.invoicing.service.CdrFileProcessorService;
-import java.util.Calendar;
-
+import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ztarmobile.invoicing.service.ResellerAllocationsService;
-import org.springframework.beans.factory.annotation.Qualifier;
+import java.util.Calendar;
 
 /**
  *
@@ -36,22 +35,23 @@ public class SampleDaoTest {
     @Autowired
     private ResellerAllocationsService resellerAllocationsService;
 
-    //@Qualifier(value = "ericssonCdrFileProcessor")
-    @Qualifier(value = "sprintCdrFileProcessor")
+    @Qualifier(value = "ericssonCdrFileProcessor")
+    //@Qualifier(value = "sprintCdrFileProcessor")
     @Autowired
     private CdrFileProcessorService cdrFileProcessorService;
     
     @Test
     public void some() {
         Calendar c1 = Calendar.getInstance();
-        c1.set(2017, 0, 1);
+        c1.set(2016, 10, 1);
         Calendar c2 = Calendar.getInstance();
-        c2.set(2017, 0, 1);
+        c2.set(2017, 1, 1);
         //resellerAllocationsService.createAllocations(c1.getTime(), c2.getTime(), "REALMOBILE");
         //resellerAllocationsService.createAllocations(Calendar.FEBRUARY, "REALMOBILE");
         //resellerAllocationsService.createAllocations(Calendar.JANUARY, Calendar.MARCH, "REALMOBILE");
         //resellerAllocationsService.createAllocations("REALMOBILE");
         //resellerAllocationsService.createAllocations("");
-        cdrFileProcessorService.extractCdrs();
+        //cdrFileProcessorService.extractCdrs();
+        cdrFileProcessorService.extractCdrs(c1, c2);
     }
 }
