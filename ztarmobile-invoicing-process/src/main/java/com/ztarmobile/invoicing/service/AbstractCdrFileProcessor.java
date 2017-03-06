@@ -130,8 +130,8 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
             } else {
                 if (foundFileInRange) {
                     // the process can't continue because a file is missing...
-                    invalidInput("This file could not be found: " + getSourceDirectoryCdrFile() + File.separator
-                            + expectedFileName);
+                    String fileNotFound = getSourceDirectoryCdrFile() + File.separator + expectedFileName;
+                    invalidInput("This file could not be found: " + fileNotFound);
                 }
             }
 
