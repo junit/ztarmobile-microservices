@@ -9,6 +9,7 @@ package com.ztarmobile.invoicing.service;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 import static java.util.Calendar.DAY_OF_MONTH;
 
+import java.io.File;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -31,6 +32,10 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      * The file extension.
      */
     public static final String FILE_EXT = ".txt.gz";
+    /**
+     * The file starts with...
+     */
+    final String PREFIX_FILE_NAME = "ztar-711_data_dump_";
     /**
      * Reference to the directory of the Ericsson cdrs.
      */
@@ -64,7 +69,7 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
 
         String endDateString = fromDateToYYYYmmddFormat(calendarNext.getTime());
 
-        sb.append("ztar-711_data_dump_");
+        sb.append(PREFIX_FILE_NAME);
         sb.append(initDateString);
         sb.append("_");
         sb.append(endDateString);
@@ -103,5 +108,23 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
     @Override
     protected boolean isFileCompressed() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getSortedFileName(String originalFileName) {
+        String[] parts = originalFileName.split("_");
+        String callDataFileName = parts[3] + "_call_adj_data_dump.txt.sorted";
+        return callDataFileName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getSortShellExpression(File fileTobeSorted) {
+        return "egrep '^C' " + fileTobeSorted + " | LC_ALL=C sort -t \"|\" -k 3,3n -k 12,12n";
     }
 }

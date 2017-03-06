@@ -9,6 +9,7 @@ package com.ztarmobile.invoicing.service;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmFormat;
 import static java.util.Calendar.MONTH;
 
+import java.io.File;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -95,6 +96,23 @@ public class SprintCdrFileProcessor extends AbstractCdrFileProcessor {
     @Override
     protected boolean isFileCompressed() {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getSortedFileName(String originalFileName) {
+        return originalFileName + ".sorted";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getSortShellExpression(File fileTobeSorted) {
+        // sort the file by phn_num, and call date.
+        return "sort -t \"|\" -k 5,5n -k 6,6n " + fileTobeSorted;
     }
 
 }

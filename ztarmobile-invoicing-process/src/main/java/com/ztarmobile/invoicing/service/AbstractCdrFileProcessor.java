@@ -11,6 +11,7 @@ import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.FileUtils.copy;
+import static com.ztarmobile.invoicing.common.FileUtils.executeShellCommand;
 import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
 import static java.util.Calendar.MONTH;
 
@@ -33,6 +34,10 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
      * Logger for this class
      */
     private static final Logger log = Logger.getLogger(AbstractCdrFileProcessor.class);
+    /**
+     * The standard file extension.
+     */
+    public static final String STANDARD_FILE_EXT = ".txt";
 
     /**
      * {@inheritDoc}
@@ -155,8 +160,57 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
         copy(currentFile, targetFile);
         if (isFileCompressed()) {
             // ungzip it
-            gunzipIt(targetFile);
+            targetFile = gunzipIt(targetFile);
         }
+        // targetFile is the name of the file after it has been decompressed
+        File processedFile = sortFile(targetFile);
+        log.debug("Extracted file: " + processedFile);
+
+        // we cleanup the files we dont need.
+        if (isFileCompressed()) {
+            File compressedFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
+            if (compressedFile.exists()) {
+                compressedFile.delete();
+            }
+        }
+        if (targetFile.exists()) {
+            targetFile.delete();
+        }
+
+        // make sure that the resulting file has a valid extension like .txt
+        String processedFileName = processedFile.getName();
+        if (!processedFileName.endsWith(STANDARD_FILE_EXT)) {
+            if (processedFileName.contains(STANDARD_FILE_EXT)) {
+                int index = processedFileName.indexOf(STANDARD_FILE_EXT);
+                String finalFileName = processedFileName.substring(0, index + STANDARD_FILE_EXT.length());
+                File finalName = new File(processedFile.getParentFile(), finalFileName);
+                processedFile.renameTo(finalName);
+                log.debug("Final file: " + finalName);
+            }
+        }
+    }
+
+    /**
+     * Sort the existing content of the file depending on business rules.
+     * 
+     * @param file
+     *            The file to be sorted.
+     * @return The resulting location of the file.
+     */
+    private File sortFile(File file) {
+        // the file after it has been sorted.
+        File expectedFileName = new File(file.getParentFile(), getSortedFileName(file.getName()));
+
+        StringBuilder sb = new StringBuilder(getSortShellExpression(file));
+        sb.append(" ");
+        sb.append(">");
+        sb.append(" ");
+        sb.append(expectedFileName);
+
+        log.debug("Executing command: " + sb.toString());
+        // executes the shell expression to sort the file
+        executeShellCommand(sb.toString());
+        return expectedFileName;
     }
 
     /**
@@ -217,4 +271,23 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
      * @return true, it's compressed, false it's not.
      */
     protected abstract boolean isFileCompressed();
+
+    /**
+     * Gets the name of the sorted file name.
+     * 
+     * @param originalFileName
+     *            The original name.
+     * @return The sorted file name.
+     */
+    protected abstract String getSortedFileName(String originalFileName);
+
+    /**
+     * Gets the shell expression based on the file to be sorted.
+     * 
+     * @param fileTobeSorted
+     *            The sorted file.
+     * @return The shell expression.
+     */
+    protected abstract String getSortShellExpression(File fileTobeSorted);
+
 }

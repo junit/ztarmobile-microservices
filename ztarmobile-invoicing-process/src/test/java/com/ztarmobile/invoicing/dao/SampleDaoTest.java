@@ -35,15 +35,15 @@ public class SampleDaoTest {
     @Autowired
     private ResellerAllocationsService resellerAllocationsService;
 
-    @Qualifier(value = "ericssonCdrFileProcessor")
-    //@Qualifier(value = "sprintCdrFileProcessor")
+    //@Qualifier(value = "ericssonCdrFileProcessor")
+    @Qualifier(value = "sprintCdrFileProcessor")
     @Autowired
     private CdrFileProcessorService cdrFileProcessorService;
     
     @Test
     public void some() {
         Calendar c1 = Calendar.getInstance();
-        c1.set(2016, 10, 1);
+        c1.set(2017, 1, 1);
         Calendar c2 = Calendar.getInstance();
         c2.set(2017, 1, 1);
         //resellerAllocationsService.createAllocations(c1.getTime(), c2.getTime(), "REALMOBILE");

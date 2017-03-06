@@ -8,11 +8,13 @@ package com.ztarmobile.invoicing.common;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -66,14 +68,17 @@ public class FileUtils {
      * 
      * @param file
      *            The file to be gunzip it.
+     * @return The file after it has been uncompressed.
      */
-    public static void gunzipIt(File file) {
+    public static File gunzipIt(File file) {
         byte[] buffer = new byte[1024];
         FileOutputStream out = null;
         GZIPInputStream gzis = null;
+        // file without .gz extension...
+        File resultingFile = new File(file.toString().substring(0, file.toString().length() - 3));
         try {
             gzis = new GZIPInputStream(new FileInputStream(file));
-            out = new FileOutputStream(file.toString().substring(0, file.toString().length() - 3));
+            out = new FileOutputStream(resultingFile);
 
             int len;
             while ((len = gzis.read(buffer)) > 0) {
@@ -85,6 +90,48 @@ public class FileUtils {
         } finally {
             close(gzis);
             close(out);
+        }
+        return resultingFile;
+    }
+
+    /**
+     * Executes a shell command.
+     * 
+     * @param commandExpression
+     *            The command expression to be executed.
+     */
+    public static void executeShellCommand(String commandExpression) {
+        try {
+            Runtime rt = Runtime.getRuntime();
+            String[] cmd = { "/bin/sh", "-c", commandExpression };
+            Process proc = rt.exec(cmd);
+            printStream(proc.getInputStream(), false);
+            printStream(proc.getErrorStream(), true);
+        } catch (Exception ex) {
+            invalidInput("Can't execute the shell command due to: " + ex);
+        }
+    }
+
+    /**
+     * Prints the input stream.
+     * 
+     * @param inputStream
+     *            The input stream.
+     * @param isError
+     *            true, prints the log error, otherwise the info level.
+     */
+    private static void printStream(InputStream inputStream, boolean isError) {
+        try (BufferedReader is = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = is.readLine()) != null) {
+                if (isError) {
+                    log.error(line);
+                } else {
+                    log.info(line);
+                }
+            }
+        } catch (IOException ex) {
+            invalidInput("Can't stream due to: " + ex);
         }
     }
 
