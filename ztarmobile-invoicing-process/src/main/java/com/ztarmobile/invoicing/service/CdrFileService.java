@@ -15,7 +15,7 @@ import java.util.Date;
  * @author armandorivas
  * @since 03/02/17
  */
-public interface CdrFileProcessorService {
+public interface CdrFileService {
     /**
      * This method extracts from the source the cdrs and move them into the
      * target directory.

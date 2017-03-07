@@ -6,8 +6,8 @@
  */
 package com.ztarmobile.invoicing.service;
 
-import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
-import static java.util.Calendar.DAY_OF_MONTH;
+import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmFormat;
+import static java.util.Calendar.MONTH;
 
 import java.io.File;
 import java.util.Calendar;
@@ -17,35 +17,31 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * Ericsson implementation to handle the files for the cdrs.
+ * Sprint implementation to handle the files for the cdrs.
  *
  * @author armandorivas
  * @since 03/02/17
  */
 @Service
-public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
+public class SprintCdrFileService extends AbstractCdrFileService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(EricssonCdrFileProcessor.class);
+    private static final Logger log = Logger.getLogger(SprintCdrFileService.class);
     /**
      * The file extension.
      */
-    public static final String FILE_EXT = ".txt.gz";
+    public static final String FILE_EXT = ".txt";
     /**
-     * The file starts with...
+     * Reference to the directory of the Sprint cdrs.
      */
-    final String PREFIX_FILE_NAME = "ztar-711_data_dump_";
+    @Value("${cdrs.source.sprint.dir}")
+    private String sourceSprintCdrs;
     /**
-     * Reference to the directory of the Ericsson cdrs.
+     * Reference to the extracted directory of the Sprint cdrs.
      */
-    @Value("${cdrs.source.ericsson.dir}")
-    private String sourceEricssonCdrs;
-    /**
-     * Reference to the extracted directory of the Ericsson cdrs.
-     */
-    @Value("${cdrs.extracted.ericsson.dir}")
-    private String targetEricssonCdrs;
+    @Value("${cdrs.extracted.sprint.dir}")
+    private String targetSprintCdrs;
 
     /**
      * {@inheritDoc}
@@ -61,18 +57,10 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
     @Override
     protected String getExpectedFileName(Calendar calendarNow) {
         StringBuilder sb = new StringBuilder();
-        String initDateString = fromDateToYYYYmmddFormat(calendarNow.getTime());
+        String dateString = fromDateToYYYYmmFormat(calendarNow.getTime());
 
-        Calendar calendarNext = Calendar.getInstance();
-        calendarNext.setTimeInMillis(calendarNow.getTimeInMillis());
-        calendarNext.add(DAY_OF_MONTH, 2);
-
-        String endDateString = fromDateToYYYYmmddFormat(calendarNext.getTime());
-
-        sb.append(PREFIX_FILE_NAME);
-        sb.append(initDateString);
-        sb.append("_");
-        sb.append(endDateString);
+        sb.append("dwh_cdr_");
+        sb.append(dateString);
         sb.append(FILE_EXT);
 
         return sb.toString();
@@ -83,7 +71,7 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      */
     @Override
     protected String getSourceDirectoryCdrFile() {
-        return sourceEricssonCdrs;
+        return sourceSprintCdrs;
     }
 
     /**
@@ -91,7 +79,7 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      */
     @Override
     protected String getTargetDirectoryCdrFile() {
-        return targetEricssonCdrs;
+        return targetSprintCdrs;
     }
 
     /**
@@ -99,7 +87,7 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      */
     @Override
     protected void incrementFrecuency(Calendar calendarNow) {
-        calendarNow.add(DAY_OF_MONTH, 1); // files are dropped every day.
+        calendarNow.add(MONTH, 1); // files are dropped every month.
     }
 
     /**
@@ -107,7 +95,7 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      */
     @Override
     protected boolean isFileCompressed() {
-        return true;
+        return false;
     }
 
     /**
@@ -115,9 +103,7 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      */
     @Override
     protected String getSortedFileName(String originalFileName) {
-        String[] parts = originalFileName.split("_");
-        String callDataFileName = parts[3] + "_call_adj_data_dump.txt.sorted";
-        return callDataFileName;
+        return originalFileName + ".sorted";
     }
 
     /**
@@ -125,6 +111,8 @@ public class EricssonCdrFileProcessor extends AbstractCdrFileProcessor {
      */
     @Override
     protected String getSortShellExpression(File fileTobeSorted) {
-        return "egrep '^C' " + fileTobeSorted + " | LC_ALL=C sort -t \"|\" -k 3,3n -k 12,12n";
+        // sort the file by phn_num, and call date.
+        return "sort -t \"|\" -k 5,5n -k 6,6n " + fileTobeSorted;
     }
+
 }

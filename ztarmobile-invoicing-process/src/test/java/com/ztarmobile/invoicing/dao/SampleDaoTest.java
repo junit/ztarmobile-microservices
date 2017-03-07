@@ -6,7 +6,8 @@
  */
 package com.ztarmobile.invoicing.dao;
 
-import com.ztarmobile.invoicing.service.CdrFileProcessorService;
+import com.ztarmobile.invoicing.service.CdrFileService;
+import com.ztarmobile.invoicing.service.ResellerUsageService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -35,10 +36,15 @@ public class SampleDaoTest {
     @Autowired
     private ResellerAllocationsService resellerAllocationsService;
 
-    //@Qualifier(value = "ericssonCdrFileProcessor")
-    @Qualifier(value = "sprintCdrFileProcessor")
+    @Qualifier(value = "ericssonCdrFileService")
+    //@Qualifier(value = "sprintCdrFileService")
     @Autowired
-    private CdrFileProcessorService cdrFileProcessorService;
+    private CdrFileService cdrFileService;
+    
+    @Qualifier(value = "ericssonResellerUsageService")
+    //@Qualifier(value = "sprintResellerUsageService")
+    @Autowired
+    private ResellerUsageService resellerUsageService;
     
     @Test
     public void some() {
@@ -51,7 +57,9 @@ public class SampleDaoTest {
         //resellerAllocationsService.createAllocations(Calendar.JANUARY, Calendar.MARCH, "REALMOBILE");
         //resellerAllocationsService.createAllocations("REALMOBILE");
         //resellerAllocationsService.createAllocations("");
-        //cdrFileProcessorService.extractCdrs();
-        cdrFileProcessorService.extractCdrs(c1, c2);
+        //cdrFileServiceService.extractCdrs();
+        //cdrFileService.extractCdrs(c1, c2);
+        //resellerUsageService.createUsage();
+        resellerUsageService.createUsage(c1, c2);
     }
 }

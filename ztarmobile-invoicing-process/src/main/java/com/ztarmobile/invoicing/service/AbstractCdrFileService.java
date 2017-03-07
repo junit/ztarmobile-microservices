@@ -29,11 +29,11 @@ import org.apache.log4j.Logger;
  * @author armandorivas
  * @since 03/02/17
  */
-public abstract class AbstractCdrFileProcessor implements CdrFileProcessorService {
+public abstract class AbstractCdrFileService implements CdrFileService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(AbstractCdrFileProcessor.class);
+    private static final Logger log = Logger.getLogger(AbstractCdrFileService.class);
     /**
      * The standard file extension.
      */
@@ -111,7 +111,7 @@ public abstract class AbstractCdrFileProcessor implements CdrFileProcessorServic
         }
         File file = new File(getSourceDirectoryCdrFile());
         if (!(file.exists() && file.isDirectory())) {
-            invalidInput("Cannot proceed further..., the ericsson directory cannot be read: " + file);
+            invalidInput("Cannot proceed further..., the source directory cannot be read: " + file);
         }
         log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
