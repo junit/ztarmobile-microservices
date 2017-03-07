@@ -39,11 +39,8 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
      */
     @Override
     protected String getExpectedFileName(Calendar calendarNow) {
-        StringBuilder sb = new StringBuilder();
-        String dateString = fromDateToYYYYmmFormat(calendarNow.getTime());
-
-        sb.append("dwh_cdr_");
-        sb.append(dateString);
+        StringBuilder sb = new StringBuilder("dwh_cdr_");
+        sb.append(fromDateToYYYYmmFormat(calendarNow.getTime()));
         sb.append(EXTRACTED_FILE_EXT);
 
         return sb.toString();
@@ -63,5 +60,30 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
     @Override
     protected void incrementFrecuency(Calendar calendarNow) {
         calendarNow.add(MONTH, 1); // files are dropped every month.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean hasHeader() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void processCurrentLine(String line) {
+        // tokenize the line
+        String[] sln = line.split("\\|");
+
+        // get usage values from specific locations
+        String ppd = sln[0];
+        String mdn = sln[4];
+        String callDate = sln[5];
+        float kbs = Float.parseFloat(sln[9]);
+        float sms = 0;
+        float mou = 0;
     }
 }

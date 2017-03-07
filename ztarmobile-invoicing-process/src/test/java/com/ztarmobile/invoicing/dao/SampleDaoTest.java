@@ -36,12 +36,12 @@ public class SampleDaoTest {
     @Autowired
     private ResellerAllocationsService resellerAllocationsService;
 
-    @Qualifier(value = "ericssonCdrFileService")
-    //@Qualifier(value = "sprintCdrFileService")
+    //@Qualifier(value = "ericssonCdrFileService")
+    @Qualifier(value = "sprintCdrFileService")
     @Autowired
     private CdrFileService cdrFileService;
     
-    @Qualifier(value = "ericssonResellerUsageService")
+        @Qualifier(value = "ericssonResellerUsageService")
     //@Qualifier(value = "sprintResellerUsageService")
     @Autowired
     private ResellerUsageService resellerUsageService;

@@ -69,4 +69,20 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
     protected void incrementFrecuency(Calendar calendarNow) {
         calendarNow.add(DAY_OF_MONTH, 1); // files are dropped every day.
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean hasHeader() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void processCurrentLine(String line) {
+
+    }
 }

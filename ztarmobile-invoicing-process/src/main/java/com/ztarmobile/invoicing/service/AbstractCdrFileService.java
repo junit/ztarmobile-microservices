@@ -7,7 +7,6 @@
 package com.ztarmobile.invoicing.service;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
-import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.FileUtils.copy;
@@ -16,7 +15,6 @@ import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
 import static java.util.Calendar.MONTH;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,7 +27,7 @@ import org.apache.log4j.Logger;
  * @author armandorivas
  * @since 03/02/17
  */
-public abstract class AbstractCdrFileService implements CdrFileService {
+public abstract class AbstractCdrFileService extends AbstractService implements CdrFileService {
     /**
      * Logger for this class
      */
@@ -101,23 +99,14 @@ public abstract class AbstractCdrFileService implements CdrFileService {
      *            The end calendar.
      */
     private void extractAllCdrs(Calendar calendarStart, Calendar calendarEnd) {
-        validateInput(calendarStart, "calendarStart must be not null");
-        validateInput(calendarEnd, "calendarStart must be not null");
-
-        if (calendarStart.after(calendarEnd)) {
-            // making sure the start date is not greater than the end date.
-            invalidInput("The Start date cannot be greater than the end date: startDate -> " + calendarStart.getTime()
-                    + ", endDate -> " + calendarEnd.getTime());
-        }
         File file = new File(getSourceDirectoryCdrFile());
-        if (!(file.exists() && file.isDirectory())) {
-            invalidInput("Cannot proceed further..., the source directory cannot be read: " + file);
-        }
+        this.validateEntries(calendarStart, calendarEnd, file);
+
         log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = calendarStart;
         String expectedFileName = null;
-        File[] files = file.listFiles(createFileNameFilter());
+        File[] files = file.listFiles(createFileNameFilter(getFileExtension()));
         Arrays.sort(files); // make sure the files are ordered lexicographically
 
         boolean foundFileInRange = false;
@@ -211,20 +200,6 @@ public abstract class AbstractCdrFileService implements CdrFileService {
         // executes the shell expression to sort the file
         executeShellCommand(sb.toString());
         return expectedFileName;
-    }
-
-    /**
-     * Creates the file name filter.
-     * 
-     * @return The file name filter.
-     */
-    private FilenameFilter createFileNameFilter() {
-        return new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(getFileExtension());
-            }
-        };
     }
 
     /**

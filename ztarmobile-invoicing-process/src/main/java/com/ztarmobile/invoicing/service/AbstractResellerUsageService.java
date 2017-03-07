@@ -7,13 +7,14 @@
 package com.ztarmobile.invoicing.service;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
-import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static java.util.Calendar.MONTH;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
  * @author armandorivas
  * @since 03/06/17
  */
-public abstract class AbstractResellerUsageService implements ResellerUsageService {
+public abstract class AbstractResellerUsageService extends AbstractService implements ResellerUsageService {
     /**
      * Logger for this class
      */
@@ -98,23 +99,14 @@ public abstract class AbstractResellerUsageService implements ResellerUsageServi
      *            The end calendar.
      */
     private void createAllUsageCdrs(Calendar calendarStart, Calendar calendarEnd) {
-        validateInput(calendarStart, "calendarStart must be not null");
-        validateInput(calendarEnd, "calendarStart must be not null");
-
-        if (calendarStart.after(calendarEnd)) {
-            // making sure the start date is not greater than the end date.
-            invalidInput("The Start date cannot be greater than the end date: startDate -> " + calendarStart.getTime()
-                    + ", endDate -> " + calendarEnd.getTime());
-        }
         File file = new File(getTargetDirectoryCdrFile());
-        if (!(file.exists() && file.isDirectory())) {
-            invalidInput("Cannot proceed further..., the target directory cannot be read: " + file);
-        }
+        this.validateEntries(calendarStart, calendarEnd, file);
+
         log.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = calendarStart;
         String expectedFileName = null;
-        File[] files = file.listFiles(createFileNameFilter());
+        File[] files = file.listFiles(createFileNameFilter(EXTRACTED_FILE_EXT));
         Arrays.sort(files); // make sure the files are ordered lexicographically
 
         boolean foundFileInRange = false;
@@ -134,8 +126,7 @@ public abstract class AbstractResellerUsageService implements ResellerUsageServi
 
             if (foundFileInRange) {
                 // process currentFile
-                // extractCurrentFile(currentFile);
-                log.debug(currentFile);
+                parseCurrentFile(currentFile);
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -145,18 +136,25 @@ public abstract class AbstractResellerUsageService implements ResellerUsageServi
         }
     }
 
-    /**
-     * Creates the file name filter.
-     * 
-     * @return The file name filter.
-     */
-    private FilenameFilter createFileNameFilter() {
-        return new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(EXTRACTED_FILE_EXT);
+    private void parseCurrentFile(File currentFile) {
+        log.info("==> The following file will be read... " + currentFile);
+        String line = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
+            if (hasHeader()) {
+                reader.readLine();// ignores the first line
             }
-        };
+            // read the rest of the files
+            while ((line = reader.readLine()) != null) {
+                log.debug(line);
+                if (line.isEmpty()) {
+                    // some how we got a blank row... skip it.
+                    continue;
+                }
+                processCurrentLine(line);
+            }
+        } catch (IOException ex) {
+            invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
+        }
     }
 
     /**
@@ -183,4 +181,18 @@ public abstract class AbstractResellerUsageService implements ResellerUsageServi
      */
     protected abstract void incrementFrecuency(Calendar calendarNow);
 
+    /**
+     * The file contains a header as part of its content?
+     * 
+     * @return true, has header, otherwise false.
+     */
+    protected abstract boolean hasHeader();
+
+    /**
+     * Process the current line.
+     * 
+     * @param line
+     *            The current line.
+     */
+    protected abstract void processCurrentLine(String line);
 }

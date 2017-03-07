@@ -56,11 +56,8 @@ public class SprintCdrFileService extends AbstractCdrFileService {
      */
     @Override
     protected String getExpectedFileName(Calendar calendarNow) {
-        StringBuilder sb = new StringBuilder();
-        String dateString = fromDateToYYYYmmFormat(calendarNow.getTime());
-
-        sb.append("dwh_cdr_");
-        sb.append(dateString);
+        StringBuilder sb = new StringBuilder("dwh_cdr_");
+        sb.append(fromDateToYYYYmmFormat(calendarNow.getTime()));
         sb.append(FILE_EXT);
 
         return sb.toString();
