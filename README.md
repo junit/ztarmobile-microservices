@@ -1,2 +1,2 @@
 # ztarmobile-microservices
-Microservice for the invoicing process
+Microservice for the invoicing process sample
