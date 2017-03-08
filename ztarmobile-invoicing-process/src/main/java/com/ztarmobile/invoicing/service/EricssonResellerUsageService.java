@@ -82,7 +82,34 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
      * {@inheritDoc}
      */
     @Override
-    protected void processCurrentLine(String line) {
+    protected void processCurrentLine(String[] sln) {
+        // get usage values from specific locations
+        String type = sln[0];
+        String callType = sln[13];
+        String callDate = sln[getCallDateFieldPositionAt()];
 
+        if (callType.equals("SMS")) {
+
+        } else if (callType.equals("MMS")) {
+
+        } else if (callType.equals("VOICE")) {
+
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int getCallDateFieldPositionAt() {
+        return 11;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int getMdnFieldPositionAt() {
+        return 2;
     }
 }

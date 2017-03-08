@@ -36,12 +36,12 @@ public class SampleDaoTest {
     @Autowired
     private ResellerAllocationsService resellerAllocationsService;
 
-    //@Qualifier(value = "ericssonCdrFileService")
-    @Qualifier(value = "sprintCdrFileService")
+    @Qualifier(value = "ericssonCdrFileService")
+    //@Qualifier(value = "sprintCdrFileService")
     @Autowired
     private CdrFileService cdrFileService;
     
-        @Qualifier(value = "ericssonResellerUsageService")
+    @Qualifier(value = "ericssonResellerUsageService")
     //@Qualifier(value = "sprintResellerUsageService")
     @Autowired
     private ResellerUsageService resellerUsageService;
@@ -49,16 +49,16 @@ public class SampleDaoTest {
     @Test
     public void some() {
         Calendar c1 = Calendar.getInstance();
-        c1.set(2017, 1, 1);
+        c1.set(2016, 9, 3);
         Calendar c2 = Calendar.getInstance();
-        c2.set(2017, 1, 1);
+        c2.set(2016, 9, 3);
         //resellerAllocationsService.createAllocations(c1.getTime(), c2.getTime(), "REALMOBILE");
         //resellerAllocationsService.createAllocations(Calendar.FEBRUARY, "REALMOBILE");
         //resellerAllocationsService.createAllocations(Calendar.JANUARY, Calendar.MARCH, "REALMOBILE");
         //resellerAllocationsService.createAllocations("REALMOBILE");
         //resellerAllocationsService.createAllocations("");
         //cdrFileServiceService.extractCdrs();
-        //cdrFileService.extractCdrs(c1, c2);
+        cdrFileService.extractCdrs(c1, c2);
         //resellerUsageService.createUsage();
         resellerUsageService.createUsage(c1, c2);
     }

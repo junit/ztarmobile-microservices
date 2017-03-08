@@ -74,16 +74,26 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
      * {@inheritDoc}
      */
     @Override
-    protected void processCurrentLine(String line) {
-        // tokenize the line
-        String[] sln = line.split("\\|");
+    protected void processCurrentLine(String[] sln) {
 
         // get usage values from specific locations
-        String ppd = sln[0];
-        String mdn = sln[4];
         String callDate = sln[5];
-        float kbs = Float.parseFloat(sln[9]);
-        float sms = 0;
-        float mou = 0;
+        System.out.println(callDate);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int getCallDateFieldPositionAt() {
+        return 5;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int getMdnFieldPositionAt() {
+        return 4;
     }
 }

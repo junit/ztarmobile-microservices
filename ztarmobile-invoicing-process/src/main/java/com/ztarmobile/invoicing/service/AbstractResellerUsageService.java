@@ -7,6 +7,8 @@
 package com.ztarmobile.invoicing.service;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
+import static com.ztarmobile.invoicing.common.DateUtils.createCalendarFrom;
+import static com.ztarmobile.invoicing.common.DateUtils.fromStringToYYmmddHHmmssFormat;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static java.util.Calendar.MONTH;
@@ -104,7 +106,7 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
 
         log.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
-        Calendar calendarNow = calendarStart;
+        Calendar calendarNow = createCalendarFrom(calendarStart);
         String expectedFileName = null;
         File[] files = file.listFiles(createFileNameFilter(EXTRACTED_FILE_EXT));
         Arrays.sort(files); // make sure the files are ordered lexicographically
@@ -126,7 +128,7 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
 
             if (foundFileInRange) {
                 // process currentFile
-                parseCurrentFile(currentFile);
+                parseCurrentFile(currentFile, calendarStart.getTime(), calendarNow.getTime(), calendarEnd.getTime());
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -136,7 +138,11 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
         }
     }
 
-    private void parseCurrentFile(File currentFile) {
+    private void parseCurrentFile(File currentFile, Date startDate, Date nowDate, Date endDate) {
+        log.info("==> The following file will be read... " + currentFile);
+        log.info("start. " + startDate);
+        log.info("now. " + nowDate);
+        log.info("end. " + endDate);
         log.info("==> The following file will be read... " + currentFile);
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
@@ -145,12 +151,22 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
             }
             // read the rest of the files
             while ((line = reader.readLine()) != null) {
-                log.debug(line);
                 if (line.isEmpty()) {
                     // some how we got a blank row... skip it.
                     continue;
                 }
-                processCurrentLine(line);
+                // tokenize the line
+                String[] sln = line.split("\\|");
+                String callDate = sln[getCallDateFieldPositionAt()];
+                Date cdt = fromStringToYYmmddHHmmssFormat(callDate);
+
+                if (cdt.before(startDate) || cdt.after(endDate)) {
+                    // call date is either before the start-date or
+                    // is after the end date.
+                    // either way, skip it.
+                    continue;
+                }
+                processCurrentLine(sln);
             }
         } catch (IOException ex) {
             invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
@@ -191,8 +207,23 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
     /**
      * Process the current line.
      * 
-     * @param line
+     * @param sln
      *            The current line.
      */
-    protected abstract void processCurrentLine(String line);
+    protected abstract void processCurrentLine(String[] sln);
+
+    /**
+     * Gets the position of the call date in a cdr file.
+     * 
+     * @return the position in a row.
+     */
+    protected abstract int getCallDateFieldPositionAt();
+
+    /**
+     * Gets the position of the mdn field in a cdr file.
+     * 
+     * @return the position in a row.
+     */
+    protected abstract int getMdnFieldPositionAt();
+
 }

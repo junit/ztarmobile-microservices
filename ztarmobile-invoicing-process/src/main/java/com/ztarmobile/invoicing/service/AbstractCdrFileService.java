@@ -7,6 +7,7 @@
 package com.ztarmobile.invoicing.service;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
+import static com.ztarmobile.invoicing.common.DateUtils.createCalendarFrom;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.FileUtils.copy;
@@ -104,7 +105,7 @@ public abstract class AbstractCdrFileService extends AbstractService implements 
 
         log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
-        Calendar calendarNow = calendarStart;
+        Calendar calendarNow = createCalendarFrom(calendarStart);
         String expectedFileName = null;
         File[] files = file.listFiles(createFileNameFilter(getFileExtension()));
         Arrays.sort(files); // make sure the files are ordered lexicographically

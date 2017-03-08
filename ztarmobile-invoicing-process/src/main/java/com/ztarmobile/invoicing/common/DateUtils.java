@@ -9,6 +9,7 @@ package com.ztarmobile.invoicing.common;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +34,12 @@ public class DateUtils {
      */
     public static final String YYYYMMDD_HHMMSS = "yyyy-MM-dd HH:mm:ss";
     private static final SimpleDateFormat dbDateFormat = new SimpleDateFormat(YYYYMMDD_HHMMSS);
+
+    /**
+     * Format used commonly in the cdr files.
+     */
+    public static final String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
+    private static final SimpleDateFormat cdrDateFormat = new SimpleDateFormat(YYYYMMDDHHMMSS);
 
     /**
      * Format used in cdrs files yyyyMMdd.
@@ -62,6 +69,33 @@ public class DateUtils {
      */
     public static String fromDateToDbFormat(Date date) {
         return dbDateFormat.format(date);
+    }
+
+    /**
+     * Converts from a date object to a cdrs file format.
+     * 
+     * @param date
+     *            The date to convert to a cdrs file format.
+     * @return The String representation of the date.
+     */
+    public static String fromDateToYYmmddHHmmssFormat(Date date) {
+        return cdrDateFormat.format(date);
+    }
+
+    /**
+     * Converts from a String object to a cdrs file format.
+     * 
+     * @param dateString
+     *            The date to convert to a cdrs file format.
+     * @return The String representation of the date.
+     */
+    public static Date fromStringToYYmmddHHmmssFormat(String dateString) {
+        try {
+            return cdrDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            CommonUtils.invalidInput("Unable to convert string: " + dateString + ", to date " + e);
+            return null;
+        }
     }
 
     /**
@@ -114,5 +148,19 @@ public class DateUtils {
         calendar.set(MONTH, month);
         calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(DAY_OF_MONTH));
         return calendar;
+    }
+
+    /**
+     * This method returns a copy of a calendar based on another calendar
+     * object.
+     * 
+     * @param calendar
+     *            The initial calendar.
+     * @return A new calendar.
+     */
+    public static Calendar createCalendarFrom(Calendar calendar) {
+        Calendar newCalendar = Calendar.getInstance();
+        newCalendar.setTimeInMillis(calendar.getTimeInMillis());
+        return newCalendar;
     }
 }
