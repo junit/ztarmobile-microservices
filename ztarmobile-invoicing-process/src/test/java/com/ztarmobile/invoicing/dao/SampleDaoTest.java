@@ -64,7 +64,7 @@ public class SampleDaoTest {
         // cdrFileService.extractCdrs(c1, c2);
         // resellerUsageService.createUsage();
         // resellerUsageService.createUsage(c1, c2);
-        List<ResellerSubsUsageVo> s = resellerAllocationsService.getResellerSubsUsage(c1.getTime(), c2.getTime(), "REALMOBILE");
+        List<ResellerSubsUsageVo> s = resellerAllocationsService.getResellerSubsUsage(c1, c2, "REALMOBILE");
         log.debug(s);
     }
 }
