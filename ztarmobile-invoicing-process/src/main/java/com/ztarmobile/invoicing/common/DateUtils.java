@@ -7,7 +7,10 @@
 package com.ztarmobile.invoicing.common;
 
 import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,14 +24,6 @@ import java.util.Date;
  * @since 03/01/17
  */
 public class DateUtils {
-    /**
-     * Last hour.
-     */
-    public static final int LAST_HOUR = 23;
-    /**
-     * Last min/sec.
-     */
-    public static final int LAST_MIN_SEC = 59;
     /**
      * Format used commonly by the db.
      */
@@ -162,5 +157,41 @@ public class DateUtils {
         Calendar newCalendar = Calendar.getInstance();
         newCalendar.setTimeInMillis(calendar.getTimeInMillis());
         return newCalendar;
+    }
+
+    /**
+     * Given a calendar set the minimun value for the hour, minutes and secodns.
+     * (e.g. 0 min, 0 sec and 0 hours =&gt; 00:00:00).
+     * 
+     * @param calendarStart
+     *            The calendar.
+     */
+    public static void setMinimumCalendarDay(Calendar calendarStart) {
+        calendarStart.set(HOUR_OF_DAY, calendarStart.getActualMinimum(HOUR_OF_DAY));
+        calendarStart.set(MINUTE, calendarStart.getActualMinimum(MINUTE));
+        calendarStart.set(SECOND, calendarStart.getActualMinimum(SECOND));
+    }
+
+    /**
+     * Given a calendar set the maximum value for the hour, minutes and secodns.
+     * If the calendar end is greater than 'now', then the calendar is set to
+     * 'now'. This calendar can never be greater than 'now'.
+     * 
+     * @param calendarEnd
+     *            The calendar.
+     */
+    public static void setMaximumCalendarDay(Calendar calendarEnd) {
+        // we get the current time.
+        Calendar calendarNow = Calendar.getInstance();
+
+        // Based on the current time, we calculate the hour, min and sec to set
+        // the date.
+        if (calendarEnd.compareTo(calendarNow) >= 0) {
+            calendarEnd = calendarNow;
+        } else {
+            calendarEnd.set(HOUR_OF_DAY, calendarEnd.getActualMaximum(HOUR_OF_DAY));
+            calendarEnd.set(MINUTE, calendarEnd.getActualMaximum(MINUTE));
+            calendarEnd.set(SECOND, calendarEnd.getActualMaximum(SECOND));
+        }
     }
 }

@@ -23,8 +23,10 @@ public interface ResellerUsageService {
      *            The start date.
      * @param end
      *            The end date.
+     * @param product
+     *            The product.
      */
-    void createUsage(Date start, Date end);
+    void createUsage(Date start, Date end, String product);
 
     /**
      * This method creates the usage given a start and end date.
@@ -33,8 +35,10 @@ public interface ResellerUsageService {
      *            The start date.
      * @param end
      *            The end date.
+     * @param product
+     *            The product.
      */
-    void createUsage(Calendar start, Calendar end);
+    void createUsage(Calendar start, Calendar end, String product);
 
     /**
      * This method creates the usage given an initial and end month. This
@@ -44,8 +48,10 @@ public interface ResellerUsageService {
      *            The initial month.
      * @param toMonth
      *            The final month.
+     * @param product
+     *            The product.
      */
-    void createUsage(int fromMonth, int toMonth);
+    void createUsage(int fromMonth, int toMonth, String product);
 
     /**
      * This method creates the usage for a particular month. This process works
@@ -53,12 +59,17 @@ public interface ResellerUsageService {
      * 
      * @param month
      *            An specific month.
+     * @param product
+     *            The product.
      */
-    void createUsage(int month);
+    void createUsage(int month, String product);
 
     /**
      * This method creates the usage. This process works only in the same year
      * and the previous month.
+     * 
+     * @param product
+     *            The product.
      */
-    void createUsage();
+    void createUsage(String product);
 }

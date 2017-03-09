@@ -115,6 +115,21 @@
                 WHERE     new_add_ind > 1;
             ]]>
         </prop>
+        <prop key="select.reseller_subs_usage">
+            <![CDATA[
+                SELECT usg.row_id, usg.call_date, usg.rate_plan, usg.mdn, usg.alloc_mou, usg.alloc_sms,
+                       usg.alloc_mms, usg.alloc_mbs, usg.actual_mou, usg.actual_sms, usg.actual_mms,
+                       usg.actual_kbs, usg.duration_start, usg.duration_end,
+                       usg.new_add_ind, usg.renewal_ind, usg.lst_upd_date
+                FROM   reseller_subs_usage usg,
+                       reseller_rate_plans rrp
+                WHERE  rrp.rate_plan = usg.rate_plan
+                AND    rrp.reseller = :reseller
+                AND    usg.call_date >= :start_dt
+                AND    usg.call_date <= :end_dt
+                ORDER BY usg.call_date, usg.mdn, usg.rate_plan
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>

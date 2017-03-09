@@ -6,26 +6,29 @@
  */
 package com.ztarmobile.invoicing.service;
 
-import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
-import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
-import static com.ztarmobile.invoicing.common.DateUtils.LAST_HOUR;
-import static com.ztarmobile.invoicing.common.DateUtils.LAST_MIN_SEC;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
+import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
 import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
 import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
+import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
 /**
  * Service to handle the operations for the allocations.
@@ -34,7 +37,7 @@ import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
  * @since 03/01/17
  */
 @Service
-public class ResellerAllocationsServiceImpl implements ResellerAllocationsService {
+public class ResellerAllocationsServiceImpl extends AbstractService implements ResellerAllocationsService {
     /**
      * Logger for this class
      */
@@ -100,6 +103,16 @@ public class ResellerAllocationsServiceImpl implements ResellerAllocationsServic
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ResellerSubsUsageVo> getResellerSubsUsage(Calendar start, Calendar end, String product) {
+        this.validateEntries(start, end, product);
+
+        return resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
+    }
+
+    /**
      * Calculates the allocations given a initial time and final time. The
      * product.
      * 
@@ -111,34 +124,12 @@ public class ResellerAllocationsServiceImpl implements ResellerAllocationsServic
      *            The product.
      */
     private void createAllAllocations(Calendar calendarStart, Calendar calendarEnd, String product) {
-        validateInput(calendarStart, "calendarStart must be not null");
-        validateInput(calendarEnd, "calendarStart must be not null");
+        // validates the input.
+        this.validateEntries(calendarStart, calendarEnd, product);
 
-        if (calendarStart.after(calendarEnd)) {
-            // making sure the start date is not greater than the end date.
-            invalidInput("The Start date cannot be greater than the end date: startDate -> " + calendarStart.getTime()
-                    + ", endDate -> " + calendarEnd.getTime());
-        }
-        // at least one product needs to be passed.
-        validateInput(product, "At least one product must be provided");
-
-        // the start date must start at 00:00:00
-        calendarStart.set(Calendar.HOUR_OF_DAY, 0);
-        calendarStart.set(Calendar.MINUTE, 0);
-        calendarStart.set(Calendar.SECOND, 0);
-
-        // we get the current time.
-        Calendar calendarNow = Calendar.getInstance();
-
-        // Based on the current time, we calculate the hour, min and sec to set
-        // the end date.
-        if (calendarEnd.compareTo(calendarNow) >= 0) {
-            calendarEnd = calendarNow;
-        } else {
-            calendarEnd.set(Calendar.HOUR_OF_DAY, LAST_HOUR);
-            calendarEnd.set(Calendar.MINUTE, LAST_MIN_SEC);
-            calendarEnd.set(Calendar.SECOND, LAST_MIN_SEC);
-        }
+        // standarize the dates.
+        setMinimumCalendarDay(calendarStart);
+        setMaximumCalendarDay(calendarEnd);
 
         Calendar calendarCurr = calendarStart;
 
@@ -148,7 +139,7 @@ public class ResellerAllocationsServiceImpl implements ResellerAllocationsServic
         long startTime = System.currentTimeMillis();
         while (calendarCurr.compareTo(calendarEnd) <= 0) {
             durationStart = calendarCurr.getTime();
-            durationEnd = calculateDurationEnd(calendarNow, calendarCurr);
+            durationEnd = calculateDurationEnd(Calendar.getInstance(), calendarCurr);
 
             log.debug("Collecting mdn usage from: " + durationStart + " - " + durationEnd);
 
@@ -183,8 +174,9 @@ public class ResellerAllocationsServiceImpl implements ResellerAllocationsServic
             return calendarNow.getTime();
         } else {
             Calendar calendarEnd = Calendar.getInstance();
-            calendarEnd.set(calendarCurr.get(YEAR), calendarCurr.get(MONTH), calendarCurr.get(DAY_OF_MONTH), LAST_HOUR,
-                    LAST_MIN_SEC, LAST_MIN_SEC);
+            calendarEnd.set(calendarCurr.get(YEAR), calendarCurr.get(MONTH), calendarCurr.get(DAY_OF_MONTH),
+                    calendarEnd.getActualMaximum(HOUR_OF_DAY), calendarEnd.getActualMaximum(MINUTE),
+                    calendarEnd.getActualMaximum(SECOND));
             return calendarEnd.getTime();
         }
     }

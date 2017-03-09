@@ -36,21 +36,68 @@ public abstract class AbstractService {
      *            The end calendar.
      * @param sourceDirectory
      *            The source directory.
+     * @param product
+     *            The product.
+     */
+    protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, File sourceDirectory, String product) {
+        log.debug("Validating reseller input...");
+        validateEntries(calendarStart, calendarEnd, sourceDirectory);
+        validateInput(product, "At least one product must be provided");
+    }
+
+    /**
+     * Validate the common input.
+     * 
+     * @param calendarStart
+     *            The initial calendar.
+     * @param calendarEnd
+     *            The end calendar.
+     * @param product
+     *            The product.
+     */
+    protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, String product) {
+        log.debug("Validating reseller input...");
+        validateCalendar(calendarStart, calendarEnd);
+        validateInput(product, "At least one product must be provided");
+    }
+
+    /**
+     * Validate the common input.
+     * 
+     * @param calendarStart
+     *            The initial calendar.
+     * @param calendarEnd
+     *            The end calendar.
+     * @param sourceDirectory
+     *            The source directory.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, File sourceDirectory) {
-        log.debug("Validating input...");
-        validateInput(calendarStart, "calendarStart must be not null");
-        validateInput(calendarEnd, "calendarStart must be not null");
+        log.debug("Validating reseller input...");
+        validateCalendar(calendarStart, calendarEnd);
         validateInput(sourceDirectory, "The source direcotry cannot be null");
+
+        if (!(sourceDirectory.exists() && sourceDirectory.isDirectory())) {
+            invalidInput("Cannot proceed further..., the source directory cannot be read: " + sourceDirectory);
+        }
+    }
+
+    /**
+     * Validate the common input.
+     * 
+     * @param calendarStart
+     *            The initial calendar.
+     * @param calendarEnd
+     *            The end calendar.
+     * 
+     */
+    private void validateCalendar(Calendar calendarStart, Calendar calendarEnd) {
+        validateInput(calendarStart, "calendarStart must be not null");
+        validateInput(calendarEnd, "calendarEnd must be not null");
 
         if (calendarStart.after(calendarEnd)) {
             // making sure the start date is not greater than the end date.
             invalidInput("The Start date cannot be greater than the end date: startDate -> " + calendarStart.getTime()
                     + ", endDate -> " + calendarEnd.getTime());
-        }
-
-        if (!(sourceDirectory.exists() && sourceDirectory.isDirectory())) {
-            invalidInput("Cannot proceed further..., the source directory cannot be read: " + sourceDirectory);
         }
     }
 

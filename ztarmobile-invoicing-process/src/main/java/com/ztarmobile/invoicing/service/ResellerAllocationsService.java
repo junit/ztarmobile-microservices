@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing.service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
 /**
  * Service to handle the operations for the allocations.
@@ -74,4 +77,17 @@ public interface ResellerAllocationsService {
      * @see ResellerAllocationsService#createAllocations(int, String)
      */
     void createAllocations(String product);
+
+    /**
+     * Gets a list of reseller subscribers.
+     * 
+     * @param start
+     *            The start date.
+     * @param end
+     *            The end date.
+     * @param product
+     *            The product.
+     * @return List of subscribers.
+     */
+    List<ResellerSubsUsageVo> getResellerSubsUsage(Calendar start, Calendar end, String product);
 }

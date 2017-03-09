@@ -11,6 +11,8 @@ import static com.ztarmobile.invoicing.common.DateUtils.createCalendarFrom;
 import static com.ztarmobile.invoicing.common.DateUtils.fromStringToYYmmddHHmmssFormat;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
+import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
 import static java.util.Calendar.MONTH;
 
 import java.io.BufferedReader;
@@ -20,8 +22,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
 /**
  * Parent abstract class to handle the usage for the cdrs.
@@ -40,10 +46,16 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
     public static final String EXTRACTED_FILE_EXT = ".txt";
 
     /**
+     * Service dependency.
+     */
+    @Autowired
+    private ResellerAllocationsService resellerAllocationsService;
+
+    /**
      * {@inheritDoc}
      */
     @Override
-    public void createUsage(Date start, Date end) {
+    public void createUsage(Date start, Date end, String product) {
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(start);
 
@@ -51,45 +63,45 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
         calendarEnd.setTime(end);
 
         // delegates to a common method.
-        this.createAllUsageCdrs(calendarStart, calendarEnd);
+        this.createAllUsageCdrs(calendarStart, calendarEnd, product);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createUsage(Calendar start, Calendar end) {
+    public void createUsage(Calendar start, Calendar end, String product) {
         // delegates to a common method.
-        this.createAllUsageCdrs(start, end);
+        this.createAllUsageCdrs(start, end, product);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createUsage(int fromMonth, int toMonth) {
+    public void createUsage(int fromMonth, int toMonth, String product) {
         Calendar calendarStart = getMinimunDayOfMonth(fromMonth);
         Calendar calendarEnd = getMaximumDayOfMonth(toMonth);
 
         // delegates to a common method.
-        this.createAllUsageCdrs(calendarStart, calendarEnd);
+        this.createAllUsageCdrs(calendarStart, calendarEnd, product);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createUsage(int month) {
-        this.createUsage(month, month);
+    public void createUsage(int month, String product) {
+        this.createUsage(month, month, product);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createUsage() {
+    public void createUsage(String product) {
         int previousMonth = Calendar.getInstance().get(MONTH) - 1;
-        this.createUsage(previousMonth);
+        this.createUsage(previousMonth, product);
     }
 
     /**
@@ -99,11 +111,15 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
      *            The initial calendar.
      * @param calendarEnd
      *            The end calendar.
+     * @param product
+     *            The product.
      */
-    private void createAllUsageCdrs(Calendar calendarStart, Calendar calendarEnd) {
+    private void createAllUsageCdrs(Calendar calendarStart, Calendar calendarEnd, String product) {
         File file = new File(getTargetDirectoryCdrFile());
-        this.validateEntries(calendarStart, calendarEnd, file);
+        this.validateEntries(calendarStart, calendarEnd, file, product);
 
+        setMinimumCalendarDay(calendarStart);
+        setMaximumCalendarDay(calendarEnd);
         log.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);
@@ -127,8 +143,12 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
             }
 
             if (foundFileInRange) {
+                List<ResellerSubsUsageVo> subscribers = null;
+                subscribers = resellerAllocationsService.getResellerSubsUsage(calendarStart, calendarEnd, product);
+
                 // process currentFile
-                parseCurrentFile(currentFile, calendarStart.getTime(), calendarNow.getTime(), calendarEnd.getTime());
+                parseCurrentFile(currentFile, calendarStart.getTime(), calendarNow.getTime(), calendarEnd.getTime(),
+                        product);
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -138,12 +158,13 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
         }
     }
 
-    private void parseCurrentFile(File currentFile, Date startDate, Date nowDate, Date endDate) {
+    private void parseCurrentFile(File currentFile, Date startDate, Date nowDate, Date endDate, String product) {
         log.info("==> The following file will be read... " + currentFile);
         log.info("start. " + startDate);
         log.info("now. " + nowDate);
         log.info("end. " + endDate);
         log.info("==> The following file will be read... " + currentFile);
+
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
             if (hasHeader()) {
@@ -164,6 +185,7 @@ public abstract class AbstractResellerUsageService extends AbstractService imple
                     // call date is either before the start-date or
                     // is after the end date.
                     // either way, skip it.
+                    log.warn("This line was skipped: " + line);
                     continue;
                 }
                 processCurrentLine(sln);

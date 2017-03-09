@@ -10,6 +10,8 @@ import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
 import static com.ztarmobile.invoicing.common.DateUtils.createCalendarFrom;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
+import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
 import static com.ztarmobile.invoicing.common.FileUtils.copy;
 import static com.ztarmobile.invoicing.common.FileUtils.executeShellCommand;
 import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
@@ -103,6 +105,8 @@ public abstract class AbstractCdrFileService extends AbstractService implements 
         File file = new File(getSourceDirectoryCdrFile());
         this.validateEntries(calendarStart, calendarEnd, file);
 
+        setMinimumCalendarDay(calendarStart);
+        setMaximumCalendarDay(calendarEnd);
         log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);

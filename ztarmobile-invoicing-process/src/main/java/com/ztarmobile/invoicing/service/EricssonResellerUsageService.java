@@ -87,6 +87,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
         String type = sln[0];
         String callType = sln[13];
         String callDate = sln[getCallDateFieldPositionAt()];
+        String mdn = sln[getMdnFieldPositionAt()];
 
         if (callType.equals("SMS")) {
 
