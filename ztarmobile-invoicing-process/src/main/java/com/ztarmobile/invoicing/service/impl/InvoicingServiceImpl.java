@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
 import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.InvoicingService;
+import com.ztarmobile.invoicing.service.ResellerAllocationsService;
+import com.ztarmobile.invoicing.service.ResellerUsageService;
 import com.ztarmobile.invoicing.vo.CatalogProductVo;
 
 /**
@@ -52,6 +54,23 @@ public class InvoicingServiceImpl implements InvoicingService {
      */
     @Autowired
     private EricssonCdrFileService ericssonCdrFileService;
+
+    /**
+     * Injection of the service to create the allocations.
+     */
+    @Autowired
+    private ResellerAllocationsService allocationsService;
+
+    /**
+     * Injection of the specific implementation for sprint.
+     */
+    @Autowired
+    private SprintResellerUsageService sprintUsageService;
+    /**
+     * Injection of the specific implementation for ericsson.
+     */
+    @Autowired
+    private EricssonResellerUsageService ericssonUsageService;
 
     /**
      * {@inheritDoc}
@@ -142,15 +161,20 @@ public class InvoicingServiceImpl implements InvoicingService {
 
         CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
         validateInput(catalogProductVo, "No product information was found for [" + product + "]");
-
         log.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
+
+        log.debug("==================> 0. preparing data <==================================");
         log.debug("Reload CDR files from its source directory ? " + reloadCdrFiles);
 
         if (reloadCdrFiles) {
             CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
             cdrFileService.extractCdrs(calendarStart, calendarEnd);
         }
-
+        log.debug("==================> 1. create_reseller_allocations <=====================");
+        allocationsService.createAllocations(calendarStart, calendarEnd, product);
+        log.debug("==================> 2. create_reseller_usage <=====================");
+        ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
+        usageService.createUsage(calendarStart, calendarEnd, product);
     }
 
 }

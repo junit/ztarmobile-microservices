@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.invoicing.service.impl;
 
+import static com.ztarmobile.invoicing.common.DateUtils.createCalendarFrom;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
@@ -133,7 +134,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
         setMinimumCalendarDay(calendarStart);
         setMaximumCalendarDay(calendarEnd);
 
-        Calendar calendarCurr = calendarStart;
+        Calendar calendarCurr = createCalendarFrom(calendarStart);
 
         Date durationStart;
         Date durationEnd;
@@ -143,7 +144,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
             durationStart = calendarCurr.getTime();
             durationEnd = calculateDurationEnd(Calendar.getInstance(), calendarCurr);
 
-            log.debug("Collecting mdn usage from: " + durationStart + " - " + durationEnd);
+            log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
 
             resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd, product);
             calendarCurr.add(DAY_OF_MONTH, 1);
