@@ -4,17 +4,18 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.service;
+package com.ztarmobile.invoicing.service.impl;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmFormat;
 import static java.util.Calendar.MONTH;
 
-import java.io.File;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
 
 /**
  * Sprint implementation to handle the files for the cdrs.
@@ -23,20 +24,12 @@ import org.springframework.stereotype.Service;
  * @since 03/02/17
  */
 @Service
-public class SprintCdrFileService extends AbstractCdrFileService {
+public class SprintResellerUsageService extends AbstractResellerUsageService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(SprintCdrFileService.class);
-    /**
-     * The file extension.
-     */
-    public static final String FILE_EXT = ".txt";
-    /**
-     * Reference to the directory of the Sprint cdrs.
-     */
-    @Value("${cdrs.source.sprint.dir}")
-    private String sourceSprintCdrs;
+    private static final Logger log = Logger.getLogger(SprintResellerUsageService.class);
+
     /**
      * Reference to the extracted directory of the Sprint cdrs.
      */
@@ -47,28 +40,12 @@ public class SprintCdrFileService extends AbstractCdrFileService {
      * {@inheritDoc}
      */
     @Override
-    protected String getFileExtension() {
-        return FILE_EXT;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String getExpectedFileName(Calendar calendarNow) {
         StringBuilder sb = new StringBuilder("dwh_cdr_");
         sb.append(fromDateToYYYYmmFormat(calendarNow.getTime()));
-        sb.append(FILE_EXT);
+        sb.append(EXTRACTED_FILE_EXT);
 
         return sb.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getSourceDirectoryCdrFile() {
-        return sourceSprintCdrs;
     }
 
     /**
@@ -91,25 +68,34 @@ public class SprintCdrFileService extends AbstractCdrFileService {
      * {@inheritDoc}
      */
     @Override
-    protected boolean isFileCompressed() {
-        return false;
+    protected boolean hasHeader() {
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String getSortedFileName(String originalFileName) {
-        return originalFileName + ".sorted";
+    protected void processCurrentLine(String[] sln) {
+
+        // get usage values from specific locations
+        String callDate = sln[5];
+        System.out.println(callDate);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String getSortShellExpression(File fileTobeSorted) {
-        // sort the file by phn_num, and call date.
-        return "sort -t \"|\" -k 5,5n -k 6,6n " + fileTobeSorted;
+    protected int getCallDateFieldPositionAt() {
+        return 5;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int getMdnFieldPositionAt() {
+        return 4;
+    }
 }
