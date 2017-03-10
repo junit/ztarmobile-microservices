@@ -35,7 +35,7 @@ import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
  * @author armandorivas
  * @since 03/06/17
  */
-public abstract class AbstractResellerUsageService extends AbstractService implements ResellerUsageService {
+public abstract class AbstractResellerUsageService extends AbstractDefaultService implements ResellerUsageService {
     /**
      * Logger for this class
      */

@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
-import com.ztarmobile.invoicing.service.AbstractService;
+import com.ztarmobile.invoicing.service.AbstractDefaultService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
@@ -39,7 +39,7 @@ import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
  * @since 03/01/17
  */
 @Service
-public class ResellerAllocationsServiceImpl extends AbstractService implements ResellerAllocationsService {
+public class ResellerAllocationsServiceImpl extends AbstractDefaultService implements ResellerAllocationsService {
     /**
      * Logger for this class
      */

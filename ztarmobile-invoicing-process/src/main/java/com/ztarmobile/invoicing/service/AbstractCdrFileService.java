@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * @author armandorivas
  * @since 03/02/17
  */
-public abstract class AbstractCdrFileService extends AbstractService implements CdrFileService {
+public abstract class AbstractCdrFileService extends AbstractDefaultService implements CdrFileService {
     /**
      * Logger for this class
      */

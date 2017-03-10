@@ -21,11 +21,11 @@ import org.apache.log4j.Logger;
  * @author armandorivas
  * @since 03/07/17
  */
-public abstract class AbstractService {
+public abstract class AbstractDefaultService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(AbstractService.class);
+    private static final Logger log = Logger.getLogger(AbstractDefaultService.class);
 
     /**
      * Validate the common input.
@@ -40,7 +40,7 @@ public abstract class AbstractService {
      *            The product.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, File sourceDirectory, String product) {
-        log.debug("Validating reseller input...");
+        log.debug("Validating reseller input start, end date with source and product");
         validateEntries(calendarStart, calendarEnd, sourceDirectory);
         validateInput(product, "At least one product must be provided");
     }
@@ -56,7 +56,7 @@ public abstract class AbstractService {
      *            The product.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, String product) {
-        log.debug("Validating reseller input...");
+        log.debug("Validating reseller input start, end date with product");
         validateCalendar(calendarStart, calendarEnd);
         validateInput(product, "At least one product must be provided");
     }
@@ -72,7 +72,7 @@ public abstract class AbstractService {
      *            The source directory.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, File sourceDirectory) {
-        log.debug("Validating reseller input...");
+        log.debug("Validating reseller input start, end date with source");
         validateCalendar(calendarStart, calendarEnd);
         validateInput(sourceDirectory, "The source direcotry cannot be null");
 

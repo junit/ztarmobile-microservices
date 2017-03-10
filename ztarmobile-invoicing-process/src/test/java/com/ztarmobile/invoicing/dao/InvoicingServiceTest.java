@@ -42,5 +42,7 @@ public class InvoicingServiceTest {
         
         
         invoicingService.performInvoicing(c1, c2, "REALMOBILE", true);
+        invoicingService.performInvoicing(c1, c2, "GOOD2GOUS-CDMA", true);
+        
     }
 }

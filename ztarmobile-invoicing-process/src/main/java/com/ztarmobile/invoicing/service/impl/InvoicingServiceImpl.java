@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
+import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.vo.CatalogProductVo;
 
@@ -40,6 +41,17 @@ public class InvoicingServiceImpl implements InvoicingService {
      */
     @Autowired
     private CatalogProductDao catalogProductDao;
+
+    /**
+     * Injection of the specific implementation for sprint.
+     */
+    @Autowired
+    private SprintCdrFileService sprintCdrFileService;
+    /**
+     * Injection of the specific implementation for ericsson.
+     */
+    @Autowired
+    private EricssonCdrFileService ericssonCdrFileService;
 
     /**
      * {@inheritDoc}
@@ -131,11 +143,12 @@ public class InvoicingServiceImpl implements InvoicingService {
         CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
         validateInput(catalogProductVo, "No product information was found for [" + product + "]");
 
-        if (catalogProductVo == null) {
+        log.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
+        log.debug("Reload CDR files from its source directory ? " + reloadCdrFiles);
 
-        }
         if (reloadCdrFiles) {
-
+            CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
+            cdrFileService.extractCdrs(calendarStart, calendarEnd);
         }
 
     }

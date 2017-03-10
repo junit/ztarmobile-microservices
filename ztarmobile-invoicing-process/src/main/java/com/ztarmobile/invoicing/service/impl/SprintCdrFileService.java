@@ -110,7 +110,7 @@ public class SprintCdrFileService extends AbstractCdrFileService {
      */
     @Override
     protected String getSortShellExpression(File fileTobeSorted) {
-        // sort the file by phn_num, and call date.
+        // sort the file by phn_num, and call date. (index starts at 1)
         return "sort -t \"|\" -k 5,5n -k 6,6n " + fileTobeSorted;
     }
 

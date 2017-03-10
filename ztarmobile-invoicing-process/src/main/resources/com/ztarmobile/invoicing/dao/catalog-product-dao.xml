@@ -10,8 +10,8 @@
         <prop key="select.catalog_product">
             <![CDATA[
                 SELECT row_id, product, cdma
-                WHERE  product = :product
                 FROM   invoicing_catalog_product
+                WHERE  product = :product
                 ORDER BY product
             ]]>
         </prop>

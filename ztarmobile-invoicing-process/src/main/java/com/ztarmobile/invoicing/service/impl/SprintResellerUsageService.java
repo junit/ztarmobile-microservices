@@ -77,9 +77,8 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
      */
     @Override
     protected void processCurrentLine(String[] sln) {
-
         // get usage values from specific locations
-        String callDate = sln[5];
+        String callDate = sln[getCallDateFieldPositionAt()];
         System.out.println(callDate);
     }
 
