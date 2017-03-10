@@ -33,7 +33,7 @@ public class SprintCdrFileService extends AbstractCdrFileService {
     /**
      * The file extension.
      */
-    public static final String FILE_EXT = ".txt";
+    private static final String FILE_EXT = ".txt";
     /**
      * Reference to the directory of the Sprint cdrs.
      */

@@ -6,7 +6,6 @@
  */
 package com.ztarmobile.invoicing.service.impl;
 
-import com.ztarmobile.invoicing.service.*;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 import static java.util.Calendar.DAY_OF_MONTH;
 
@@ -16,6 +15,8 @@ import java.util.Calendar;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 
 /**
  * Ericsson implementation to handle the files for the cdrs.
@@ -32,11 +33,11 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
     /**
      * The file extension.
      */
-    public static final String FILE_EXT = ".txt.gz";
+    private static final String FILE_EXT = ".txt.gz";
     /**
      * The file starts with...
      */
-    final String PREFIX_FILE_NAME = "ztar-711_data_dump_";
+    private final String PREFIX_FILE_NAME = "ztar-711_data_dump_";
     /**
      * Reference to the directory of the Ericsson cdrs.
      */
@@ -117,8 +118,7 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
     @Override
     protected String getSortedFileName(String originalFileName) {
         String[] parts = originalFileName.split("_");
-        String callDataFileName = parts[3] + "_call_adj_data_dump.txt.sorted";
-        return callDataFileName;
+        return parts[3] + "_call_adj_data_dump.txt.sorted";
     }
 
     /**

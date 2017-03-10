@@ -6,7 +6,6 @@
  */
 package com.ztarmobile.invoicing.service.impl;
 
-import com.ztarmobile.invoicing.service.*;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 import static java.util.Calendar.DAY_OF_MONTH;
 
@@ -15,6 +14,8 @@ import java.util.Calendar;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
 
 /**
  * Ericsson implementation to handle the files for the cdrs.
@@ -32,7 +33,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
     /**
      * The file starts with...
      */
-    final String SUFIX_FILE_NAME = "_call_adj_data_dump";
+    private final String SUFIX_FILE_NAME = "_call_adj_data_dump";
 
     /**
      * Reference to the extracted directory of the Ericsson cdrs.

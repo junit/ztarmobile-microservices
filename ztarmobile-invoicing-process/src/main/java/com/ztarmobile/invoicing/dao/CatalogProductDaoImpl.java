@@ -8,7 +8,6 @@ package com.ztarmobile.invoicing.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
         Map<String, String> params = new HashMap<>();
         params.put("product", product);
 
-        List<CatalogProductVo> list = new ArrayList<>();
+        List<CatalogProductVo> list;
         list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<CatalogProductVo>() {
             @Override
             public CatalogProductVo mapRow(ResultSet rs, int rowNum) throws SQLException {
