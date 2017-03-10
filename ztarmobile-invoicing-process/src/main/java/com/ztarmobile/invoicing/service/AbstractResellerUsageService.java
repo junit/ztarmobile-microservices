@@ -7,6 +7,7 @@
 package com.ztarmobile.invoicing.service;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.invalidInput;
+import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.createCalendarFrom;
 import static com.ztarmobile.invoicing.common.DateUtils.fromStringToYYmmddHHmmssFormat;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
@@ -19,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,7 +51,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      * Service dependency.
      */
     @Autowired
-    private ResellerAllocationsService resellerAllocationsService;
+    private ResellerAllocationsService allocationsService;
 
     /**
      * {@inheritDoc}
@@ -113,8 +115,14 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      *            The end calendar.
      * @param product
      *            The product.
+     * @param subscribers
+     *            The list of subscribers.
      */
     private void createAllUsageCdrs(Calendar calendarStart, Calendar calendarEnd, String product) {
+        // finds all the subscribers for this product
+        List<ResellerSubsUsageVo> subs = allocationsService.getResellerSubsUsage(calendarStart, calendarEnd, product);
+        validateInput(subs.isEmpty(), "No subcribers were found, the usage cannot be calculated for [" + product + "]");
+
         File file = new File(getTargetDirectoryCdrFile());
         this.validateEntries(calendarStart, calendarEnd, file, product);
 
@@ -143,12 +151,9 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             }
 
             if (foundFileInRange) {
-                List<ResellerSubsUsageVo> subscribers = null;
-                subscribers = resellerAllocationsService.getResellerSubsUsage(calendarStart, calendarEnd, product);
-
                 // process currentFile
                 parseCurrentFile(currentFile, calendarStart.getTime(), calendarNow.getTime(), calendarEnd.getTime(),
-                        product);
+                        subs);
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -158,12 +163,17 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
         }
     }
 
-    private void parseCurrentFile(File currentFile, Date startDate, Date nowDate, Date endDate, String product) {
+    private void parseCurrentFile(File currentFile, Date startDate, Date nowDate, Date endDate,
+            List<ResellerSubsUsageVo> subs) {
         log.info("==> The following file will be read... " + currentFile);
         log.info("start. " + startDate);
         log.info("now. " + nowDate);
         log.info("end. " + endDate);
         log.info("==> The following file will be read... " + currentFile);
+
+        String lastMdn = null;
+        String lastCallDate = null;
+        List<ResellerSubsUsageVo> usgList = null;
 
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
@@ -178,21 +188,91 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 }
                 // tokenize the line
                 String[] sln = line.split("\\|");
-                String callDate = sln[getCallDateFieldPositionAt()];
-                Date cdt = fromStringToYYmmddHHmmssFormat(callDate);
 
+                // we get the info from each line
+                String callDate = sln[getCallDateFieldPositionAt()];
+                String mdn = sln[getMdnFieldPositionAt()];
+
+                Date cdt = fromStringToYYmmddHHmmssFormat(callDate);
                 if (cdt.before(startDate) || cdt.after(endDate)) {
                     // call date is either before the start-date or
                     // is after the end date.
                     // either way, skip it.
-                    log.warn("This line was skipped: " + line);
                     continue;
                 }
+
+                // the usage list is null. That means we reached this mdn
+                // for the first time. This row is a new mdn.
+                if (lastMdn == null || lastCallDate == null || !lastMdn.equals(mdn)
+                        || !lastCallDate.substring(0, 8).equals(callDate.substring(0, 8))) {
+                    /*
+                     * We have the mdn and calldate. Let's look in the
+                     * subscribers list, if this mdn shows up for this
+                     * call-date. There can be more than one entries (if the
+                     * rate plan was changed on that day). So, get all the
+                     * entries for the subscriber i.e. mdn for the call-date.
+                     */
+                    usgList = getUsageByMdnAndCallDate(subs, mdn, callDate.substring(0, 8));
+                }
+                // check for the specific subscriber and plan when
+                // record was created and add usage
+                for (ResellerSubsUsageVo rms : usgList) {
+                    // we know the usage list is for the mdn, and the call date.
+                    // match the call date and time to fit in the rate plan
+                    // duration start and end.
+
+                    if (rms.isTimeInRange(callDate)) {
+                        // rms.setActualMou(rms.getActualMou() + mou);
+                        // rms.setActualKbs(rms.getActualKbs() + kbs);
+                        // rms.setActualSms(rms.getActualSms() + sms);
+                        // rms.setActualMms(rms.getActualMms() + mms);
+                        rms.setUpdated(true); // dirty flag
+                        break;
+                    }
+                }
+                // capture this mdn for next iteration.
+                lastMdn = mdn;
+                lastCallDate = callDate;
+
                 processCurrentLine(sln);
             }
         } catch (IOException ex) {
             invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
         }
+    }
+
+    /**
+     * Get all usage rows that match mdn, and the call date
+     * 
+     * @param subs
+     *            The list of subcribers.
+     * @param mdn
+     *            The mdn.
+     * @param callDate
+     *            The calldate in format YYYYmmdd
+     * @return The list containing matching objects.
+     */
+    private List<ResellerSubsUsageVo> getUsageByMdnAndCallDate(List<ResellerSubsUsageVo> subs, String mdn,
+            String callDate) {
+        List<ResellerSubsUsageVo> subList = new ArrayList<>();
+
+        for (ResellerSubsUsageVo sub : subs) {
+            if (!sub.isEqualsByMdnAndCallDate(mdn, callDate)) {
+                // skip all list entries where mdn is does not match
+                continue;
+            }
+            // found the matching mdn and callDate
+            // Initialize all actual values. This is to avoid doubling up in
+            // case of accidental duplicate runs..
+            sub.setActualKbs(0);
+            sub.setActualMms(0);
+            sub.setActualMou(0);
+            sub.setActualSms(0);
+
+            // add the same object from the subscribers list to the sublist.
+            subList.add(sub);
+        }
+        return subList;
     }
 
     /**

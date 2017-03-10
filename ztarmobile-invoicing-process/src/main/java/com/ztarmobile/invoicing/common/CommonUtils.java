@@ -59,6 +59,21 @@ public class CommonUtils {
     }
 
     /**
+     * Validates that the value being passed is true or not, if it's true, it
+     * throws the exception, otherwise everything is ignored.
+     * 
+     * @param value
+     *            The boolean value.
+     * @param msg
+     *            The exception message.
+     */
+    public static void validateInput(boolean value, String msg) {
+        if (value) {
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+    /**
      * Validates a generic array to test if this array is null or empty.
      * 
      * @param arr

@@ -6,6 +6,9 @@
  */
 package com.ztarmobile.invoicing.vo;
 
+import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
+import static com.ztarmobile.invoicing.common.DateUtils.fromStringToYYmmddHHmmssFormat;
+
 import java.util.Date;
 
 /**
@@ -302,6 +305,35 @@ public class ResellerSubsUsageVo {
      */
     public void setUpdated(boolean isUpdated) {
         this.isUpdated = isUpdated;
+    }
+
+    /**
+     * Compare if the mdn, and call date matches that of this object.
+     * 
+     * @param mdn
+     *            The mdn.
+     * @param callDate
+     *            The call date under this format yyyyMMdd
+     * @return true if it's the same or false it that does not match.
+     */
+    public boolean isEqualsByMdnAndCallDate(String mdn, String callDate) {
+        return this.mdn.equals(mdn) && fromDateToYYYYmmddFormat(this.callDate).equals(callDate);
+    }
+
+    /**
+     * The time is in range.
+     * 
+     * @param callDate
+     *            The call date.
+     * @return true, it's in range.
+     */
+    public boolean isTimeInRange(String callDate) {
+        boolean isInRange = true;
+        Date calldt = fromStringToYYmmddHHmmssFormat(callDate);
+        if (calldt.before(durationStart) || calldt.after(durationEnd)) {
+            isInRange = false;
+        }
+        return isInRange;
     }
 
     /*
