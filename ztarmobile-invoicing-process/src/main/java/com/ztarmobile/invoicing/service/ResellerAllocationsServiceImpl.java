@@ -53,15 +53,6 @@ public class ResellerAllocationsServiceImpl extends AbstractService implements R
      * {@inheritDoc}
      */
     @Override
-    public void createAllocations(Calendar start, Calendar end, String product) {
-        // delegates to a common method.
-        this.createAllAllocations(start, end, product);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void createAllocations(Date start, Date end, String product) {
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(start);
@@ -71,6 +62,15 @@ public class ResellerAllocationsServiceImpl extends AbstractService implements R
 
         // delegates to a common method.
         this.createAllAllocations(calendarStart, calendarEnd, product);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void createAllocations(Calendar start, Calendar end, String product) {
+        // delegates to a common method.
+        this.createAllAllocations(start, end, product);
     }
 
     /**

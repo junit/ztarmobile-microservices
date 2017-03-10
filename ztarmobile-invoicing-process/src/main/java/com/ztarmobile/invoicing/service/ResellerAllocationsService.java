@@ -28,6 +28,8 @@ public interface ResellerAllocationsService {
      *            The end date.
      * @param product
      *            The product.
+     * @see ResellerAllocationsService#createAllocations(Calendar, Calendar,
+     *      String)
      */
     void createAllocations(Date start, Date end, String product);
 
@@ -40,6 +42,7 @@ public interface ResellerAllocationsService {
      *            The end date.
      * @param product
      *            The product.
+     * @see ResellerAllocationsService#createAllocations(Date, Date, String)
      */
     void createAllocations(Calendar start, Calendar end, String product);
 

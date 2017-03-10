@@ -24,6 +24,7 @@ public interface CdrFileService {
      *            The start date.
      * @param end
      *            The end date.
+     * @see CdrFileService#extractCdrs(Calendar, Calendar)
      */
     void extractCdrs(Date start, Date end);
 
@@ -35,6 +36,7 @@ public interface CdrFileService {
      *            The start date.
      * @param end
      *            The end date.
+     * @see CdrFileService#extractCdrs(Date, Date)
      */
     void extractCdrs(Calendar start, Calendar end);
 
