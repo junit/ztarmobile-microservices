@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="catalogProductDaoSql">
+        <prop key="select.catalog_product">
+            <![CDATA[
+                SELECT row_id, product, cdma
+                WHERE  product = :product
+                FROM   invoicing_catalog_product
+                ORDER BY product
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>

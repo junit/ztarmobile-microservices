@@ -4,8 +4,9 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.service;
+package com.ztarmobile.invoicing.service.impl;
 
+import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static java.util.Calendar.MONTH;
@@ -14,7 +15,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.ztarmobile.invoicing.dao.CatalogProductDao;
+import com.ztarmobile.invoicing.service.InvoicingService;
+import com.ztarmobile.invoicing.vo.CatalogProductVo;
 
 /**
  * Direct service implementation that calculates and perform the invoicing
@@ -29,6 +35,11 @@ public class InvoicingServiceImpl implements InvoicingService {
      * Logger for this class
      */
     private static final Logger log = Logger.getLogger(InvoicingServiceImpl.class);
+    /**
+     * DAO dependency.
+     */
+    @Autowired
+    private CatalogProductDao catalogProductDao;
 
     /**
      * {@inheritDoc}
@@ -115,7 +126,17 @@ public class InvoicingServiceImpl implements InvoicingService {
      */
     private void performAllInvoicing(Calendar calendarStart, Calendar calendarEnd, String product,
             boolean reloadCdrFiles) {
-        log.debug("dssdsd====================");
+        log.debug("Starting the invoicing process...");
+
+        CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
+        validateInput(catalogProductVo, "No product information was found for [" + product + "]");
+
+        if (catalogProductVo == null) {
+
+        }
+        if (reloadCdrFiles) {
+
+        }
 
     }
 
