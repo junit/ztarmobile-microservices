@@ -128,6 +128,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
             }
             alist.add(sub);
         }
+        // updates the database
         resellerAllocationsDao.updateResellerSubsUsage(alist);
     }
 

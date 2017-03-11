@@ -56,6 +56,7 @@ public interface ResellerAllocationsDao {
      * 
      * @param subscribers
      *            The list of subscribers.
+     * @return Total of records updated.
      */
-    void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers);
+    int[] updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers);
 }

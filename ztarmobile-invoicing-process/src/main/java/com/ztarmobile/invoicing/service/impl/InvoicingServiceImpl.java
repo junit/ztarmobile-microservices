@@ -176,6 +176,8 @@ public class InvoicingServiceImpl implements InvoicingService {
         log.debug("==================> 2. create_reseller_usage <=====================");
         ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
         usageService.createUsage(calendarStart, calendarEnd, product);
+        
+        log.debug("==================> 2. create_reseller_usage <=====================");
     }
 
 }

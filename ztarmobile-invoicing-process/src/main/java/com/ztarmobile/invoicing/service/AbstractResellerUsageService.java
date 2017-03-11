@@ -157,6 +157,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
                 // 2. updates the usage.
                 allocationsService.updateResellerSubsUsage(subs);
+
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -316,8 +317,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      * 
      * @param sln
      *            The current line.
-     * @param The
-     *            usage for each line.
+     * @return The usage for each line.
      */
     protected abstract UsageVo calculateIndividualUsage(String[] sln);
 

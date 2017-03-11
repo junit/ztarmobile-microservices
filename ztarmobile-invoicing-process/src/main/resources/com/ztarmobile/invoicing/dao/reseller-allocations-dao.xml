@@ -104,7 +104,7 @@
                 UPDATE    new_add_ind = new_add_ind + if (isnull(newadds.billing_start_date), 0, 1);
             ]]>
         </prop>
-        <prop key="update.reseller_subs_usage">
+        <prop key="update.reseller_subs_usage.indicators">
             <![CDATA[
                 UPDATE    reseller_subs_usage
                 SET       renewal_ind = 1
@@ -130,9 +130,15 @@
                 ORDER BY usg.call_date, usg.mdn, usg.rate_plan
             ]]>
         </prop>
-        <prop key="select.reseller_subs_usage">
+        <prop key="update.reseller_subs_usage">
             <![CDATA[
-                UPDATE bla bla...
+                UPDATE reseller_subs_usage
+                SET    actual_mou = :actualMou,
+                       actual_sms = :actualSms,
+                       actual_mms = :actualMms,
+                       actual_kbs = :actualKbs,
+                       lst_upd_date = now()
+                WHERE  row_id = :rowId
             ]]>
         </prop>
     </util:properties>

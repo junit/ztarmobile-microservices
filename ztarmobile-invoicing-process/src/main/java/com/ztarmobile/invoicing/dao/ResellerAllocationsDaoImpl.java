@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
@@ -69,7 +71,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
     @Override
     public void updateAllocationIndicators() {
         log.debug("Updating status...");
-        String sql = sqlStatements.getProperty("update.reseller_subs_usage");
+        String sql = sqlStatements.getProperty("update.reseller_subs_usage.indicators");
 
         Map<String, String> params = new HashMap<>();
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
@@ -119,8 +121,11 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      * {@inheritDoc}
      */
     @Override
-    public void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
-        log.debug("Updating subscriber usage...");
+    public int[] updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
+        log.debug("Updating " + subscribers.size() + " subscriber usage...");
         String sql = sqlStatements.getProperty("update.reseller_subs_usage");
+
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(subscribers.toArray());
+        return this.getJdbc().batchUpdate(sql, batch);
     }
 }
