@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
+import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
  * Sprint implementation to handle the files for the cdrs.
@@ -76,9 +77,30 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
      * {@inheritDoc}
      */
     @Override
-    protected void processCurrentLine(String[] sln) {
-        // get usage values from specific locations
-        String callDate = sln[getCallDateFieldPositionAt()];
+    protected UsageVo calculateIndividualUsage(String[] sln) {
+        UsageVo usage = new UsageVo();
+
+        // check if it's prepaid as there's a difference on how
+        // sms is handled
+        String ppd = sln[0];
+
+        usage.setKbs(Float.parseFloat(sln[9]));
+        if (ppd.equalsIgnoreCase("prepaid")) {
+            if (sln.length > 14) {
+                String tp = sln[14];
+                if (tp != null && tp.equalsIgnoreCase("TEXT MESG")) {
+                    usage.setSms(Float.parseFloat(sln[8]));
+                } else {
+                    usage.setMou(Float.parseFloat(sln[8]));
+                }
+            } else {
+                usage.setMou(Float.parseFloat(sln[8]));
+            }
+        } else {
+            usage.setSms(Float.parseFloat(sln[10]));
+            usage.setMou(Float.parseFloat(sln[8]));
+        }
+        return usage;
     }
 
     /**

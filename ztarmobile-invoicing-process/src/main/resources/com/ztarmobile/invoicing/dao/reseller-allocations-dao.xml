@@ -130,6 +130,11 @@
                 ORDER BY usg.call_date, usg.mdn, usg.rate_plan
             ]]>
         </prop>
+        <prop key="select.reseller_subs_usage">
+            <![CDATA[
+                UPDATE bla bla...
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>

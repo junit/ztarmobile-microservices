@@ -20,6 +20,7 @@ import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -113,6 +114,21 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
         this.validateEntries(start, end, product);
 
         return resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
+        List<ResellerSubsUsageVo> alist = new ArrayList<>();
+        for (ResellerSubsUsageVo sub : subscribers) {
+            if (!sub.isUpdated()) {
+                continue;
+            }
+            alist.add(sub);
+        }
+        resellerAllocationsDao.updateResellerSubsUsage(alist);
     }
 
     /**

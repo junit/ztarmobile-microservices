@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
+import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
  * Ericsson implementation to handle the files for the cdrs.
@@ -84,20 +85,31 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
      * {@inheritDoc}
      */
     @Override
-    protected void processCurrentLine(String[] sln) {
+    protected UsageVo calculateIndividualUsage(String[] sln) {
+        UsageVo usage = new UsageVo();
+
         // get usage values from specific locations
-        String type = sln[0];
         String callType = sln[13];
-        String callDate = sln[getCallDateFieldPositionAt()];
-        String mdn = sln[getMdnFieldPositionAt()];
+        String kbs = sln[17];
 
         if (callType.equals("SMS")) {
-
+            usage.setSms(1);
         } else if (callType.equals("MMS")) {
-
+            usage.setMms(1);
         } else if (callType.equals("VOICE")) {
-
+            // *** NEW LOGIG
+            // we need to exclude call forward to voicemail from the chargeable
+            // minutes, as it should not be chargeable…. We are not charged by
+            // ATT either.
+            if (sln.length == 29 && sln[10].equals("Forwarding") && sln[28].equals("VM_DEP")) {
+                usage.setMou(0);
+            } else {
+                usage.setMou(Float.parseFloat(sln[14]));
+            }
+        } else if (callType.equals("GPRS")) {
+            usage.setKbs(Float.parseFloat(kbs));
         }
+        return usage;
     }
 
     /**

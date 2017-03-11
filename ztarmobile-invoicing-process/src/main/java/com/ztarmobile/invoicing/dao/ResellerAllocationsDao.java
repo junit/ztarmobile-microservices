@@ -50,4 +50,12 @@ public interface ResellerAllocationsDao {
      * @return List of the reseller subscribers.
      */
     List<ResellerSubsUsageVo> getResellerSubsUsage(Date startDate, Date endDate, String product);
+
+    /**
+     * Updates the subscriber usage into the db.
+     * 
+     * @param subscribers
+     *            The list of subscribers.
+     */
+    void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers);
 }

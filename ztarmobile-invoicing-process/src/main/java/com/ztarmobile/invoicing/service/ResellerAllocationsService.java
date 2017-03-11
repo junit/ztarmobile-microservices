@@ -93,4 +93,12 @@ public interface ResellerAllocationsService {
      * @return List of subscribers.
      */
     List<ResellerSubsUsageVo> getResellerSubsUsage(Calendar start, Calendar end, String product);
+
+    /**
+     * Updates the usage of the subscribers.
+     * 
+     * @param subscribers
+     *            List of subscribers.
+     */
+    void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers);
 }

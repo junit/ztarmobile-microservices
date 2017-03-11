@@ -114,4 +114,13 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
             }
         });
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
+        log.debug("Updating subscriber usage...");
+        String sql = sqlStatements.getProperty("update.reseller_subs_usage");
+    }
 }

@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
+import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
  * Parent abstract class to handle the usage for the cdrs.
@@ -151,9 +152,11 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             }
 
             if (foundFileInRange) {
-                // process currentFile
-                parseCurrentFile(currentFile, calendarStart.getTime(), calendarNow.getTime(), calendarEnd.getTime(),
-                        subs);
+                // 1. calculate the usage in the current file.
+                calculateUsagePerFile(currentFile, calendarStart.getTime(), calendarEnd.getTime(), subs);
+
+                // 2. updates the usage.
+                allocationsService.updateResellerSubsUsage(subs);
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -163,25 +166,23 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
         }
     }
 
-    private void parseCurrentFile(File currentFile, Date startDate, Date nowDate, Date endDate,
-            List<ResellerSubsUsageVo> subs) {
+    private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsageVo> subs) {
         log.info("==> The following file will be read... " + currentFile);
-        log.info("start. " + startDate);
-        log.info("now. " + nowDate);
-        log.info("end. " + endDate);
-        log.info("==> The following file will be read... " + currentFile);
-
-        String lastMdn = null;
-        String lastCallDate = null;
-        List<ResellerSubsUsageVo> usgList = null;
 
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
             if (hasHeader()) {
                 reader.readLine();// ignores the first line
             }
+
+            String lastMdn = null;
+            String lastCallDate = null;
+            List<ResellerSubsUsageVo> usgList = null;
+            long linecnt = 0, mdnUpdCnt = 0;
+
             // read the rest of the files
             while ((line = reader.readLine()) != null) {
+                linecnt++;
                 if (line.isEmpty()) {
                     // some how we got a blank row... skip it.
                     continue;
@@ -200,6 +201,9 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                     // either way, skip it.
                     continue;
                 }
+
+                // calculate the usage
+                UsageVo usage = calculateIndividualUsage(sln);
 
                 // the usage list is null. That means we reached this mdn
                 // for the first time. This row is a new mdn.
@@ -222,10 +226,10 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                     // duration start and end.
 
                     if (rms.isTimeInRange(callDate)) {
-                        // rms.setActualMou(rms.getActualMou() + mou);
-                        // rms.setActualKbs(rms.getActualKbs() + kbs);
-                        // rms.setActualSms(rms.getActualSms() + sms);
-                        // rms.setActualMms(rms.getActualMms() + mms);
+                        rms.setActualMou(rms.getActualMou() + usage.getMou());
+                        rms.setActualKbs(rms.getActualKbs() + usage.getKbs());
+                        rms.setActualSms(rms.getActualSms() + usage.getSms());
+                        rms.setActualMms(rms.getActualMms() + usage.getMms());
                         rms.setUpdated(true); // dirty flag
                         break;
                     }
@@ -233,9 +237,10 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 // capture this mdn for next iteration.
                 lastMdn = mdn;
                 lastCallDate = callDate;
-
-                processCurrentLine(sln);
+                mdnUpdCnt++;
             }
+            log.info("  .. read lines #: " + linecnt);
+            log.info("  .. processed mdns #: " + mdnUpdCnt);
         } catch (IOException ex) {
             invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
         }
@@ -311,8 +316,10 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      * 
      * @param sln
      *            The current line.
+     * @param The
+     *            usage for each line.
      */
-    protected abstract void processCurrentLine(String[] sln);
+    protected abstract UsageVo calculateIndividualUsage(String[] sln);
 
     /**
      * Gets the position of the call date in a cdr file.
