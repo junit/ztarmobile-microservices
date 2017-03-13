@@ -9,22 +9,21 @@
     <util:properties id="invoicingDaoSql">
         <prop key="select.insert.invocing_details">
             <![CDATA[
-                INSERT INTO invocing_details (product, year, month, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms, creation_date) 
-                SELECT 1,
-                       1,
-                       2,
-                       3,
-                       4,
-                       5,
-                       6,
-                       7,
-                       8,
-                       9,
+                INSERT INTO invocing_details (product_id, year, month, day, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms, creation_date) 
+                SELECT (SELECT row_id FROM invoicing_catalog_product WHERE product = :product),
+                       year(call_date) as 'Year',
+                       month(call_date) as 'Month',
+                       day(call_date) as 'Day',
+                       mdn as mdn,
+                       rate_plan as 'Rate-Plan',
+                       ROUND((SUM(TIME_TO_SEC(TIMEDIFF(duration_end, duration_start))/3600)/24)) AS 'Days-On-Plan',
+                       FLOOR(sum(actual_mou)) as 'Actual-MOU',
+                       round(sum(actual_kbs/1024),0) as 'Actual-MBS',
+                       FLOOR(sum(actual_sms)) as 'Actual-SMS',
+                       FLOOR(sum(actual_mms)) as 'Actual-MMS',
                        NOW()
                   FROM reseller_subs_usage
-                 -- WHERE rate_plan in ( " . $plans_list . " )
-                 --  AND product = ?  -- to reestrict only for an specific product
-                 --  AND date(call_date) between ? and ?
+                 -- WHERE product = :product  -- to reestrict only for an specific product
               GROUP BY mdn, rate_plan
               ORDER BY mdn, rate_plan
             ]]>
