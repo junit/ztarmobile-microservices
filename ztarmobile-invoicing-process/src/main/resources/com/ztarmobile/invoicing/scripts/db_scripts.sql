@@ -38,7 +38,8 @@ CREATE TABLE `cdrs`.`invocing_details` (
   `mbs` INT NOT NULL,
   `sms` INT NOT NULL,
   `mms` INT NOT NULL,
-  `creation_date` DATETIME NOT NULL,
+  `creation_date` DATETIME NOT NULL DEFAULT NOW(),
+  `update_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
   KEY `fk_invoicing_product_idx` (`product_id`),
   CONSTRAINT `fk_invoicing_product_idx`
