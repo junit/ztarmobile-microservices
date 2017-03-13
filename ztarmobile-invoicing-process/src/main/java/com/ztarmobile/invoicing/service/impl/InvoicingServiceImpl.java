@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
+import com.ztarmobile.invoicing.dao.InvoicingDao;
 import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
@@ -38,8 +39,15 @@ public class InvoicingServiceImpl implements InvoicingService {
      * Logger for this class
      */
     private static final Logger log = Logger.getLogger(InvoicingServiceImpl.class);
+
     /**
-     * DAO dependency.
+     * DAO dependency for the invoicing process.
+     */
+    @Autowired
+    private InvoicingDao invoicingDao;
+
+    /**
+     * DAO dependency for the product.
      */
     @Autowired
     private CatalogProductDao catalogProductDao;
@@ -176,8 +184,9 @@ public class InvoicingServiceImpl implements InvoicingService {
         log.debug("==================> 2. create_reseller_usage <=====================");
         ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
         usageService.createUsage(calendarStart, calendarEnd, product);
-        
+
         log.debug("==================> 2. create_reseller_usage <=====================");
+        invoicingDao.saveInvoicing(calendarStart.getTime(), calendarEnd.getTime(), product);
     }
 
 }
