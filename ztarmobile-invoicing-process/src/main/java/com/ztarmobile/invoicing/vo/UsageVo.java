@@ -13,15 +13,15 @@ package com.ztarmobile.invoicing.vo;
  * @since 03/10/17
  */
 public class UsageVo {
-    private float mou;
-    private float kbs;
-    private float sms;
-    private float mms;
+    private double mou;
+    private double kbs;
+    private double sms;
+    private double mms;
 
     /**
      * @return the mou
      */
-    public float getMou() {
+    public double getMou() {
         return mou;
     }
 
@@ -29,14 +29,14 @@ public class UsageVo {
      * @param mou
      *            the mou to set
      */
-    public void setMou(float mou) {
+    public void setMou(double mou) {
         this.mou = mou;
     }
 
     /**
      * @return the kbs
      */
-    public float getKbs() {
+    public double getKbs() {
         return kbs;
     }
 
@@ -44,14 +44,14 @@ public class UsageVo {
      * @param kbs
      *            the kbs to set
      */
-    public void setKbs(float kbs) {
+    public void setKbs(double kbs) {
         this.kbs = kbs;
     }
 
     /**
      * @return the sms
      */
-    public float getSms() {
+    public double getSms() {
         return sms;
     }
 
@@ -59,14 +59,14 @@ public class UsageVo {
      * @param sms
      *            the sms to set
      */
-    public void setSms(float sms) {
+    public void setSms(double sms) {
         this.sms = sms;
     }
 
     /**
      * @return the mms
      */
-    public float getMms() {
+    public double getMms() {
         return mms;
     }
 
@@ -74,7 +74,7 @@ public class UsageVo {
      * @param mms
      *            the mms to set
      */
-    public void setMms(float mms) {
+    public void setMms(double mms) {
         this.mms = mms;
     }
 

@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddDashFormat;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,9 +51,8 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
         String sql = sqlStatements.getProperty("select.insert.invocing_details");
 
         Map<String, String> params = new HashMap<>();
-        // params.put("call_dt", fromDateToDbFormat(callDate));
-        // params.put("duration_start", fromDateToDbFormat(durationStart));
-        // params.put("duration_end", fromDateToDbFormat(durationEnd));
+        params.put("init_date", fromDateToYYYYmmddDashFormat(start));
+        params.put("end_date", fromDateToYYYYmmddDashFormat(end));
         params.put("product", product);
 
         this.getJdbc().update(sql, new MapSqlParameterSource(params));

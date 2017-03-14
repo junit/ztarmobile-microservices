@@ -43,6 +43,12 @@ public class DateUtils {
     private static final SimpleDateFormat yyyyMMddDateFormat = new SimpleDateFormat(YYYYMMDD);
 
     /**
+     * Format used in date format yyyy-MM-dd.
+     */
+    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+    private static final SimpleDateFormat yyyyMMddDashDateFormat = new SimpleDateFormat(YYYY_MM_DD);
+
+    /**
      * Format used in cdrs files yyyyMM.
      */
     public static final String YYYYMM = "yyyyMM";
@@ -102,6 +108,17 @@ public class DateUtils {
      */
     public static String fromDateToYYYYmmddFormat(Date date) {
         return yyyyMMddDateFormat.format(date);
+    }
+
+    /**
+     * Converts from a date object to a yyyy-MM-dd format.
+     * 
+     * @param date
+     *            The date to convert to a yyyy-MM-dd format.
+     * @return The String representation of the date.
+     */
+    public static String fromDateToYYYYmmddDashFormat(Date date) {
+        return yyyyMMddDashDateFormat.format(date);
     }
 
     /**

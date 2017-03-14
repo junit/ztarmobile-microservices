@@ -36,13 +36,14 @@ public class InvoicingServiceTest {
     @Test
     public void performInvoicing() {
         Calendar c1 = Calendar.getInstance();
-        c1.set(2016, 9, 3);
+        c1.set(2016, 9, 01);
         Calendar c2 = Calendar.getInstance();
-        c2.set(2016, 9, 3);
+        c2.set(2016, 9, 31);
         
-        
+        long init = System.currentTimeMillis();
         invoicingService.performInvoicing(c1, c2, "GOOD2GOUS", true);
+        long end = System.currentTimeMillis();
         //invoicingService.performInvoicing(c1, c2, "GOOD2GOUS-CDMA", true);
-        
+        System.out.println(end-init);
     }
 }

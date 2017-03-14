@@ -22,14 +22,14 @@ public class ResellerSubsUsageVo {
     private Date callDate;
     private String ratePlan;
     private String mdn;
-    private float allocMou; // maps to 'alloc_voice' field
-    private float allocSms;
-    private float allocMms;
-    private float allocMbs; // maps to 'alloc_mou_mbs' field
-    private float actualMou; // maps to 'actual_voice' field
-    private float actualSms;
-    private float actualMms;
-    private float actualKbs;
+    private double allocMou; // maps to 'alloc_voice' field
+    private double allocSms;
+    private double allocMms;
+    private double allocMbs; // maps to 'alloc_mou_mbs' field
+    private double actualMou; // maps to 'actual_voice' field
+    private double actualSms;
+    private double actualMms;
+    private double actualKbs;
     private Date durationStart;
     private Date durationEnd;
     private int newAddInd;
@@ -100,7 +100,7 @@ public class ResellerSubsUsageVo {
     /**
      * @return the allocMou
      */
-    public float getAllocMou() {
+    public double getAllocMou() {
         return allocMou;
     }
 
@@ -108,14 +108,14 @@ public class ResellerSubsUsageVo {
      * @param allocMou
      *            the allocMou to set
      */
-    public void setAllocMou(float allocMou) {
+    public void setAllocMou(double allocMou) {
         this.allocMou = allocMou;
     }
 
     /**
      * @return the allocSms
      */
-    public float getAllocSms() {
+    public double getAllocSms() {
         return allocSms;
     }
 
@@ -123,14 +123,14 @@ public class ResellerSubsUsageVo {
      * @param allocSms
      *            the allocSms to set
      */
-    public void setAllocSms(float allocSms) {
+    public void setAllocSms(double allocSms) {
         this.allocSms = allocSms;
     }
 
     /**
      * @return the allocMms
      */
-    public float getAllocMms() {
+    public double getAllocMms() {
         return allocMms;
     }
 
@@ -138,14 +138,14 @@ public class ResellerSubsUsageVo {
      * @param allocMms
      *            the allocMms to set
      */
-    public void setAllocMms(float allocMms) {
+    public void setAllocMms(double allocMms) {
         this.allocMms = allocMms;
     }
 
     /**
      * @return the allocMbs
      */
-    public float getAllocMbs() {
+    public double getAllocMbs() {
         return allocMbs;
     }
 
@@ -153,14 +153,14 @@ public class ResellerSubsUsageVo {
      * @param allocMbs
      *            the allocMbs to set
      */
-    public void setAllocMbs(float allocMbs) {
+    public void setAllocMbs(double allocMbs) {
         this.allocMbs = allocMbs;
     }
 
     /**
      * @return the actualMou
      */
-    public float getActualMou() {
+    public double getActualMou() {
         return actualMou;
     }
 
@@ -168,14 +168,14 @@ public class ResellerSubsUsageVo {
      * @param actualMou
      *            the actualMou to set
      */
-    public void setActualMou(float actualMou) {
+    public void setActualMou(double actualMou) {
         this.actualMou = actualMou;
     }
 
     /**
      * @return the actualSms
      */
-    public float getActualSms() {
+    public double getActualSms() {
         return actualSms;
     }
 
@@ -183,14 +183,14 @@ public class ResellerSubsUsageVo {
      * @param actualSms
      *            the actualSms to set
      */
-    public void setActualSms(float actualSms) {
+    public void setActualSms(double actualSms) {
         this.actualSms = actualSms;
     }
 
     /**
      * @return the actualMms
      */
-    public float getActualMms() {
+    public double getActualMms() {
         return actualMms;
     }
 
@@ -198,14 +198,14 @@ public class ResellerSubsUsageVo {
      * @param actualMms
      *            the actualMms to set
      */
-    public void setActualMms(float actualMms) {
+    public void setActualMms(double actualMms) {
         this.actualMms = actualMms;
     }
 
     /**
      * @return the actualKbs
      */
-    public float getActualKbs() {
+    public double getActualKbs() {
         return actualKbs;
     }
 
@@ -213,7 +213,7 @@ public class ResellerSubsUsageVo {
      * @param actualKbs
      *            the actualKbs to set
      */
-    public void setActualKbs(float actualKbs) {
+    public void setActualKbs(double actualKbs) {
         this.actualKbs = actualKbs;
     }
 

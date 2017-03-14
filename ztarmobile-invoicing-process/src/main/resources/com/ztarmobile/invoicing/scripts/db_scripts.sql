@@ -41,10 +41,10 @@ CREATE TABLE `cdrs`.`invocing_details` (
   `creation_date` DATETIME NOT NULL DEFAULT NOW(),
   `update_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
+  UNIQUE INDEX `unique_idx` (`product_id` ASC, `year` ASC, `month` ASC, `day` ASC, `mdn` ASC, `rate_plan` ASC),
   KEY `fk_invoicing_product_idx` (`product_id`),
   CONSTRAINT `fk_invoicing_product_idx`
     FOREIGN KEY (`product_id`)
     REFERENCES `cdrs`.`invoicing_catalog_product` (`row_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
-
