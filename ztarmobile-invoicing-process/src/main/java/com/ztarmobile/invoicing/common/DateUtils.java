@@ -14,8 +14,10 @@ import static java.util.Calendar.SECOND;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Utility to handle the date format conversions.
@@ -210,5 +212,98 @@ public class DateUtils {
             calendarEnd.set(MINUTE, calendarEnd.getActualMaximum(MINUTE));
             calendarEnd.set(SECOND, calendarEnd.getActualMaximum(SECOND));
         }
+    }
+
+    /**
+     * Given a calendar, this one is set to the last day of the month.
+     * 
+     * @param calendar
+     *            The calendar to be returned as the last one of the month.
+     * @return The last day of the month.
+     */
+    public static Calendar getMaximumCalendarMonth(Calendar calendar) {
+        Calendar calendarLast = createCalendarFrom(calendar);
+
+        calendarLast.set(DAY_OF_MONTH, calendarLast.getActualMaximum(DAY_OF_MONTH));
+
+        calendarLast.set(HOUR_OF_DAY, calendarLast.getActualMaximum(HOUR_OF_DAY));
+        calendarLast.set(MINUTE, calendarLast.getActualMaximum(MINUTE));
+        calendarLast.set(SECOND, calendarLast.getActualMaximum(SECOND));
+        return calendarLast;
+    }
+
+    /**
+     * Given a calendar, this one is set to the first day of the month.
+     * 
+     * @param calendar
+     *            The calendar to be returned as the first one of the month.
+     * @return The first day of the month.
+     */
+    public static Calendar getMinimumCalendarMonth(Calendar calendar) {
+        Calendar calendarFirst = createCalendarFrom(calendar);
+
+        calendarFirst.set(DAY_OF_MONTH, calendarFirst.getActualMinimum(DAY_OF_MONTH));
+
+        calendarFirst.set(HOUR_OF_DAY, calendarFirst.getActualMinimum(HOUR_OF_DAY));
+        calendarFirst.set(MINUTE, calendarFirst.getActualMinimum(MINUTE));
+        calendarFirst.set(SECOND, calendarFirst.getActualMinimum(SECOND));
+        return calendarFirst;
+    }
+
+    /**
+     * Given a start and end calendar, this method returns a list of months
+     * within that interval. e.g. The start date is: 01/23/17 and the end date
+     * is: 03/14/17. The result would be [01/23/17 - 01/31-17, 02/01/17 -
+     * 02/28/17, 03/01/17 - 03/14/17].
+     * 
+     * @param start
+     *            The start calendar.
+     * @param end
+     *            The end calendar.
+     * @return List of intervals by month.
+     */
+    public static List<MontlyTime> splitTimeByMonth(Calendar start, Calendar end) {
+        List<MontlyTime> list = null;
+        if (!(start == null || end == null)) {
+            if (!start.after(end)) {
+                // the end date is greater than start date and those are not
+                // null
+                list = new ArrayList<>();
+
+                Calendar startTmp = createCalendarFrom(start);
+                for (;;) {
+                    Calendar calendarNow = getMaximumCalendarMonth(startTmp);
+
+                    if (calendarNow.after(end)) {
+                        list.add(createMontlyTime(startTmp, end));
+                        break;
+                    } else {
+                        list.add(createMontlyTime(startTmp, calendarNow));
+                        // we preprare for the next interval
+                        calendarNow.add(MONTH, 1);
+                        calendarNow = getMinimumCalendarMonth(calendarNow);
+                        startTmp = getMinimumCalendarMonth(calendarNow);
+                    }
+
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Creates a montly time object.
+     * 
+     * @param start
+     *            The start date.
+     * @param end
+     *            The end date.
+     * @return The montly time.
+     */
+    private static MontlyTime createMontlyTime(Calendar start, Calendar end) {
+        MontlyTime montlyTime = new MontlyTime();
+        montlyTime.setStart(createCalendarFrom(start));
+        montlyTime.setEnd(createCalendarFrom(end));
+        return montlyTime;
     }
 }

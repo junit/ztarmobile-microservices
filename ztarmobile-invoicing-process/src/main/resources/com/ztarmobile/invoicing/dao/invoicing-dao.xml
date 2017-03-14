@@ -26,7 +26,7 @@
                            rate_plan as 'Rate-Plan',
                            ROUND((SUM(TIME_TO_SEC(TIMEDIFF(duration_end, duration_start))/3600)/24)) AS 'Days_On_Plan',
                            FLOOR(sum(actual_mou)) as 'Actual_MOU',
-                           round(sum(actual_kbs/1024),0) as 'Actual_MBS',
+                           round(sum((actual_kbs/1024)/1024),0) as 'Actual_MBS',
                            FLOOR(sum(actual_sms)) as 'Actual_SMS',
                            FLOOR(sum(actual_mms)) as 'Actual_MMS'
                       FROM reseller_subs_usage

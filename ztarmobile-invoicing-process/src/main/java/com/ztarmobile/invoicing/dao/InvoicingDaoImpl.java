@@ -64,7 +64,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      */
     @Override
     public void saveInvoicing(Date start, Date end, String product) {
-        log.debug("Saving invoicing data...");
+        log.debug("Saving invoicing details...");
 
         String sql = sqlStatements.getProperty("select.insert.invocing_details");
 

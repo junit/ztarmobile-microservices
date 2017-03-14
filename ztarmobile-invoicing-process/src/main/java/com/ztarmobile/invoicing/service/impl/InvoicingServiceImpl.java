@@ -9,15 +9,18 @@ package com.ztarmobile.invoicing.service.impl;
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.splitTimeByMonth;
 import static java.util.Calendar.MONTH;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ztarmobile.invoicing.common.MontlyTime;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
 import com.ztarmobile.invoicing.dao.InvoicingDao;
 import com.ztarmobile.invoicing.service.CdrFileService;
@@ -185,10 +188,42 @@ public class InvoicingServiceImpl implements InvoicingService {
         ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
         usageService.createUsage(calendarStart, calendarEnd, product);
 
-        log.debug("==================> 2. create_reseller_usage <=====================");
+        log.debug("==================> 3. create_invoicing_details <=====================");
+        // finally, create the data so that we can use later
+        this.createInvoicingDetails(calendarStart, calendarEnd, product);
+    }
+
+    /**
+     * Creates the necesary information so that is can be used later.
+     * 
+     * @param start
+     *            The start date.
+     * @param end
+     *            The end date.
+     * @param product
+     *            The product.
+     */
+    private void createInvoicingDetails(Calendar start, Calendar end, String product) {
         // we remove old data so that we can override with new info.
-        invoicingDao.cleanUpInvoicing(calendarStart.getTime(), calendarEnd.getTime(), product);
-        invoicingDao.saveInvoicing(calendarStart.getTime(), calendarEnd.getTime(), product);
+        invoicingDao.cleanUpInvoicing(start.getTime(), end.getTime(), product);
+        // by default, if more than one month is requested, the information is
+        // grouped montly
+        boolean splitByMonth = true;
+        log.debug("Split by month: " + splitByMonth);
+        if (splitByMonth) {
+            // calculates the intervals.
+            List<MontlyTime> intervals = splitTimeByMonth(start, end);
+            if (intervals != null) {
+                for (MontlyTime montlyTime : intervals) {
+                    // month by month
+                    invoicingDao.saveInvoicing(montlyTime.getStart().getTime(), montlyTime.getEnd().getTime(), product);
+                }
+            } else {
+                log.warn("There's no invoicing to be processed");
+            }
+        } else {
+            invoicingDao.saveInvoicing(start.getTime(), end.getTime(), product);
+        }
     }
 
 }
