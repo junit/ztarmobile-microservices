@@ -186,6 +186,8 @@ public class InvoicingServiceImpl implements InvoicingService {
         usageService.createUsage(calendarStart, calendarEnd, product);
 
         log.debug("==================> 2. create_reseller_usage <=====================");
+        // we remove old data so that we can override with new info.
+        invoicingDao.cleanUpInvoicing(calendarStart.getTime(), calendarEnd.getTime(), product);
         invoicingDao.saveInvoicing(calendarStart.getTime(), calendarEnd.getTime(), product);
     }
 

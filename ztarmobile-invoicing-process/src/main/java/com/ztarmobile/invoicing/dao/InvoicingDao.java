@@ -16,6 +16,19 @@ import java.util.Date;
  */
 public interface InvoicingDao {
     /**
+     * Cleans up the existing information based on a start and end date
+     * including the product.
+     * 
+     * @param start
+     *            The initial date.
+     * @param end
+     *            The end date.
+     * @param product
+     *            The product.
+     */
+    void cleanUpInvoicing(Date start, Date end, String product);
+
+    /**
      * Saves the information related to the invoicing based on the init, end
      * date and a specific product.
      * 
@@ -27,4 +40,5 @@ public interface InvoicingDao {
      *            The product.
      */
     void saveInvoicing(Date start, Date end, String product);
+
 }

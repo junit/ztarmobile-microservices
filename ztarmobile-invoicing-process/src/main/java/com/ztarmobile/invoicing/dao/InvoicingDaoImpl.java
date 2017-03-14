@@ -45,6 +45,24 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      * {@inheritDoc}
      */
     @Override
+    public void cleanUpInvoicing(Date start, Date end, String product) {
+        log.debug("Cleaning up invoicing data...");
+
+        String sql = sqlStatements.getProperty("delete.invocing_details");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("init_date", fromDateToYYYYmmddDashFormat(start));
+        params.put("end_date", fromDateToYYYYmmddDashFormat(end));
+        params.put("product", product);
+
+        int rowAffected = this.getJdbc().update(sql, new MapSqlParameterSource(params));
+        log.debug("Rows deleted: " + rowAffected);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void saveInvoicing(Date start, Date end, String product) {
         log.debug("Saving invoicing data...");
 

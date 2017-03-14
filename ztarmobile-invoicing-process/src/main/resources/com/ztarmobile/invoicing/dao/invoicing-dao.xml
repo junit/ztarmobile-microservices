@@ -7,6 +7,13 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
     
     <util:properties id="invoicingDaoSql">
+        <prop key="delete.invocing_details">
+            <![CDATA[
+                DELETE FROM invocing_details
+                      WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
+                        AND STR_TO_DATE(CONCAT(month,'-',day,'-',year),'%m-%d-%Y') between :init_date and :end_date
+            ]]>
+        </prop>
         <prop key="select.insert.invocing_details">
             <![CDATA[
                 INSERT INTO invocing_details (product_id, year, month, day, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms) 
