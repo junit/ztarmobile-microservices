@@ -114,4 +114,12 @@ public class SprintCdrFileService extends AbstractCdrFileService {
         return "sort -t \"|\" -k 5,5n -k 6,6n " + fileTobeSorted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected char getFileType() {
+        return 'S';
+    }
+
 }

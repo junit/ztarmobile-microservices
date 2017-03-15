@@ -1,8 +1,11 @@
 # New table that stores all invoicing data.
 DROP TABLE IF EXISTS `invocing_details`;
 
-# New table that stores all the products
+# New table that stores all the products.
 DROP TABLE IF EXISTS `invoicing_catalog_product`;
+
+# New table that stores the status of the cdr files.
+DROP TABLE IF EXISTS `invoicing_cdr_file`;
 
 CREATE TABLE `cdrs`.`invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
@@ -48,3 +51,12 @@ CREATE TABLE `cdrs`.`invocing_details` (
     REFERENCES `cdrs`.`invoicing_catalog_product` (`row_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+    
+CREATE TABLE `cdrs`.`invoicing_cdr_file` (
+  `row_id` INT NOT NULL AUTO_INCREMENT,
+  `file_name` VARCHAR(100) NOT NULL,
+  `file_type` ENUM ('E', 'S') NOT NULL COMMENT 'E = EricssonDumpFiles, S = SprintDumpFiles',
+  `load_date` DATETIME NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`row_id`),
+  UNIQUE INDEX `unique_idx` (`file_name` ASC, `file_type` ASC));

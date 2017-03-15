@@ -46,7 +46,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      */
     @Override
     public void cleanUpInvoicing(Date start, Date end, String product) {
-        log.debug("Cleaning up invoicing data...");
+        log.debug("Cleaning up invoicing data from " + start + " - " + end);
 
         String sql = sqlStatements.getProperty("delete.invocing_details");
 
@@ -64,7 +64,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      */
     @Override
     public void saveInvoicing(Date start, Date end, String product) {
-        log.debug("Saving invoicing details...");
+        log.debug("Saving invoicing details from " + start + " - " + end);
 
         String sql = sqlStatements.getProperty("select.insert.invocing_details");
 

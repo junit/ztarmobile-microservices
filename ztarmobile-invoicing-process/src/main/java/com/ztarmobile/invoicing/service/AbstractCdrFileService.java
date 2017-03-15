@@ -23,6 +23,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ztarmobile.invoicing.dao.CdrFileDao;
 
 /**
  * Parent abstract class to handle the files for the cdrs.
@@ -39,6 +42,12 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      * The standard file extension.
      */
     public static final String STANDARD_FILE_EXT = ".txt";
+
+    /**
+     * DAO dependency for cdr file.
+     */
+    @Autowired
+    private CdrFileDao cdrFileDao;
 
     /**
      * {@inheritDoc}
@@ -102,6 +111,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      *            The end calendar.
      */
     private void extractAllCdrs(Calendar calendarStart, Calendar calendarEnd) {
+
         File file = new File(getSourceDirectoryCdrFile());
         this.validateEntries(calendarStart, calendarEnd, file);
 
@@ -148,6 +158,11 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      *            The current file.
      */
     private void extractCurrentFile(File currentFile) {
+        if (cdrFileDao.isFileProcessed(currentFile.getName())) {
+            log.info("==> No need to process... " + currentFile);
+            return;
+        }
+
         log.info("==> The following file will be extracted... " + currentFile);
         // copy the current file into the extracted directory
         File targetFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
@@ -182,6 +197,8 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                 log.debug("Final file: " + finalName);
             }
         }
+        // saves the file processed
+        cdrFileDao.saveFileProcessed(currentFile.getName(), getFileType());
     }
 
     /**
@@ -270,4 +287,10 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      */
     protected abstract String getSortShellExpression(File fileTobeSorted);
 
+    /**
+     * Get the type of the file.
+     * 
+     * @return The type of the file.
+     */
+    protected abstract char getFileType();
 }

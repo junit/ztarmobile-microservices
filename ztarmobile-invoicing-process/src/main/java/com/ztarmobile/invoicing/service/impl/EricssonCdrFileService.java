@@ -129,4 +129,12 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
         // sort the file by phn_num, and call date. (index starts at 1)
         return "egrep '^C' " + fileTobeSorted + " | LC_ALL=C sort -t \"|\" -k 3,3n -k 12,12n";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected char getFileType() {
+        return 'E';
+    }
 }

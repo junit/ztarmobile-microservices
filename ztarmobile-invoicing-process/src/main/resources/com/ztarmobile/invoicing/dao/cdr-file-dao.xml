@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="cdrFileDaoSql">
+        <prop key="select.count.cdr_file">
+            <![CDATA[
+                SELECT COUNT(*)
+                FROM   invoicing_cdr_file
+                WHERE  file_name = :file_name
+            ]]>
+        </prop>
+        <prop key="insert.cdr_file">
+            <![CDATA[
+                INSERT INTO invoicing_cdr_file (file_name, file_type)
+                VALUES (:file_name, :file_type)
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>

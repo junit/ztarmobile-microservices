@@ -274,7 +274,7 @@ public class DateUtils {
                 for (;;) {
                     Calendar calendarNow = getMaximumCalendarMonth(startTmp);
 
-                    if (calendarNow.after(end)) {
+                    if (calendarNow.after(end) || calendarNow.equals(end)) {
                         list.add(createMontlyTime(startTmp, end));
                         break;
                     } else {

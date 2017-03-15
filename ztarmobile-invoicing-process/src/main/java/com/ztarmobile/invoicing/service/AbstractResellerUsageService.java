@@ -168,7 +168,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     }
 
     private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsageVo> subs) {
-        log.info("==> The following file will be read... " + currentFile);
+        log.debug("==> The following file will be read... " + currentFile);
 
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
