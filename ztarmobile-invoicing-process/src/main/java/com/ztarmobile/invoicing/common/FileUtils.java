@@ -20,6 +20,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.log4j.Logger;
 
@@ -34,6 +35,10 @@ public class FileUtils {
      * Logger for this class
      */
     private static final Logger log = Logger.getLogger(FileUtils.class);
+    /**
+     * The file extension for compressed files.
+     */
+    public static final String GZIP_EXT = ".gz";
 
     /**
      * Private constructor.
@@ -64,6 +69,41 @@ public class FileUtils {
     }
 
     /**
+     * Zip a file and the existing file is deleted by default.
+     * 
+     * @param file
+     *            The file to be zipped.
+     */
+    public static void zipIt(File file) {
+        byte[] buffer = new byte[1024];
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        GZIPOutputStream gzipOS = null;
+
+        File resultingFile = new File(file.getAbsolutePath() + GZIP_EXT);
+
+        try {
+            fis = new FileInputStream(file);
+            fos = new FileOutputStream(resultingFile);
+            gzipOS = new GZIPOutputStream(fos);
+
+            int len;
+            while ((len = fis.read(buffer)) != -1) {
+                gzipOS.write(buffer, 0, len);
+            }
+            // we delete the original file after the process
+            file.delete();
+        } catch (IOException ex) {
+            log.error(ex);
+            invalidInput("Can't compress file due to: " + ex);
+        } finally {
+            close(gzipOS);
+            close(fos);
+            close(fis);
+        }
+    }
+
+    /**
      * Gunzip a file.
      * 
      * @param file
@@ -75,7 +115,7 @@ public class FileUtils {
         FileOutputStream out = null;
         GZIPInputStream gzis = null;
         // file without .gz extension...
-        File resultingFile = new File(file.toString().substring(0, file.toString().length() - 3));
+        File resultingFile = new File(file.toString().substring(0, file.toString().length() - GZIP_EXT.length()));
         try {
             gzis = new GZIPInputStream(new FileInputStream(file));
             out = new FileOutputStream(resultingFile);

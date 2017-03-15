@@ -113,7 +113,10 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
     public List<ResellerSubsUsageVo> getResellerSubsUsage(Calendar start, Calendar end, String product) {
         this.validateEntries(start, end, product);
 
-        return resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
+        List<ResellerSubsUsageVo> list;
+        list = resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
+        log.debug("Reseller subsUsage found: " + list.size());
+        return list;
     }
 
     /**

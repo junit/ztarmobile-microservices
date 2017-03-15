@@ -12,6 +12,7 @@ import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
 import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
+import static com.ztarmobile.invoicing.common.FileUtils.GZIP_EXT;
 import static com.ztarmobile.invoicing.common.FileUtils.copy;
 import static com.ztarmobile.invoicing.common.FileUtils.executeShellCommand;
 import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
@@ -43,10 +44,6 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      * The standard file extension.
      */
     public static final String STANDARD_FILE_EXT = ".txt";
-    /**
-     * The file extension for compressed files.
-     */
-    private static final String GZIP_EXT = ".gz";
     /**
      * DAO dependency for cdr file.
      */
@@ -162,7 +159,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      */
     private void extractCurrentFile(File currentFile) {
         // test whether the file is going to be processed or not.
-        if (isFileProcessed(currentFile.getName())) {
+        if (isFileProcessed(currentFile)) {
             log.info("==> File already processed... " + currentFile);
             return;
         }
@@ -209,21 +206,26 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
 
     /**
      * This method validates whether the current file is already processed or
-     * not.
+     * not. If the file was already processed, then uncompress it so that it can
+     * be used later.
      * 
      * @param fileName
      *            The file name.
      * @return true, it was processed, false it's not.
      */
-    private boolean isFileProcessed(String fileName) {
+    private boolean isFileProcessed(File fileName) {
         boolean processed = false;
-        CdrFileVo cdrFileVo = cdrFileDao.getFileProcessed(fileName);
+        CdrFileVo cdrFileVo = cdrFileDao.getFileProcessed(fileName.getName());
         if (cdrFileVo != null) {
             // make sure the target file is there...
             String targetFile = cdrFileVo.getTargetFileName();
             File file = new File(getTargetDirectoryCdrFile(), targetFile);
             if (file.isFile() && file.exists()) {
                 processed = true;
+            }
+            if (processed) {
+                gunzipIt(file);
+                file.delete();
             }
         }
         return processed;

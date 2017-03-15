@@ -14,6 +14,7 @@ import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
 import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
+import static com.ztarmobile.invoicing.common.FileUtils.zipIt;
 import static java.util.Calendar.MONTH;
 
 import java.io.BufferedReader;
@@ -157,6 +158,9 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
                 // 2. updates the usage.
                 allocationsService.updateResellerSubsUsage(subs);
+
+                // 3. finally, we compress the file (close it out)
+                zipIt(currentFile);
 
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
