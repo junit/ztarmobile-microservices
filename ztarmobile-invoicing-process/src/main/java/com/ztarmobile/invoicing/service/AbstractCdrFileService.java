@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ztarmobile.invoicing.dao.CdrFileDao;
+import com.ztarmobile.invoicing.vo.CdrFileVo;
 
 /**
  * Parent abstract class to handle the files for the cdrs.
@@ -42,7 +43,10 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      * The standard file extension.
      */
     public static final String STANDARD_FILE_EXT = ".txt";
-
+    /**
+     * The file extension for compressed files.
+     */
+    private static final String GZIP_EXT = ".gz";
     /**
      * DAO dependency for cdr file.
      */
@@ -111,7 +115,6 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      *            The end calendar.
      */
     private void extractAllCdrs(Calendar calendarStart, Calendar calendarEnd) {
-
         File file = new File(getSourceDirectoryCdrFile());
         this.validateEntries(calendarStart, calendarEnd, file);
 
@@ -158,8 +161,9 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      *            The current file.
      */
     private void extractCurrentFile(File currentFile) {
-        if (cdrFileDao.isFileProcessed(currentFile.getName())) {
-            log.info("==> No need to process... " + currentFile);
+        // test whether the file is going to be processed or not.
+        if (isFileProcessed(currentFile.getName())) {
+            log.info("==> File already processed... " + currentFile);
             return;
         }
 
@@ -195,10 +199,34 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                 File finalName = new File(processedFile.getParentFile(), finalFileName);
                 processedFile.renameTo(finalName);
                 log.debug("Final file: " + finalName);
+
+                // saves the file processed
+                cdrFileDao.saveFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT, getFileType());
             }
         }
-        // saves the file processed
-        cdrFileDao.saveFileProcessed(currentFile.getName(), getFileType());
+
+    }
+
+    /**
+     * This method validates whether the current file is already processed or
+     * not.
+     * 
+     * @param fileName
+     *            The file name.
+     * @return true, it was processed, false it's not.
+     */
+    private boolean isFileProcessed(String fileName) {
+        boolean processed = false;
+        CdrFileVo cdrFileVo = cdrFileDao.getFileProcessed(fileName);
+        if (cdrFileVo != null) {
+            // make sure the target file is there...
+            String targetFile = cdrFileVo.getTargetFileName();
+            File file = new File(getTargetDirectoryCdrFile(), targetFile);
+            if (file.isFile() && file.exists()) {
+                processed = true;
+            }
+        }
+        return processed;
     }
 
     /**

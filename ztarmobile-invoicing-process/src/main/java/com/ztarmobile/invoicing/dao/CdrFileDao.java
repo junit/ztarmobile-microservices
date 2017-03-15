@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import com.ztarmobile.invoicing.vo.CdrFileVo;
+
 /**
  * DAO to handle the operations for the cdrs files.
  *
@@ -19,17 +21,19 @@ public interface CdrFileDao {
      * 
      * @param fileName
      *            The file name.
-     * @return true, the file has been processed.
+     * @return The cdr file or null if this object was not found.
      */
-    boolean isFileProcessed(String fileName);
+    CdrFileVo getFileProcessed(String fileName);
 
     /**
      * Saves a record to indicate that a file has been saved.
      * 
-     * @param fileName
-     *            The file name.
+     * @param sourceFileName
+     *            The source file name.
+     * @param targetFileName
+     *            The target file name.
      * @param type
      *            The file of the file.
      */
-    void saveFileProcessed(String fileName, char type);
+    void saveFileProcessed(String sourceFileName, String targetFileName, char type);
 }

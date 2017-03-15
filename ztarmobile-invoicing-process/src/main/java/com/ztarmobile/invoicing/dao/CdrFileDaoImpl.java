@@ -6,17 +6,22 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.vo.CdrFileVo;
 
 /**
  * Direct DAO Implementation.
@@ -41,27 +46,43 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
     /**
      * {@inheritDoc}
      */
-
     @Override
-    public boolean isFileProcessed(String fileName) {
-        String sql = sqlStatements.getProperty("select.count.cdr_file");
+    public CdrFileVo getFileProcessed(String fileName) {
+        String sql = sqlStatements.getProperty("select.cdr_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("file_name", fileName);
-        int total = this.getJdbc().queryForObject(sql, new MapSqlParameterSource(params), Integer.class);
-        log.debug("Cdrs file exists: " + fileName + ", " + (total != 0));
-        return total != 0;
+
+        List<CdrFileVo> list;
+        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<CdrFileVo>() {
+            @Override
+            public CdrFileVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                CdrFileVo vo = new CdrFileVo();
+                int rcnt = 0;
+                vo.setRowId(rs.getLong(++rcnt));
+                vo.setSourceFileName(rs.getString(++rcnt));
+                vo.setTargetFileName(rs.getString(++rcnt));
+
+                return vo;
+            }
+        });
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveFileProcessed(String fileName, char type) {
+    public void saveFileProcessed(String sourceFileName, String targetFileName, char type) {
         String sql = sqlStatements.getProperty("insert.cdr_file");
 
         Map<String, String> params = new HashMap<>();
-        params.put("file_name", fileName);
+        params.put("source_file_name", sourceFileName);
+        params.put("target_file_name", targetFileName);
         params.put("file_type", String.valueOf(type));
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }

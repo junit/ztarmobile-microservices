@@ -7,17 +7,19 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
     
     <util:properties id="cdrFileDaoSql">
-        <prop key="select.count.cdr_file">
+        <prop key="select.cdr_file">
             <![CDATA[
-                SELECT COUNT(*)
+                SELECT row_id, source_file_name, target_file_name
                 FROM   invoicing_cdr_file
-                WHERE  file_name = :file_name
+                WHERE  source_file_name = :file_name
             ]]>
         </prop>
         <prop key="insert.cdr_file">
             <![CDATA[
-                INSERT INTO invoicing_cdr_file (file_name, file_type)
-                VALUES (:file_name, :file_type)
+                INSERT INTO invoicing_cdr_file (source_file_name, target_file_name, file_type)
+                VALUES (:source_file_name, :target_file_name, :file_type)
+                ON DUPLICATE KEY 
+                UPDATE load_date = NOW()
             ]]>
         </prop>
     </util:properties>

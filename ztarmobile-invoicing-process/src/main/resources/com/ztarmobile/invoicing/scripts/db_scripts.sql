@@ -55,8 +55,9 @@ CREATE TABLE `cdrs`.`invocing_details` (
     
 CREATE TABLE `cdrs`.`invoicing_cdr_file` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
-  `file_name` VARCHAR(100) NOT NULL,
+  `source_file_name` VARCHAR(100) NOT NULL,
+  `target_file_name` VARCHAR(100) NOT NULL,
   `file_type` ENUM ('E', 'S') NOT NULL COMMENT 'E = EricssonDumpFiles, S = SprintDumpFiles',
   `load_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
-  UNIQUE INDEX `unique_idx` (`file_name` ASC, `file_type` ASC));
+  UNIQUE INDEX `unique_idx` (`source_file_name` ASC));

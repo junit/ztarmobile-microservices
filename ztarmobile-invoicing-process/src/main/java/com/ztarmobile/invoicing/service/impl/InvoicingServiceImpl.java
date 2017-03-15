@@ -175,12 +175,9 @@ public class InvoicingServiceImpl implements InvoicingService {
         log.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
 
         log.debug("==================> 0. preparing data <==================================");
-        log.debug("Reload CDR files from its source directory ? " + reloadCdrFiles);
+        CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
+        cdrFileService.extractCdrs(calendarStart, calendarEnd);
 
-        if (reloadCdrFiles) {
-            CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
-            cdrFileService.extractCdrs(calendarStart, calendarEnd);
-        }
         log.debug("==================> 1. create_reseller_allocations <=====================");
         allocationsService.createAllocations(calendarStart, calendarEnd, product);
 
