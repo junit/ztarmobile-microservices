@@ -53,7 +53,6 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public void createAllocations(Date callDate, Date durationStart, Date durationEnd, String product) {
-        log.debug("Creating allocations...");
         String sql = sqlStatements.getProperty("select.insert.reseller_subs_usage");
 
         Map<String, String> params = new HashMap<>();

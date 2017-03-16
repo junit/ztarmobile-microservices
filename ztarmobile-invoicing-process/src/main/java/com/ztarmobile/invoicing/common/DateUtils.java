@@ -30,28 +30,28 @@ public class DateUtils {
      * Format used commonly by the db.
      */
     public static final String YYYYMMDD_HHMMSS = "yyyy-MM-dd HH:mm:ss";
-    private static final SimpleDateFormat dbDateFormat = new SimpleDateFormat(YYYYMMDD_HHMMSS);
+    private static final SimpleDateFormat DB_DATE_FORMAT = new SimpleDateFormat(YYYYMMDD_HHMMSS);
 
     /**
-     * Format used commonly in the cdr files.
+     * Format used commonly in the CDR files.
      */
     public static final String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
-    private static final SimpleDateFormat cdrDateFormat = new SimpleDateFormat(YYYYMMDDHHMMSS);
+    private static final SimpleDateFormat CDR_DATE_FORMAT = new SimpleDateFormat(YYYYMMDDHHMMSS);
 
     /**
-     * Format used in cdrs files yyyyMMdd.
+     * Format used in CDR files yyyyMMdd.
      */
     public static final String YYYYMMDD = "yyyyMMdd";
-    private static final SimpleDateFormat yyyyMMddDateFormat = new SimpleDateFormat(YYYYMMDD);
+    private static final SimpleDateFormat YYYYMMDD_DATE_FORMAT = new SimpleDateFormat(YYYYMMDD);
 
     /**
      * Format used in date format yyyy-MM-dd.
      */
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
-    private static final SimpleDateFormat yyyyMMddDashDateFormat = new SimpleDateFormat(YYYY_MM_DD);
+    private static final SimpleDateFormat YYYYMMDD_DASH_DATE_FORMAT = new SimpleDateFormat(YYYY_MM_DD);
 
     /**
-     * Format used in cdrs files yyyyMM.
+     * Format used in CDR files yyyyMM.
      */
     public static final String YYYYMM = "yyyyMM";
     private static final SimpleDateFormat yyyyMMDateFormat = new SimpleDateFormat(YYYYMM);
@@ -71,7 +71,7 @@ public class DateUtils {
      * @return The String representation of the date.
      */
     public static String fromDateToDbFormat(Date date) {
-        return dbDateFormat.format(date);
+        return DB_DATE_FORMAT.format(date);
     }
 
     /**
@@ -82,7 +82,7 @@ public class DateUtils {
      * @return The String representation of the date.
      */
     public static String fromDateToYYmmddHHmmssFormat(Date date) {
-        return cdrDateFormat.format(date);
+        return CDR_DATE_FORMAT.format(date);
     }
 
     /**
@@ -94,7 +94,7 @@ public class DateUtils {
      */
     public static Date fromStringToYYmmddHHmmssFormat(String dateString) {
         try {
-            return cdrDateFormat.parse(dateString);
+            return CDR_DATE_FORMAT.parse(dateString);
         } catch (ParseException e) {
             CommonUtils.invalidInput("Unable to convert string: " + dateString + ", to date " + e);
             return null;
@@ -109,7 +109,7 @@ public class DateUtils {
      * @return The String representation of the date.
      */
     public static String fromDateToYYYYmmddFormat(Date date) {
-        return yyyyMMddDateFormat.format(date);
+        return YYYYMMDD_DATE_FORMAT.format(date);
     }
 
     /**
@@ -120,7 +120,7 @@ public class DateUtils {
      * @return The String representation of the date.
      */
     public static String fromDateToYYYYmmddDashFormat(Date date) {
-        return yyyyMMddDashDateFormat.format(date);
+        return YYYYMMDD_DASH_DATE_FORMAT.format(date);
     }
 
     /**

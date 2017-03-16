@@ -29,7 +29,7 @@ public interface InvoicingDao {
     void cleanUpInvoicing(Date start, Date end, String product);
 
     /**
-     * Saves the information related to the invoicing based on the init, end
+     * Saves the information related to the invoicing based on the initial, end
      * date and a specific product.
      * 
      * @param start

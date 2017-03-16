@@ -10,14 +10,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Service to handle the files for the cdrs.
+ * Service to handle the files for the CDRS.
  *
  * @author armandorivas
  * @since 03/02/17
  */
 public interface CdrFileService {
     /**
-     * This method extracts from the source the cdrs and move them into the
+     * This method extracts from the source the CDRS and move them into the
      * target directory.
      * 
      * @param start
@@ -29,7 +29,7 @@ public interface CdrFileService {
     void extractCdrs(Date start, Date end);
 
     /**
-     * This method extracts from the source the cdrs and move them into the
+     * This method extracts from the source the CDRS and move them into the
      * target directory.
      * 
      * @param start
@@ -41,7 +41,7 @@ public interface CdrFileService {
     void extractCdrs(Calendar start, Calendar end);
 
     /**
-     * This method extracts from the source the cdrs and move them into the
+     * This method extracts from the source the CDRS and move them into the
      * target directory. This process works only in the same year.
      * 
      * @param fromMonth
@@ -52,7 +52,7 @@ public interface CdrFileService {
     void extractCdrs(int fromMonth, int toMonth);
 
     /**
-     * This method extracts from the source the cdrs and move them into the
+     * This method extracts from the source the CDRS and move them into the
      * target directory. This process works only in the same year.
      * 
      * @param month
@@ -61,7 +61,7 @@ public interface CdrFileService {
     void extractCdrs(int month);
 
     /**
-     * This method extracts from the source the cdrs and move them into the
+     * This method extracts from the source the CDRS and move them into the
      * target directory. This process works only in the same year and the
      * previous month.
      */

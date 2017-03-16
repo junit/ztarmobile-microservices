@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 
 /**
- * Ericsson implementation to handle the files for the cdrs.
+ * Ericsson implementation to handle the files for the CDR's.
  *
  * @author armandorivas
  * @since 03/02/17
@@ -39,12 +39,12 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
      */
     private final String PREFIX_FILE_NAME = "ztar-711_data_dump_";
     /**
-     * Reference to the directory of the Ericsson cdrs.
+     * Reference to the directory of the Ericsson CDR's.
      */
     @Value("${cdrs.source.ericsson.dir}")
     private String sourceEricssonCdrs;
     /**
-     * Reference to the extracted directory of the Ericsson cdrs.
+     * Reference to the extracted directory of the Ericsson CDR's.
      */
     @Value("${cdrs.extracted.ericsson.dir}")
     private String targetEricssonCdrs;

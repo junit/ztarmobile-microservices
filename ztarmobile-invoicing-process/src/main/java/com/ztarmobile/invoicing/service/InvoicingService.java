@@ -26,9 +26,9 @@ public interface InvoicingService {
      * @param product
      *            The product.
      * @param reloadCdrFiles
-     *            If this flag is set to true, then the cdrs files are read from
+     *            If this flag is set to true, then the CDR files are read from
      *            the source directory, if it's false the process assumes the
-     *            cdrs files are already processed.
+     *            CDR files are already processed.
      * @see InvoicingService#performInvoicing(Calendar, Calendar, String,
      *      boolean)
      */
@@ -44,9 +44,9 @@ public interface InvoicingService {
      * @param product
      *            The product.
      * @param reloadCdrFiles
-     *            If this flag is set to true, then the cdrs files are read from
+     *            If this flag is set to true, then the CDR files are read from
      *            the source directory, if it's false the process assumes the
-     *            cdrs files are already processed.
+     *            CDR files are already processed.
      * @see InvoicingService#performInvoicing(Date, Date, String, boolean)
      */
     void performInvoicing(Calendar start, Calendar end, String product, boolean reloadCdrFiles);
@@ -60,9 +60,9 @@ public interface InvoicingService {
      * @param product
      *            The product.
      * @param reloadCdrFiles
-     *            If this flag is set to true, then the cdrs files are read from
+     *            If this flag is set to true, then the CDR files are read from
      *            the source directory, if it's false the process assumes the
-     *            cdrs files are already processed.
+     *            CDR files are already processed.
      * @see InvoicingService#performInvoicing(int, int, String, boolean)
      */
     void performInvoicing(int month, String product, boolean reloadCdrFiles);
@@ -77,9 +77,9 @@ public interface InvoicingService {
      * @param product
      *            The product.
      * @param reloadCdrFiles
-     *            If this flag is set to true, then the cdrs files are read from
+     *            If this flag is set to true, then the CDR files are read from
      *            the source directory, if it's false the process assumes the
-     *            cdrs files are already processed.
+     *            CDR files are already processed.
      * @see InvoicingService#performInvoicing(int, String, boolean)
      */
     void performInvoicing(int fromMonth, int toMonth, String product, boolean reloadCdrFiles);
@@ -90,15 +90,15 @@ public interface InvoicingService {
      * @param product
      *            The product.
      * @param reloadCdrFiles
-     *            If this flag is set to true, then the cdrs files are read from
+     *            If this flag is set to true, then the CDR files are read from
      *            the source directory, if it's false the process assumes the
-     *            cdrs files are already processed.
+     *            CDR files are already processed.
      */
     void performInvoicing(String product, boolean reloadCdrFiles);
 
     /**
-     * Perform the invoicing process based on a specific product. The cdrs files
-     * are forzed to be read from the source folder.
+     * Perform the invoicing process based on a specific product. The CDR files
+     * are forced to be read from the source folder.
      * 
      * @param product
      *            The product.

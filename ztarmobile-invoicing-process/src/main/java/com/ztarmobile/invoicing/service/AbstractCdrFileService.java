@@ -30,7 +30,7 @@ import com.ztarmobile.invoicing.dao.CdrFileDao;
 import com.ztarmobile.invoicing.vo.CdrFileVo;
 
 /**
- * Parent abstract class to handle the files for the cdrs.
+ * Parent abstract class to handle the files for the CDR's.
  *
  * @author armandorivas
  * @since 03/02/17
@@ -45,7 +45,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      */
     public static final String STANDARD_FILE_EXT = ".txt";
     /**
-     * DAO dependency for cdr file.
+     * DAO dependency for CDR file.
      */
     @Autowired
     private CdrFileDao cdrFileDao;
@@ -120,7 +120,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
         log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);
-        String expectedFileName = null;
+        String expectedFileName;
         File[] files = file.listFiles(createFileNameFilter(getFileExtension()));
         Arrays.sort(files); // make sure the files are ordered lexicographically
 

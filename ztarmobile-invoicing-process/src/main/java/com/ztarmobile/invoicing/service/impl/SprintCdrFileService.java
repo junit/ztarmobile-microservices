@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 
 /**
- * Sprint implementation to handle the files for the cdrs.
+ * Sprint implementation to handle the files for the CDR's.
  *
  * @author armandorivas
  * @since 03/02/17
@@ -35,12 +35,12 @@ public class SprintCdrFileService extends AbstractCdrFileService {
      */
     private static final String FILE_EXT = ".txt";
     /**
-     * Reference to the directory of the Sprint cdrs.
+     * Reference to the directory of the Sprint CDR's.
      */
     @Value("${cdrs.source.sprint.dir}")
     private String sourceSprintCdrs;
     /**
-     * Reference to the extracted directory of the Sprint cdrs.
+     * Reference to the extracted directory of the Sprint CDR's.
      */
     @Value("${cdrs.extracted.sprint.dir}")
     private String targetSprintCdrs;

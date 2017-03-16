@@ -19,7 +19,7 @@ import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
 import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
- * Ericsson implementation to handle the files for the cdrs.
+ * Ericsson implementation to handle the files for the CDR's.
  *
  * @author armandorivas
  * @since 03/02/17
@@ -37,7 +37,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
     private final String SUFIX_FILE_NAME = "_call_adj_data_dump";
 
     /**
-     * Reference to the extracted directory of the Ericsson cdrs.
+     * Reference to the extracted directory of the Ericsson CDR's.
      */
     @Value("${cdrs.extracted.ericsson.dir}")
     private String targetEricssonCdrs;
@@ -92,11 +92,14 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
         String callType = sln[13];
         String kbs = sln[17];
 
-        if (callType.equals("SMS")) {
+        switch (callType) {
+        case "SMS":
             usage.setSms(1);
-        } else if (callType.equals("MMS")) {
+            break;
+        case "MMS":
             usage.setMms(1);
-        } else if (callType.equals("VOICE")) {
+            break;
+        case "VOICE":
             // *** NEW LOGIG
             // we need to exclude call forward to voicemail from the chargeable
             // minutes, as it should not be chargeable…. We are not charged by
@@ -106,8 +109,12 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
             } else {
                 usage.setMou(Float.parseFloat(sln[14]));
             }
-        } else if (callType.equals("GPRS")) {
+            break;
+        case "GPRS":
             usage.setKbs(Float.parseFloat(kbs));
+            break;
+        default:
+            break;
         }
         return usage;
     }

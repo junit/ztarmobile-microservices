@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Service to handle the usage files for the cdrs.
+ * Service to handle the usage files for the CDR's.
  *
  * @author armandorivas
  * @since 03/06/17

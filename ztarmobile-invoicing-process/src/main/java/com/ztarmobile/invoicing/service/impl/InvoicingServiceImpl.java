@@ -61,7 +61,7 @@ public class InvoicingServiceImpl implements InvoicingService {
     @Autowired
     private SprintCdrFileService sprintCdrFileService;
     /**
-     * Injection of the specific implementation for ericsson.
+     * Injection of the specific implementation for Ericsson.
      */
     @Autowired
     private EricssonCdrFileService ericssonCdrFileService;
@@ -78,7 +78,7 @@ public class InvoicingServiceImpl implements InvoicingService {
     @Autowired
     private SprintResellerUsageService sprintUsageService;
     /**
-     * Injection of the specific implementation for ericsson.
+     * Injection of the specific implementation for Ericsson.
      */
     @Autowired
     private EricssonResellerUsageService ericssonUsageService;
@@ -162,9 +162,9 @@ public class InvoicingServiceImpl implements InvoicingService {
      * @param product
      *            The product.
      * @param reloadCdrFiles
-     *            If this flag is set to true, then the cdrs files are read from
+     *            If this flag is set to true, then the CDR files are read from
      *            the source directory, if it's false the process assumes the
-     *            cdrs files are already processed.
+     *            CDR files are already processed.
      */
     private void performAllInvoicing(Calendar calendarStart, Calendar calendarEnd, String product,
             boolean reloadCdrFiles) {
@@ -191,7 +191,7 @@ public class InvoicingServiceImpl implements InvoicingService {
     }
 
     /**
-     * Creates the necesary information so that is can be used later.
+     * Creates the necessary information so that is can be used later.
      * 
      * @param start
      *            The start date.

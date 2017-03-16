@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import java.util.Calendar;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ztarmobile.invoicing.service.InvoicingService;
-import java.util.Calendar;
 
 /**
  *
@@ -36,14 +37,17 @@ public class InvoicingServiceTest {
     @Test
     public void performInvoicing() {
         Calendar c1 = Calendar.getInstance();
-        c1.set(2017, 1, 01);
+        c1.set(2017, 0, 1);
         Calendar c2 = Calendar.getInstance();
-        c2.set(2017, 1, 28);
-        
+        c2.set(2017, 0, 31);
+
         long init = System.currentTimeMillis();
-        //invoicingService.performInvoicing(c1, c2, "PIX_ATT", true);
-        long end = System.currentTimeMillis();
+
+        // invoicingService.performInvoicing(c1, c2, "PIX_ATT", true);
         invoicingService.performInvoicing(c1, c2, "GOOD2GOUS", true);
-        System.out.println(end-init);
+
+        long end = System.currentTimeMillis();
+        long total = end - init;
+        System.out.println("Milliseconds: " + total);
     }
 }

@@ -181,7 +181,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             }
         }
 
-        String line = null;
+        String line;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
             if (hasHeader()) {
                 reader.readLine();// ignores the first line
@@ -222,11 +222,11 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 if (lastMdn == null || lastCallDate == null || !lastMdn.equals(mdn)
                         || !lastCallDate.substring(0, 8).equals(callDate.substring(0, 8))) {
                     /*
-                     * We have the mdn and calldate. Let's look in the
-                     * subscribers list, if this mdn shows up for this
+                     * We have the MDN and calldate. Let's look in the
+                     * subscribers list, if this MDN shows up for this
                      * call-date. There can be more than one entries (if the
                      * rate plan was changed on that day). So, get all the
-                     * entries for the subscriber i.e. mdn for the call-date.
+                     * entries for the subscriber i.e. MDN for the call-date.
                      */
                     usgList = getUsageByMdnAndCallDate(subs, mdn, callDate.substring(0, 8));
                 }
@@ -246,27 +246,26 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                         break;
                     }
                 }
-                // capture this mdn for next iteration.
+                // capture this MDN for next iteration.
                 lastMdn = mdn;
                 lastCallDate = callDate;
                 mdnUpdCnt++;
             }
-            log.info("  .. read lines #: " + linecnt);
-            log.info("  .. processed mdns #: " + mdnUpdCnt);
+            log.info("Lines read #: " + linecnt + ", processed mdns #:" + mdnUpdCnt);
         } catch (IOException ex) {
             invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
         }
     }
 
     /**
-     * Get all usage rows that match mdn, and the call date
+     * Get all usage rows that match MDN, and the call date
      * 
      * @param subs
-     *            The list of subcribers.
+     *            The list of subscribers.
      * @param mdn
-     *            The mdn.
+     *            The MDN.
      * @param callDate
-     *            The calldate in format YYYYmmdd
+     *            The callDate in format YYYYmmdd
      * @return The list containing matching objects.
      */
     private List<ResellerSubsUsageVo> getUsageByMdnAndCallDate(List<ResellerSubsUsageVo> subs, String mdn,
@@ -275,10 +274,10 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
         for (ResellerSubsUsageVo sub : subs) {
             if (!sub.isEqualsByMdnAndCallDate(mdn, callDate)) {
-                // skip all list entries where mdn is does not match
+                // skip all list entries where MDN is does not match
                 continue;
             }
-            // found the matching mdn and callDate
+            // found the matching MDN and callDate
             // Initialize all actual values. This is to avoid doubling up in
             // case of accidental duplicate runs..
             sub.setActualKbs(0);
@@ -333,14 +332,14 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     protected abstract UsageVo calculateIndividualUsage(String[] sln);
 
     /**
-     * Gets the position of the call date in a cdr file.
+     * Gets the position of the call date in a CDR file.
      * 
      * @return the position in a row.
      */
     protected abstract int getCallDateFieldPositionAt();
 
     /**
-     * Gets the position of the mdn field in a cdr file.
+     * Gets the position of the MDN field in a CDR file.
      * 
      * @return the position in a row.
      */

@@ -19,7 +19,7 @@ import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
 import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
- * Sprint implementation to handle the files for the cdrs.
+ * Sprint implementation to handle the files for the CDR's.
  *
  * @author armandorivas
  * @since 03/02/17
@@ -32,7 +32,7 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
     private static final Logger log = Logger.getLogger(SprintResellerUsageService.class);
 
     /**
-     * Reference to the extracted directory of the Sprint cdrs.
+     * Reference to the extracted directory of the Sprint CDR's.
      */
     @Value("${cdrs.extracted.sprint.dir}")
     private String targetSprintCdrs;

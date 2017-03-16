@@ -9,7 +9,7 @@ package com.ztarmobile.invoicing.dao;
 import com.ztarmobile.invoicing.vo.CdrFileVo;
 
 /**
- * DAO to handle the operations for the cdrs files.
+ * DAO to handle the operations for the CDR files.
  *
  * @author armandorivas
  * @since 03/14/17
@@ -21,13 +21,13 @@ public interface CdrFileDao {
      * 
      * @param fileName
      *            The file name.
-     * @return The cdr file or null if this object was not found.
+     * @return The CDR file or null if this object was not found.
      */
     CdrFileVo getFileProcessed(String fileName);
 
     /**
      * Saves or updates a record to indicate that a file has been loaded
-     * succesfully.
+     * successfully.
      * 
      * @param sourceFileName
      *            The source file name.
@@ -41,7 +41,7 @@ public interface CdrFileDao {
 
     /**
      * Saves or updates a record to indicate that a file has been loaded but
-     * during the process an error occured.
+     * during the process an error occurred.
      * 
      * @param sourceFileName
      *            The source file name.

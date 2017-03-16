@@ -36,7 +36,7 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
      */
     private static final Logger log = Logger.getLogger(CdrFileDaoImpl.class);
     /**
-     * Status to indicate that the file was loaded sucessfully.
+     * Status to indicate that the file was loaded successfully.
      */
     private static final char STATUS_COMPLETED = 'C';
     /**
