@@ -16,6 +16,7 @@ public class CdrFileVo {
     private long rowId;
     private String sourceFileName;
     private String targetFileName;
+    private char status;
 
     /**
      * @return the rowId
@@ -62,6 +63,21 @@ public class CdrFileVo {
         this.targetFileName = targetFileName;
     }
 
+    /**
+     * @return the status
+     */
+    public char getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status
+     *            the status to set
+     */
+    public void setStatus(char status) {
+        this.status = status;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -70,7 +86,7 @@ public class CdrFileVo {
     @Override
     public String toString() {
         return "CdrFileVo [rowId=" + rowId + ", sourceFileName=" + sourceFileName + ", targetFileName=" + targetFileName
-                + "]";
+                + ", status=" + status + "]";
     }
 
 }

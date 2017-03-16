@@ -198,7 +198,8 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                 log.debug("Final file: " + finalName);
 
                 // saves the file processed
-                cdrFileDao.saveFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT, getFileType());
+                cdrFileDao.saveOrUpdateFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT,
+                        getFileType());
             }
         }
 
@@ -216,7 +217,8 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
     private boolean isFileProcessed(File fileName) {
         boolean processed = false;
         CdrFileVo cdrFileVo = cdrFileDao.getFileProcessed(fileName.getName());
-        if (cdrFileVo != null) {
+        if (cdrFileVo != null && cdrFileVo.getStatus() == 'C') {
+            // the record was found and it was completed.
             // make sure the target file is there...
             String targetFile = cdrFileVo.getTargetFileName();
             File file = new File(getTargetDirectoryCdrFile(), targetFile);

@@ -26,7 +26,7 @@ public interface CdrFileDao {
     CdrFileVo getFileProcessed(String fileName);
 
     /**
-     * Saves a record to indicate that a file has been saved.
+     * Saves or updates a record to indicate that a file has been loaded.
      * 
      * @param sourceFileName
      *            The source file name.
@@ -35,5 +35,5 @@ public interface CdrFileDao {
      * @param type
      *            The file of the file.
      */
-    void saveFileProcessed(String sourceFileName, String targetFileName, char type);
+    void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type);
 }

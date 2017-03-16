@@ -58,6 +58,7 @@ CREATE TABLE `cdrs`.`invoicing_cdr_file` (
   `source_file_name` VARCHAR(100) NOT NULL,
   `target_file_name` VARCHAR(100) NOT NULL,
   `file_type` ENUM ('E', 'S') NOT NULL COMMENT 'E = EricssonDumpFiles, S = SprintDumpFiles',
+  `status` ENUM ('C', 'R') NOT NULL COMMENT 'C = Completed, R = Reload',
   `load_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `unique_idx` (`source_file_name` ASC));

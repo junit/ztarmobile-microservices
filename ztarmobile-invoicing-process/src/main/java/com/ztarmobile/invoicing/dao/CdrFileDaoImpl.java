@@ -62,7 +62,10 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setSourceFileName(rs.getString(++rcnt));
                 vo.setTargetFileName(rs.getString(++rcnt));
-
+                String status = rs.getString(++rcnt);
+                if (!status.isEmpty()) {
+                    vo.setStatus(status.charAt(0));
+                }
                 return vo;
             }
         });
@@ -77,7 +80,8 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
      * {@inheritDoc}
      */
     @Override
-    public void saveFileProcessed(String sourceFileName, String targetFileName, char type) {
+    public void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type) {
+        log.debug("Saving record for this file: " + sourceFileName);
         String sql = sqlStatements.getProperty("insert.cdr_file");
 
         Map<String, String> params = new HashMap<>();
