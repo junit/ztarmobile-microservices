@@ -158,51 +158,57 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      *            The current file.
      */
     private void extractCurrentFile(File currentFile) {
-        // test whether the file is going to be processed or not.
-        if (isFileProcessed(currentFile)) {
-            log.info("==> File already processed... " + currentFile);
-            return;
-        }
-
-        log.info("==> The following file will be extracted... " + currentFile);
-        // copy the current file into the extracted directory
-        File targetFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
-        copy(currentFile, targetFile);
-        if (isFileCompressed()) {
-            // ungzip it
-            targetFile = gunzipIt(targetFile);
-        }
-        // targetFile is the name of the file after it has been decompressed
-        File processedFile = sortFile(targetFile);
-        log.debug("Extracted file: " + processedFile);
-
-        // we cleanup the files we dont need.
-        if (isFileCompressed()) {
-            File compressedFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
-            if (compressedFile.exists()) {
-                compressedFile.delete();
+        try {
+            // test whether the file is going to be processed or not.
+            if (isFileProcessed(currentFile)) {
+                log.info("==> File already processed... " + currentFile);
+                return;
             }
-        }
-        if (targetFile.exists()) {
-            targetFile.delete();
-        }
 
-        // make sure that the resulting file has a valid extension like .txt
-        String processedFileName = processedFile.getName();
-        if (!processedFileName.endsWith(STANDARD_FILE_EXT)) {
-            if (processedFileName.contains(STANDARD_FILE_EXT)) {
-                int index = processedFileName.indexOf(STANDARD_FILE_EXT);
-                String finalFileName = processedFileName.substring(0, index + STANDARD_FILE_EXT.length());
-                File finalName = new File(processedFile.getParentFile(), finalFileName);
-                processedFile.renameTo(finalName);
-                log.debug("Final file: " + finalName);
-
-                // saves the file processed
-                cdrFileDao.saveOrUpdateFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT,
-                        getFileType());
+            log.info("==> The following file will be extracted... " + currentFile);
+            // copy the current file into the extracted directory
+            File targetFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
+            copy(currentFile, targetFile);
+            if (isFileCompressed()) {
+                // ungzip it
+                targetFile = gunzipIt(targetFile);
             }
-        }
+            // targetFile is the name of the file after it has been decompressed
+            File processedFile = sortFile(targetFile);
+            log.debug("Extracted file: " + processedFile);
 
+            // we cleanup the files we dont need.
+            if (isFileCompressed()) {
+                File compressedFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
+                if (compressedFile.exists()) {
+                    compressedFile.delete();
+                }
+            }
+            if (targetFile.exists()) {
+                targetFile.delete();
+            }
+
+            // make sure that the resulting file has a valid extension like .txt
+            String processedFileName = processedFile.getName();
+            if (!processedFileName.endsWith(STANDARD_FILE_EXT)) {
+                if (processedFileName.contains(STANDARD_FILE_EXT)) {
+                    int index = processedFileName.indexOf(STANDARD_FILE_EXT);
+                    String finalFileName = processedFileName.substring(0, index + STANDARD_FILE_EXT.length());
+                    File finalName = new File(processedFile.getParentFile(), finalFileName);
+                    processedFile.renameTo(finalName);
+                    log.debug("Final file: " + finalName);
+
+                    // saves the file processed
+                    cdrFileDao.saveOrUpdateFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT,
+                            getFileType());
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            log.error(ex);
+            // we save the error and continue with the next file.
+            cdrFileDao.saveOrUpdateFileProcessed(currentFile.getName(), "unknown", getFileType(), ex.toString());
+        }
     }
 
     /**

@@ -26,7 +26,8 @@ public interface CdrFileDao {
     CdrFileVo getFileProcessed(String fileName);
 
     /**
-     * Saves or updates a record to indicate that a file has been loaded.
+     * Saves or updates a record to indicate that a file has been loaded
+     * succesfully.
      * 
      * @param sourceFileName
      *            The source file name.
@@ -34,6 +35,23 @@ public interface CdrFileDao {
      *            The target file name.
      * @param type
      *            The file of the file.
+     * @see CdrFileDao#saveOrUpdateFileProcessed(String, String, char, String)
      */
     void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type);
+
+    /**
+     * Saves or updates a record to indicate that a file has been loaded but
+     * during the process an error occured.
+     * 
+     * @param sourceFileName
+     *            The source file name.
+     * @param targetFileName
+     *            The target file name.
+     * @param type
+     *            The file of the file.
+     * @param errorDescription
+     *            Error description.
+     * @see CdrFileDao#saveOrUpdateFileProcessed(String, String, char)
+     */
+    void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type, String errorDescription);
 }

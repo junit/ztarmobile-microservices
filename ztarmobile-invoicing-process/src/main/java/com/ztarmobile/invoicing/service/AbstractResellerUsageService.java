@@ -147,7 +147,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             } else {
                 if (foundFileInRange) {
                     // the process can't continue because a file is missing...
-                    String fileNotFound = null;
+                    String fileNotFound = getTargetDirectoryCdrFile() + File.separator + expectedFileName;
                     invalidInput("This file could not be found: " + fileNotFound);
                 }
             }

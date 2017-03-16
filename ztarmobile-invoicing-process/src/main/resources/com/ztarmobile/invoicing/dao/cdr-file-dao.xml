@@ -16,10 +16,10 @@
         </prop>
         <prop key="insert.cdr_file">
             <![CDATA[
-                INSERT INTO invoicing_cdr_file (source_file_name, target_file_name, file_type, status)
-                VALUES (:source_file_name, :target_file_name, :file_type, 'C')
+                INSERT INTO invoicing_cdr_file (source_file_name, target_file_name, file_type, status, error_description)
+                VALUES (:source_file_name, :target_file_name, :file_type, :status, :error_description)
                 ON DUPLICATE KEY 
-                UPDATE status = 'C', load_date = NOW()
+                UPDATE target_file_name = :target_file_name, file_type = :file_type, status = :status, error_description = :error_description, load_date = NOW() 
             ]]>
         </prop>
     </util:properties>

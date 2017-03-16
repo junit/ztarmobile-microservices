@@ -35,7 +35,14 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
      * Logger for this class
      */
     private static final Logger log = Logger.getLogger(CdrFileDaoImpl.class);
-
+    /**
+     * Status to indicate that the file was loaded sucessfully.
+     */
+    private static final char STATUS_COMPLETED = 'C';
+    /**
+     * Status to indicate that there was an error.
+     */
+    private static final char STATUS_ERROR = 'E';
     /**
      * The SQL statements.
      */
@@ -81,13 +88,26 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
      */
     @Override
     public void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type) {
+        // call the overloaded version
+        this.saveOrUpdateFileProcessed(sourceFileName, targetFileName, type, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type,
+            String errorDescription) {
         log.debug("Saving record for this file: " + sourceFileName);
+        char status = errorDescription == null ? STATUS_COMPLETED : STATUS_ERROR;
         String sql = sqlStatements.getProperty("insert.cdr_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("source_file_name", sourceFileName);
         params.put("target_file_name", targetFileName);
         params.put("file_type", String.valueOf(type));
+        params.put("status", String.valueOf(status));
+        params.put("error_description", errorDescription);
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }
 }
