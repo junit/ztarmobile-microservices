@@ -30,6 +30,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.ztarmobile.invoicing.dao.LoggerDao;
 import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 import com.ztarmobile.invoicing.vo.UsageVo;
 
@@ -54,6 +55,12 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      */
     @Autowired
     private ResellerAllocationsService allocationsService;
+
+    /**
+     * DAO dependency for the logger process.
+     */
+    @Autowired
+    private LoggerDao loggerDao;
 
     /**
      * {@inheritDoc}
@@ -153,15 +160,30 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             }
 
             if (foundFileInRange) {
-                // 1. calculate the usage in the current file.
-                calculateUsagePerFile(currentFile, calendarStart.getTime(), calendarEnd.getTime(), subs);
+                try {
+                    // test whether the file is going to be processed or not.
+                    if (isFileProcessed(product, calendarNow.getTime())) {
+                        log.info("==> File already processed... " + currentFile);
+                        continue;
+                    }
 
-                // 2. updates the usage.
-                allocationsService.updateResellerSubsUsage(subs);
+                    // 1. calculate the usage in the current file.
+                    calculateUsagePerFile(currentFile, calendarStart.getTime(), calendarEnd.getTime(), subs);
 
-                // 3. finally, we compress the file (close it out)
-                zipIt(currentFile);
+                    // 2. updates the usage.
+                    allocationsService.updateResellerSubsUsage(subs);
 
+                    // 3. finally, we compress the file (close it out)
+                    zipIt(currentFile);
+
+                    // saves the file processed
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    log.error(ex);
+                    // we save the error and continue with the next file.
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), ex.toString());
+                }
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
                     // no more files to process, the process is done
@@ -169,6 +191,11 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 }
             }
         }
+    }
+
+    private boolean isFileProcessed(String product, Date time) {
+        loggerDao.getReportFileProcessed();
+        return false;
     }
 
     private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsageVo> subs) {

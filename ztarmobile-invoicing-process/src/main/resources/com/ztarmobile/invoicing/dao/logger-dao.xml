@@ -6,17 +6,17 @@
 
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
     
-    <util:properties id="cdrFileDaoSql">
-        <prop key="select.cdr_file">
+    <util:properties id="loggerDaoSql">
+        <prop key="select.logger_cdr_file">
             <![CDATA[
                 SELECT row_id, source_file_name, target_file_name, status
-                FROM   invoicing_cdr_file
+                FROM   invoicing_logger_cdr_file
                 WHERE  source_file_name = :file_name
             ]]>
         </prop>
-        <prop key="insert.cdr_file">
+        <prop key="insert.logger_cdr_file">
             <![CDATA[
-                INSERT INTO invoicing_cdr_file (source_file_name, target_file_name, file_type, status, error_description)
+                INSERT INTO invoicing_logger_cdr_file (source_file_name, target_file_name, file_type, status, error_description)
                 VALUES (:source_file_name, :target_file_name, :file_type, :status, :error_description)
                 ON DUPLICATE KEY 
                 UPDATE target_file_name = :target_file_name, file_type = :file_type, status = :status, error_description = :error_description, load_date = NOW() 

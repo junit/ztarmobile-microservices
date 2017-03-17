@@ -12,7 +12,7 @@ package com.ztarmobile.invoicing.vo;
  * @author armandorivas
  * @since 03/15/17
  */
-public class CdrFileVo {
+public class LoggerReportFileVo {
     private long rowId;
     private String sourceFileName;
     private String targetFileName;

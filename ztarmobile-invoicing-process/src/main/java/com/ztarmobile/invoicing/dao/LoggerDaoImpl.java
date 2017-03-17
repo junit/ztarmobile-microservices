@@ -8,6 +8,7 @@ package com.ztarmobile.invoicing.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.vo.CdrFileVo;
+import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
+import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
 
 /**
  * Direct DAO Implementation.
@@ -30,11 +32,11 @@ import com.ztarmobile.invoicing.vo.CdrFileVo;
  * @since 03/14/17
  */
 @Repository
-public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
+public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(CdrFileDaoImpl.class);
+    private static final Logger log = Logger.getLogger(LoggerDaoImpl.class);
     /**
      * Status to indicate that the file was loaded successfully.
      */
@@ -47,24 +49,24 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
      * The SQL statements.
      */
     @Autowired
-    @Qualifier(value = "cdrFileDaoSql")
+    @Qualifier(value = "loggerDaoSql")
     private Properties sqlStatements;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public CdrFileVo getFileProcessed(String fileName) {
-        String sql = sqlStatements.getProperty("select.cdr_file");
+    public LoggerCdrFileVo getCdrFileProcessed(String fileName) {
+        String sql = sqlStatements.getProperty("select.logger_cdr_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("file_name", fileName);
 
-        List<CdrFileVo> list;
-        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<CdrFileVo>() {
+        List<LoggerCdrFileVo> list;
+        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerCdrFileVo>() {
             @Override
-            public CdrFileVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                CdrFileVo vo = new CdrFileVo();
+            public LoggerCdrFileVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                LoggerCdrFileVo vo = new LoggerCdrFileVo();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setSourceFileName(rs.getString(++rcnt));
@@ -87,20 +89,20 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type) {
+    public void saveOrUpdateCdrFileProcessed(String sourceFileName, String targetFileName, char type) {
         // call the overloaded version
-        this.saveOrUpdateFileProcessed(sourceFileName, targetFileName, type, null);
+        this.saveOrUpdateCdrFileProcessed(sourceFileName, targetFileName, type, null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateFileProcessed(String sourceFileName, String targetFileName, char type,
+    public void saveOrUpdateCdrFileProcessed(String sourceFileName, String targetFileName, char type,
             String errorDescription) {
         log.debug("Saving record for this file: " + sourceFileName);
         char status = errorDescription == null ? STATUS_COMPLETED : STATUS_ERROR;
-        String sql = sqlStatements.getProperty("insert.cdr_file");
+        String sql = sqlStatements.getProperty("insert.logger_cdr_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("source_file_name", sourceFileName);
@@ -108,6 +110,32 @@ public class CdrFileDaoImpl extends AbstractJdbc implements CdrFileDao {
         params.put("file_type", String.valueOf(type));
         params.put("status", String.valueOf(status));
         params.put("error_description", errorDescription);
+
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LoggerReportFileVo getReportFileProcessed() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveOrUpdateReportFileProcessed(String product, Date invoiceDate) {
+        // call the overloaded version
+        this.saveOrUpdateReportFileProcessed(product, invoiceDate, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveOrUpdateReportFileProcessed(String product, Date invoiceDate, String errorDescription) {
+
     }
 }

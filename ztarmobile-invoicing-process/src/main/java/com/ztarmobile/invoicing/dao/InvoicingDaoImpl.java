@@ -48,7 +48,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
     public void cleanUpInvoicing(Date start, Date end, String product) {
         log.debug("Cleaning up invoicing data from " + start + " - " + end);
 
-        String sql = sqlStatements.getProperty("delete.invocing_details");
+        String sql = sqlStatements.getProperty("delete.invoicing_report_details");
 
         Map<String, String> params = new HashMap<>();
         params.put("init_date", fromDateToYYYYmmddDashFormat(start));
@@ -66,7 +66,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
     public void saveInvoicing(Date start, Date end, String product) {
         log.debug("Saving invoicing details from " + start + " - " + end);
 
-        String sql = sqlStatements.getProperty("select.insert.invocing_details");
+        String sql = sqlStatements.getProperty("select.insert.invoicing_report_details");
 
         Map<String, String> params = new HashMap<>();
         params.put("init_date", fromDateToYYYYmmddDashFormat(start));

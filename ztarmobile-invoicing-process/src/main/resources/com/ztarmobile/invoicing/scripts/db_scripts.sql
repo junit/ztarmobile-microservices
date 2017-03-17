@@ -1,11 +1,14 @@
 # New table that stores all invoicing data.
-DROP TABLE IF EXISTS `invocing_details`;
+DROP TABLE IF EXISTS `invoicing_report_details`;
 
 # New table that stores all the products.
 DROP TABLE IF EXISTS `invoicing_catalog_product`;
 
 # New table that stores the status of the cdr files.
-DROP TABLE IF EXISTS `invoicing_cdr_file`;
+DROP TABLE IF EXISTS `invoicing_logger_cdr_file`;
+
+# New table that stores the status of the reports.
+DROP TABLE IF EXISTS `invoicing_logger_report_file`;
 
 CREATE TABLE `cdrs`.`invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
@@ -28,7 +31,7 @@ INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('STRE
 INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('TELBILL', '0');
 
 
-CREATE TABLE `cdrs`.`invocing_details` (
+CREATE TABLE `cdrs`.`invoicing_report_details` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
   `year` INT NOT NULL,
@@ -53,7 +56,7 @@ CREATE TABLE `cdrs`.`invocing_details` (
     ON UPDATE NO ACTION);
 
     
-CREATE TABLE `cdrs`.`invoicing_cdr_file` (
+CREATE TABLE `cdrs`.`invoicing_logger_cdr_file` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `source_file_name` VARCHAR(100) NOT NULL,
   `target_file_name` VARCHAR(100) NOT NULL,
@@ -63,3 +66,14 @@ CREATE TABLE `cdrs`.`invoicing_cdr_file` (
   `load_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `unique_idx` (`source_file_name` ASC));
+  
+
+CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
+  `row_id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NOT NULL,
+  `invoice_date` DATE NOT NULL,
+  `status` ENUM ('C', 'R', 'E') NOT NULL COMMENT 'C = Completed, R = Reload, E = Error',
+  `error_description` VARCHAR(500) COMMENT 'This column is populated when the status is E',
+  `processed_date` DATETIME NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`row_id`),
+  UNIQUE INDEX `unique_idx` (`product_id` ASC, `invoice_date` ASC));

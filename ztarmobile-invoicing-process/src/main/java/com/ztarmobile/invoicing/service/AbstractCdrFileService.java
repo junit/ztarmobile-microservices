@@ -26,8 +26,8 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ztarmobile.invoicing.dao.CdrFileDao;
-import com.ztarmobile.invoicing.vo.CdrFileVo;
+import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
 
 /**
  * Parent abstract class to handle the files for the CDR's.
@@ -45,10 +45,10 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      */
     public static final String STANDARD_FILE_EXT = ".txt";
     /**
-     * DAO dependency for CDR file.
+     * DAO dependency for the logger process.
      */
     @Autowired
-    private CdrFileDao cdrFileDao;
+    private LoggerDao loggerDao;
 
     /**
      * {@inheritDoc}
@@ -199,7 +199,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                     log.debug("Final file: " + finalName);
 
                     // saves the file processed
-                    cdrFileDao.saveOrUpdateFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT,
+                    loggerDao.saveOrUpdateCdrFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT,
                             getFileType());
                 }
             }
@@ -207,7 +207,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             ex.printStackTrace();
             log.error(ex);
             // we save the error and continue with the next file.
-            cdrFileDao.saveOrUpdateFileProcessed(currentFile.getName(), "unknown", getFileType(), ex.toString());
+            loggerDao.saveOrUpdateCdrFileProcessed(currentFile.getName(), "unknown", getFileType(), ex.toString());
         }
     }
 
@@ -222,11 +222,11 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      */
     private boolean isFileProcessed(File fileName) {
         boolean processed = false;
-        CdrFileVo cdrFileVo = cdrFileDao.getFileProcessed(fileName.getName());
-        if (cdrFileVo != null && cdrFileVo.getStatus() == 'C') {
+        LoggerCdrFileVo loggerCdrFileVo = loggerDao.getCdrFileProcessed(fileName.getName());
+        if (loggerCdrFileVo != null && loggerCdrFileVo.getStatus() == 'C') {
             // the record was found and it was completed.
             // make sure the target file is there...
-            String targetFile = cdrFileVo.getTargetFileName();
+            String targetFile = loggerCdrFileVo.getTargetFileName();
             File file = new File(getTargetDirectoryCdrFile(), targetFile);
             if (file.isFile() && file.exists()) {
                 processed = true;
