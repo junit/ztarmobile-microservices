@@ -71,9 +71,10 @@ CREATE TABLE `cdrs`.`invoicing_logger_cdr_file` (
 CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
-  `invoice_date` DATE NOT NULL,
-  `status` ENUM ('C', 'R', 'E') NOT NULL COMMENT 'C = Completed, R = Reload, E = Error',
+  `report_date` DATE NOT NULL,
+  `status_allocations` ENUM ('P', 'C', 'R', 'E') NOT NULL COMMENT 'P = Pending, C = Completed, R = Reload, E = Error',
+  `status_usage` ENUM ('P', 'C', 'R', 'E') NOT NULL COMMENT 'P = Pending, C = Completed, R = Reload, E = Error',
   `error_description` VARCHAR(500) COMMENT 'This column is populated when the status is E',
   `processed_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
-  UNIQUE INDEX `unique_idx` (`product_id` ASC, `invoice_date` ASC));
+  UNIQUE INDEX `unique_idx` (`product_id` ASC, `report_date` ASC));

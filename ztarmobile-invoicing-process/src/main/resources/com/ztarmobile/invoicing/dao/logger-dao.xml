@@ -22,6 +22,22 @@
                 UPDATE target_file_name = :target_file_name, file_type = :file_type, status = :status, error_description = :error_description, load_date = NOW() 
             ]]>
         </prop>
+        <prop key="select.logger_report_file">
+            <![CDATA[
+                SELECT row_id, status_allocations, status_usage
+                FROM   invoicing_logger_report_file
+                WHERE  product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
+                AND    report_date = :report_date
+            ]]>
+        </prop>
+        <prop key="insert.logger_report_file">
+            <![CDATA[
+                INSERT INTO invoicing_logger_report_file (product_id, report_date, status_allocations, status_usage, error_description)
+                VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date, :status_allocations, :status_usage, :error_description)
+                ON DUPLICATE KEY 
+                UPDATE status_allocations = :status_allocations, status_usage = :status_usage, error_description = :error_description, processed_date = NOW() 
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>

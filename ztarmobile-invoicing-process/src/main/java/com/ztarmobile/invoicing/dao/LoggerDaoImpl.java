@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddDashFormat;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Repository;
 import com.ztarmobile.invoicing.common.AbstractJdbc;
 import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
 import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
+import com.ztarmobile.invoicing.vo.PhaseVo;
 
 /**
  * Direct DAO Implementation.
@@ -38,7 +41,11 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      */
     private static final Logger log = Logger.getLogger(LoggerDaoImpl.class);
     /**
-     * Status to indicate that the file was loaded successfully.
+     * Status to indicate that the record was loaded successfully.
+     */
+    private static final char STATUS_PENDING = 'P';
+    /**
+     * Status to indicate that the record was loaded successfully.
      */
     private static final char STATUS_COMPLETED = 'C';
     /**
@@ -118,24 +125,74 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public LoggerReportFileVo getReportFileProcessed() {
-        return null;
+    public LoggerReportFileVo getReportFileProcessed(String product, Date reportDate) {
+        String sql = sqlStatements.getProperty("select.logger_report_file");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("product", product);
+        params.put("report_date", fromDateToYYYYmmddDashFormat(reportDate));
+
+        List<LoggerReportFileVo> list;
+        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerReportFileVo>() {
+            @Override
+            public LoggerReportFileVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                LoggerReportFileVo vo = new LoggerReportFileVo();
+                int rcnt = 0;
+                vo.setRowId(rs.getLong(++rcnt));
+                String status = rs.getString(++rcnt);
+                if (!status.isEmpty()) {
+                    vo.setStatusAllocations(status.charAt(0));
+                }
+                status = rs.getString(++rcnt);
+                if (!status.isEmpty()) {
+                    vo.setStatusUsage(status.charAt(0));
+                }
+                return vo;
+            }
+        });
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateReportFileProcessed(String product, Date invoiceDate) {
+    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase) {
         // call the overloaded version
-        this.saveOrUpdateReportFileProcessed(product, invoiceDate, null);
+        this.saveOrUpdateReportFileProcessed(product, reportDate, phase, null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateReportFileProcessed(String product, Date invoiceDate, String errorDescription) {
+    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase,
+            String errorDescription) {
+        log.debug("Saving record for this date: " + reportDate);
+        char status = errorDescription == null ? STATUS_COMPLETED : STATUS_ERROR;
+        String sql = sqlStatements.getProperty("insert.logger_report_file");
 
+        Map<String, String> params = new HashMap<>();
+        params.put("product", product);
+        params.put("report_date", fromDateToYYYYmmddDashFormat(reportDate));
+
+        switch (phase) {
+        case ALLOCATIONS:
+            params.put("status_allocations", String.valueOf(status));
+            params.put("status_usage", String.valueOf(STATUS_PENDING));
+            break;
+        case USAGE:
+            params.put("status_allocations", String.valueOf(STATUS_COMPLETED));
+            params.put("status_usage", String.valueOf(status));
+            break;
+        }
+        params.put("error_description", errorDescription);
+
+        this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }
+
 }

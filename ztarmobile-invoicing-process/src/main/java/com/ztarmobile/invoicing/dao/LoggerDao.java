@@ -10,6 +10,7 @@ import java.util.Date;
 
 import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
 import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
+import com.ztarmobile.invoicing.vo.PhaseVo;
 
 /**
  * DAO to handle the operations for the transactions.
@@ -61,19 +62,27 @@ public interface LoggerDao {
     /**
      * States whether the invoice record has been processed or not.
      * 
+     * @param product
+     *            The product.
+     * @param reportDate
+     *            The report date.
+     * 
+     * 
      * @return The report file or null if this object was not found.
      */
-    LoggerReportFileVo getReportFileProcessed();
+    LoggerReportFileVo getReportFileProcessed(String product, Date reportDate);
 
     /**
      * Saves or updates a record to indicate that a file has been invoiced.
      * 
      * @param product
      *            The product description.
-     * @param invoiceDate
+     * @param reportDate
      *            The date when the record was processed.
+     * @param phase
+     *            The phase.
      */
-    void saveOrUpdateReportFileProcessed(String product, Date invoiceDate);
+    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase);
 
     /**
      * Saves or updates a record to indicate that a file has been invoiced but
@@ -81,10 +90,12 @@ public interface LoggerDao {
      * 
      * @param product
      *            The product description.
-     * @param invoiceDate
+     * @param reportDate
      *            The date when the record was processed.
+     * @param phase
+     *            The phase.
      * @param errorDescription
      *            Error description.
      */
-    void saveOrUpdateReportFileProcessed(String product, Date invoiceDate, String errorDescription);
+    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, String errorDescription);
 }

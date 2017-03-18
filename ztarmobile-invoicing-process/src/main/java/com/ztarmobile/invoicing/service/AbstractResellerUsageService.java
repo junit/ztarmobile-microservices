@@ -15,6 +15,7 @@ import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
 import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
 import static com.ztarmobile.invoicing.common.FileUtils.zipIt;
+import static com.ztarmobile.invoicing.vo.PhaseVo.USAGE;
 import static java.util.Calendar.MONTH;
 
 import java.io.BufferedReader;
@@ -31,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
 import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 import com.ztarmobile.invoicing.vo.UsageVo;
 
@@ -177,12 +179,12 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                     zipIt(currentFile);
 
                     // saves the file processed
-                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime());
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     log.error(ex);
                     // we save the error and continue with the next file.
-                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), ex.toString());
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE, ex.toString());
                 }
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {
@@ -193,9 +195,13 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
         }
     }
 
-    private boolean isFileProcessed(String product, Date time) {
-        loggerDao.getReportFileProcessed();
-        return false;
+    private boolean isFileProcessed(String product, Date currentDate) {
+        boolean processed = false;
+        LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
+        if (loggerReportFileVo != null && loggerReportFileVo.getStatusAllocations() == 'C') {
+
+        }
+        return processed;
     }
 
     private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsageVo> subs) {

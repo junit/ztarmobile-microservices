@@ -10,13 +10,12 @@ package com.ztarmobile.invoicing.vo;
  * Value object.
  *
  * @author armandorivas
- * @since 03/15/17
+ * @since 03/17/17
  */
 public class LoggerReportFileVo {
     private long rowId;
-    private String sourceFileName;
-    private String targetFileName;
-    private char status;
+    private char statusAllocations;
+    private char statusUsage;
 
     /**
      * @return the rowId
@@ -34,48 +33,33 @@ public class LoggerReportFileVo {
     }
 
     /**
-     * @return the sourceFileName
+     * @return the statusAllocations
      */
-    public String getSourceFileName() {
-        return sourceFileName;
+    public char getStatusAllocations() {
+        return statusAllocations;
     }
 
     /**
-     * @param sourceFileName
-     *            the sourceFileName to set
+     * @param statusAllocations
+     *            the statusAllocations to set
      */
-    public void setSourceFileName(String sourceFileName) {
-        this.sourceFileName = sourceFileName;
+    public void setStatusAllocations(char statusAllocations) {
+        this.statusAllocations = statusAllocations;
     }
 
     /**
-     * @return the targetFileName
+     * @return the statusUsage
      */
-    public String getTargetFileName() {
-        return targetFileName;
+    public char getStatusUsage() {
+        return statusUsage;
     }
 
     /**
-     * @param targetFileName
-     *            the targetFileName to set
+     * @param statusUsage
+     *            the statusUsage to set
      */
-    public void setTargetFileName(String targetFileName) {
-        this.targetFileName = targetFileName;
-    }
-
-    /**
-     * @return the status
-     */
-    public char getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status
-     *            the status to set
-     */
-    public void setStatus(char status) {
-        this.status = status;
+    public void setStatusUsage(char statusUsage) {
+        this.statusUsage = statusUsage;
     }
 
     /*
@@ -85,8 +69,8 @@ public class LoggerReportFileVo {
      */
     @Override
     public String toString() {
-        return "CdrFileVo [rowId=" + rowId + ", sourceFileName=" + sourceFileName + ", targetFileName=" + targetFileName
-                + ", status=" + status + "]";
+        return "LoggerReportFileVo [rowId=" + rowId + ", statusAllocations=" + statusAllocations + ", statusUsage="
+                + statusUsage + "]";
     }
 
 }

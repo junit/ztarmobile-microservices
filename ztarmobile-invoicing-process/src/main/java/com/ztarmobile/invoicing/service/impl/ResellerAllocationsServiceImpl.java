@@ -11,6 +11,7 @@ import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
 import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
+import static com.ztarmobile.invoicing.vo.PhaseVo.ALLOCATIONS;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
@@ -29,9 +30,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ztarmobile.invoicing.dao.LoggerDao;
 import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
 import com.ztarmobile.invoicing.service.AbstractDefaultService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
+import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
 import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
 /**
@@ -52,6 +55,12 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
      */
     @Autowired
     private ResellerAllocationsDao resellerAllocationsDao;
+
+    /**
+     * DAO dependency for the logger process.
+     */
+    @Autowired
+    private LoggerDao loggerDao;
 
     /**
      * {@inheritDoc}
@@ -164,10 +173,26 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
             durationStart = calendarCurr.getTime();
             durationEnd = calculateDurationEnd(Calendar.getInstance(), calendarCurr);
 
-            log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
+            try {
+                // test whether the file is going to be processed or not.
+                if (isFileProcessed(product, calendarCurr.getTime())) {
+                    log.info("==> Allocation already processed... " + calendarCurr.getTime());
+                    calendarCurr.add(DAY_OF_MONTH, 1);
+                    continue;
+                }
+                log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
 
-            resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd, product);
-            calendarCurr.add(DAY_OF_MONTH, 1);
+                resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd, product);
+                calendarCurr.add(DAY_OF_MONTH, 1);
+
+                // saves the file processed
+                loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                log.error(ex);
+                // we save the error and continue with the next file.
+                loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, ex.toString());
+            }
         }
         resellerAllocationsDao.updateAllocationIndicators();
         long endTime = System.currentTimeMillis();
@@ -178,6 +203,27 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
         long sec = MILLISECONDS.toSeconds(totalTime) - MINUTES.toSeconds(MILLISECONDS.toMinutes(totalTime));
         String timeMsg = String.format("%02d min, %02d sec", min, sec);
         log.debug("Allocations executed in: " + timeMsg);
+    }
+
+    /**
+     * This method validates whether the current file is already processed or
+     * not. If the file was already processed, then uncompress it so that it can
+     * be used later.
+     * 
+     * @param product
+     *            The product.
+     * @param currentDate
+     *            The current date.
+     * @return true, it was processed, false it's not.
+     */
+    private boolean isFileProcessed(String product, Date currentDate) {
+        boolean processed = false;
+        LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
+        if (loggerReportFileVo != null && loggerReportFileVo.getStatusAllocations() == 'C') {
+            // the record was found and it was completed.
+            processed = true;
+        }
+        return processed;
     }
 
     /**
