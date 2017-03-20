@@ -334,6 +334,16 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     }
 
     /**
+     * Increments the frecuency of the calendar based on the type of file.
+     * 
+     * @param calendarNow
+     *            The calendar.
+     */
+    private void incrementFrecuency(Calendar calendarNow) {
+        calendarNow.add(getFileFrecuency(), 1);
+    }
+
+    /**
      * Gets the expected file name.
      * 
      * @param calendarNow
@@ -350,12 +360,14 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     protected abstract String getTargetDirectoryCdrFile();
 
     /**
-     * Increments the frecuency of the calendar based on the type of file.
+     * Get the file frecuency, that means, how ofter the cdr file is dropped in
+     * the servers.
      * 
-     * @param calendarNow
-     *            The calendar.
+     * @return The frecuency constant that must match with the Calendar
+     *         constant. It could be, every month or every day or every year
+     *         depending on the Calendar constant.
      */
-    protected abstract void incrementFrecuency(Calendar calendarNow);
+    protected abstract int getFileFrecuency();
 
     /**
      * The file contains a header as part of its content?

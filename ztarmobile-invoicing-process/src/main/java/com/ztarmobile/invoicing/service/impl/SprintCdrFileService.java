@@ -85,8 +85,8 @@ public class SprintCdrFileService extends AbstractCdrFileService {
      * {@inheritDoc}
      */
     @Override
-    protected void incrementFrecuency(Calendar calendarNow) {
-        calendarNow.add(MONTH, 1); // files are dropped every month.
+    protected int getFileFrecuency() {
+        return MONTH; // files are dropped every month.
     }
 
     /**
