@@ -159,7 +159,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
         // validates the input.
         this.validateEntries(calendarStart, calendarEnd, product);
 
-        // standarize the dates.
+        // Standardize the dates.
         setMinimumCalendarDay(calendarStart);
         setMaximumCalendarDay(calendarEnd);
 
@@ -181,9 +181,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
                     continue;
                 }
                 log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
-
                 resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd, product);
-                calendarCurr.add(DAY_OF_MONTH, 1);
 
                 // saves the file processed
                 loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS);
@@ -193,8 +191,17 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
                 // we save the error and continue with the next file.
                 loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, ex.toString());
             }
+            calendarCurr.add(DAY_OF_MONTH, 1);
         }
-        resellerAllocationsDao.updateAllocationIndicators();
+        try {
+            resellerAllocationsDao.updateAllocationIndicators();
+        } catch (Exception ex) {
+            calendarCurr.add(DAY_OF_MONTH, -1);
+            ex.printStackTrace();
+            log.error(ex);
+            // we save the error and continue with the next file.
+            loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, ex.toString());
+        }
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         log.debug("<=== Ending Allocations... <===");

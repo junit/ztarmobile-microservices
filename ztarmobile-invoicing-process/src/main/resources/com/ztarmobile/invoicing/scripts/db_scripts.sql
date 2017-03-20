@@ -62,7 +62,7 @@ CREATE TABLE `cdrs`.`invoicing_logger_cdr_file` (
   `target_file_name` VARCHAR(100) NOT NULL,
   `file_type` ENUM ('E', 'S') NOT NULL COMMENT 'E = EricssonDumpFiles, S = SprintDumpFiles',
   `status` ENUM ('C', 'R', 'E') NOT NULL COMMENT 'C = Completed, R = Reload, E = Error',
-  `error_description` VARCHAR(500) COMMENT 'This column is populated when the status is E',
+  `error_description` LONGTEXT COMMENT 'This column is populated when the status is E',
   `load_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `unique_idx` (`source_file_name` ASC));
@@ -74,7 +74,7 @@ CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
   `report_date` DATE NOT NULL,
   `status_allocations` ENUM ('P', 'C', 'R', 'E') NOT NULL COMMENT 'P = Pending, C = Completed, R = Reload, E = Error',
   `status_usage` ENUM ('P', 'C', 'R', 'E') NOT NULL COMMENT 'P = Pending, C = Completed, R = Reload, E = Error',
-  `error_description` VARCHAR(500) COMMENT 'This column is populated when the status is E',
+  `error_description` LONGTEXT COMMENT 'This column is populated when the status is E',
   `processed_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `unique_idx` (`product_id` ASC, `report_date` ASC));

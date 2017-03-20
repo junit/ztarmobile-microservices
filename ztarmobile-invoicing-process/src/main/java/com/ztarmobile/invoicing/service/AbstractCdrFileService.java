@@ -173,11 +173,11 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                 // ungzip it
                 targetFile = gunzipIt(targetFile);
             }
-            // targetFile is the name of the file after it has been decompressed
+            // targetFile is the name of the file after it has been uncompressed
             File processedFile = sortFile(targetFile);
             log.debug("Extracted file: " + processedFile);
 
-            // we cleanup the files we dont need.
+            // we cleanup the files we don't need.
             if (isFileCompressed()) {
                 File compressedFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
                 if (compressedFile.exists()) {
