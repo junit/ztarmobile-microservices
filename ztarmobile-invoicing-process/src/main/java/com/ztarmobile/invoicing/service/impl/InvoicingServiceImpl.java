@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.ztarmobile.invoicing.common.MontlyTime;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
 import com.ztarmobile.invoicing.dao.InvoicingDao;
+import com.ztarmobile.invoicing.service.AbstractDefaultService;
 import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
@@ -87,7 +88,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public void performInvoicing(Date start, Date end, String product, boolean reloadCdrFiles) {
+    public void performInvoicing(Date start, Date end, String product, boolean rerunInvoicing) {
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(start);
 
@@ -95,45 +96,45 @@ public class InvoicingServiceImpl implements InvoicingService {
         calendarEnd.setTime(end);
 
         // delegates to a common method.
-        this.performAllInvoicing(calendarStart, calendarEnd, product, reloadCdrFiles);
+        this.performAllInvoicing(calendarStart, calendarEnd, product, rerunInvoicing);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void performInvoicing(Calendar start, Calendar end, String product, boolean reloadCdrFiles) {
+    public void performInvoicing(Calendar start, Calendar end, String product, boolean rerunInvoicing) {
         // delegates to a common method.
-        this.performAllInvoicing(start, end, product, reloadCdrFiles);
+        this.performAllInvoicing(start, end, product, rerunInvoicing);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void performInvoicing(int month, String product, boolean reloadCdrFiles) {
-        this.performInvoicing(month, month, product, reloadCdrFiles);
+    public void performInvoicing(int month, String product, boolean rerunInvoicing) {
+        this.performInvoicing(month, month, product, rerunInvoicing);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void performInvoicing(int fromMonth, int toMonth, String product, boolean reloadCdrFiles) {
+    public void performInvoicing(int fromMonth, int toMonth, String product, boolean rerunInvoicing) {
         Calendar calendarStart = getMinimunDayOfMonth(fromMonth);
         Calendar calendarEnd = getMaximumDayOfMonth(toMonth);
 
         // delegates to a common method.
-        this.performAllInvoicing(calendarStart, calendarEnd, product, reloadCdrFiles);
+        this.performAllInvoicing(calendarStart, calendarEnd, product, rerunInvoicing);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void performInvoicing(String product, boolean reloadCdrFiles) {
+    public void performInvoicing(String product, boolean rerunInvoicing) {
         int previousMonth = Calendar.getInstance().get(MONTH) - 1;
-        this.performInvoicing(previousMonth, product, reloadCdrFiles);
+        this.performInvoicing(previousMonth, product, rerunInvoicing);
     }
 
     /**
@@ -161,14 +162,14 @@ public class InvoicingServiceImpl implements InvoicingService {
      *            The final calendar
      * @param product
      *            The product.
-     * @param reloadCdrFiles
-     *            If this flag is set to true, then the CDR files are read from
-     *            the source directory, if it's false the process assumes the
-     *            CDR files are already processed.
+     * @param rerunInvoicing
+     *            If this flag is set to true, then the invoice process is run
+     *            from scracth processing the cdrs and calculating all, if it's
+     *            false the process runs as usual.
      */
     private void performAllInvoicing(Calendar calendarStart, Calendar calendarEnd, String product,
-            boolean reloadCdrFiles) {
-        log.debug("Starting the invoicing process...");
+            boolean rerunInvoicing) {
+        log.debug("Starting the invoicing process...rerun process? " + rerunInvoicing);
 
         CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
         validateInput(catalogProductVo, "No product information was found for [" + product + "]");
@@ -176,13 +177,16 @@ public class InvoicingServiceImpl implements InvoicingService {
 
         log.debug("==================> 0. preparing data <==================================");
         CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
+        ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
         cdrFileService.extractCdrs(calendarStart, calendarEnd);
 
         log.debug("==================> 1. create_reseller_allocations <=====================");
+        ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
         allocationsService.createAllocations(calendarStart, calendarEnd, product);
 
         log.debug("==================> 2. create_reseller_usage <=====================");
         ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
+        ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
         usageService.createUsage(calendarStart, calendarEnd, product);
 
         log.debug("==================> 3. create_invoicing_details <=====================");

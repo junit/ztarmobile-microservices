@@ -222,6 +222,11 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
      */
     private boolean isFileProcessed(File fileName) {
         boolean processed = false;
+        if (this.isReProcess()) {
+            // the process will be rerun
+            return processed;
+        }
+
         LoggerCdrFileVo loggerCdrFileVo = loggerDao.getCdrFileProcessed(fileName.getName());
         if (loggerCdrFileVo != null && loggerCdrFileVo.getStatus() == 'C') {
             // the record was found and it was completed.

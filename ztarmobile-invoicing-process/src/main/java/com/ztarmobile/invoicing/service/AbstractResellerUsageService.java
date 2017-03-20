@@ -164,22 +164,25 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             if (foundFileInRange) {
                 try {
                     // test whether the file is going to be processed or not.
-                    if (isFileProcessed(product, calendarNow.getTime())) {
-                        log.info("==> File already processed... " + currentFile);
-                        continue;
+                    boolean processed = isUsageProcessed(product, calendarNow.getTime());
+                    if (!processed) {
+                        // 1. calculate the usage in the current file.
+                        calculateUsagePerFile(currentFile, calendarStart.getTime(), calendarEnd.getTime(), subs);
+
+                        // 2. updates the usage.
+                        allocationsService.updateResellerSubsUsage(subs);
+
+                        // 3. finally, we compress the file (close it out)
+                        zipIt(currentFile);
+
+                        // saves the file processed
+                        loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE);
+                    } else {
+                        log.info("==> Usage already processed... " + currentFile);
+                        // 3. finally, we compress the file (close it out)
+                        // this is necesary to finish the process.
+                        zipIt(currentFile);
                     }
-
-                    // 1. calculate the usage in the current file.
-                    calculateUsagePerFile(currentFile, calendarStart.getTime(), calendarEnd.getTime(), subs);
-
-                    // 2. updates the usage.
-                    allocationsService.updateResellerSubsUsage(subs);
-
-                    // 3. finally, we compress the file (close it out)
-                    zipIt(currentFile);
-
-                    // saves the file processed
-                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     log.error(ex);
@@ -195,11 +198,17 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
         }
     }
 
-    private boolean isFileProcessed(String product, Date currentDate) {
+    private boolean isUsageProcessed(String product, Date currentDate) {
         boolean processed = false;
-        LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
-        if (loggerReportFileVo != null && loggerReportFileVo.getStatusAllocations() == 'C') {
+        if (this.isReProcess()) {
+            // the process will be rerun
+            return processed;
+        }
 
+        LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
+        if (loggerReportFileVo != null && loggerReportFileVo.getStatusUsage() == 'C') {
+            // the record was found and it was completed.
+            processed = true;
         }
         return processed;
     }

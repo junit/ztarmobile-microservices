@@ -175,16 +175,17 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
 
             try {
                 // test whether the file is going to be processed or not.
-                if (isFileProcessed(product, calendarCurr.getTime())) {
-                    log.info("==> Allocation already processed... " + calendarCurr.getTime());
-                    calendarCurr.add(DAY_OF_MONTH, 1);
-                    continue;
-                }
-                log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
-                resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd, product);
+                boolean processed = isAllocationProcessed(product, calendarCurr.getTime());
+                if (!processed) {
+                    log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
+                    resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd,
+                            product);
 
-                // saves the file processed
-                loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS);
+                    // saves the file processed
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS);
+                } else {
+                    log.info("==> Allocation already processed... " + calendarCurr.getTime());
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 log.error(ex);
@@ -199,7 +200,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
             calendarCurr.add(DAY_OF_MONTH, -1);
             ex.printStackTrace();
             log.error(ex);
-            // we save the error and continue with the next file.
+            // we save the error and continue the normal flow.
             loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, ex.toString());
         }
         long endTime = System.currentTimeMillis();
@@ -223,8 +224,13 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
      *            The current date.
      * @return true, it was processed, false it's not.
      */
-    private boolean isFileProcessed(String product, Date currentDate) {
+    private boolean isAllocationProcessed(String product, Date currentDate) {
         boolean processed = false;
+        if (this.isReProcess()) {
+            // the process will be rerun
+            return processed;
+        }
+
         LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
         if (loggerReportFileVo != null && loggerReportFileVo.getStatusAllocations() == 'C') {
             // the record was found and it was completed.

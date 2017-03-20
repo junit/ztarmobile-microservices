@@ -26,6 +26,10 @@ public abstract class AbstractDefaultService {
      * Logger for this class
      */
     private static final Logger log = Logger.getLogger(AbstractDefaultService.class);
+    /**
+     * Flag to reprocess the current task.
+     */
+    private boolean reProcess;
 
     /**
      * Validate the common input.
@@ -115,5 +119,20 @@ public abstract class AbstractDefaultService {
                 return name.endsWith(fileExtension);
             }
         };
+    }
+
+    /**
+     * @return the reProcess
+     */
+    public boolean isReProcess() {
+        return reProcess;
+    }
+
+    /**
+     * @param reProcess
+     *            the reProcess to set
+     */
+    public void setReProcess(boolean reProcess) {
+        this.reProcess = reProcess;
     }
 }

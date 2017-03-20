@@ -25,14 +25,14 @@ public interface InvoicingService {
      *            The end date.
      * @param product
      *            The product.
-     * @param reloadCdrFiles
-     *            If this flag is set to true, then the CDR files are read from
-     *            the source directory, if it's false the process assumes the
-     *            CDR files are already processed.
+     * @param rerunInvoicing
+     *            If this flag is set to true, then the invoice process is run
+     *            from scracth processing the cdrs and calculating all, if it's
+     *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(Calendar, Calendar, String,
      *      boolean)
      */
-    void performInvoicing(Date start, Date end, String product, boolean reloadCdrFiles);
+    void performInvoicing(Date start, Date end, String product, boolean rerunInvoicing);
 
     /**
      * Perform the invoicing process based on a start and end date.
@@ -43,13 +43,13 @@ public interface InvoicingService {
      *            The end date.
      * @param product
      *            The product.
-     * @param reloadCdrFiles
-     *            If this flag is set to true, then the CDR files are read from
-     *            the source directory, if it's false the process assumes the
-     *            CDR files are already processed.
+     * @param rerunInvoicing
+     *            If this flag is set to true, then the invoice process is run
+     *            from scracth processing the cdrs and calculating all, if it's
+     *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(Date, Date, String, boolean)
      */
-    void performInvoicing(Calendar start, Calendar end, String product, boolean reloadCdrFiles);
+    void performInvoicing(Calendar start, Calendar end, String product, boolean rerunInvoicing);
 
     /**
      * Perform the invoicing process based on a specific month and a product.
@@ -59,13 +59,13 @@ public interface InvoicingService {
      *            third month of the year in the Gregorian and Julian calendars.
      * @param product
      *            The product.
-     * @param reloadCdrFiles
-     *            If this flag is set to true, then the CDR files are read from
-     *            the source directory, if it's false the process assumes the
-     *            CDR files are already processed.
+     * @param rerunInvoicing
+     *            If this flag is set to true, then the invoice process is run
+     *            from scracth processing the cdrs and calculating all, if it's
+     *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(int, int, String, boolean)
      */
-    void performInvoicing(int month, String product, boolean reloadCdrFiles);
+    void performInvoicing(int month, String product, boolean rerunInvoicing);
 
     /**
      * Perform the invoicing process based on a initial month and an end month.
@@ -76,29 +76,29 @@ public interface InvoicingService {
      *            The end month.
      * @param product
      *            The product.
-     * @param reloadCdrFiles
-     *            If this flag is set to true, then the CDR files are read from
-     *            the source directory, if it's false the process assumes the
-     *            CDR files are already processed.
+     * @param rerunInvoicing
+     *            If this flag is set to true, then the invoice process is run
+     *            from scracth processing the cdrs and calculating all, if it's
+     *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(int, String, boolean)
      */
-    void performInvoicing(int fromMonth, int toMonth, String product, boolean reloadCdrFiles);
+    void performInvoicing(int fromMonth, int toMonth, String product, boolean rerunInvoicing);
 
     /**
      * Perform the invoicing process based on a specific product.
      * 
      * @param product
      *            The product.
-     * @param reloadCdrFiles
-     *            If this flag is set to true, then the CDR files are read from
-     *            the source directory, if it's false the process assumes the
-     *            CDR files are already processed.
+     * @param rerunInvoicing
+     *            If this flag is set to true, then the invoice process is run
+     *            from scracth processing the cdrs and calculating all, if it's
+     *            false the process runs as usual.
      */
-    void performInvoicing(String product, boolean reloadCdrFiles);
+    void performInvoicing(String product, boolean rerunInvoicing);
 
     /**
-     * Perform the invoicing process based on a specific product. The CDR files
-     * are forced to be read from the source folder.
+     * Perform the invoicing process based on a specific product. The invoicing
+     * process is started from scratch.
      * 
      * @param product
      *            The product.
