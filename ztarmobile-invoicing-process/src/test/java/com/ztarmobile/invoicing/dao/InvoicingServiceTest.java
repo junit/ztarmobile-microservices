@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ztarmobile.invoicing.service.InvoicingService;
+import com.ztarmobile.invoicing.vo.CatalogProductVo;
 import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
@@ -58,5 +59,9 @@ public class InvoicingServiceTest {
             System.out.println(vo);
         }
         System.out.println(list.size());
+
+        for (CatalogProductVo vo : invoicingService.getAllAvailableProducts()) {
+            System.out.println(vo);
+        }
     }
 }

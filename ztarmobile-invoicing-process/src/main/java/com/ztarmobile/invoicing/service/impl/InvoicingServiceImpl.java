@@ -166,6 +166,15 @@ public class InvoicingServiceImpl implements InvoicingService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<CatalogProductVo> getAllAvailableProducts() {
+        // gets all the available products.
+        return catalogProductDao.getCatalogProduct();
+    }
+
+    /**
      * Calculates the invoicing given a initial and final time including the
      * product.
      * 

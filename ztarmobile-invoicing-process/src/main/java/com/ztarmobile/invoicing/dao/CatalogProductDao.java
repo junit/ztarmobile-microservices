@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import java.util.List;
+
 import com.ztarmobile.invoicing.vo.CatalogProductVo;
 
 /**
@@ -24,4 +26,12 @@ public interface CatalogProductDao {
      * @return The product or null if it was not found.
      */
     CatalogProductVo getCatalogProduct(String product);
+
+    /**
+     * Gets all the existing products.
+     * 
+     * @return The list of all the products or an empty list where no products
+     *         were found.
+     */
+    List<CatalogProductVo> getCatalogProduct();
 }

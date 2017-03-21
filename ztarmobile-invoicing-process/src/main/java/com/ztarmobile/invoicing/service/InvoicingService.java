@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.ztarmobile.invoicing.vo.CatalogProductVo;
 import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
@@ -135,4 +136,12 @@ public interface InvoicingService {
      * @see InvoicingService#generateReport(String, Calendar, Calendar)
      */
     List<ReportDetailsVo> generateReport(String product, Date start, Date end);
+
+    /**
+     * Gets all the existing products.
+     * 
+     * @return The list of all the products or an empty list where no products
+     *         were found.
+     */
+    List<CatalogProductVo> getAllAvailableProducts();
 }

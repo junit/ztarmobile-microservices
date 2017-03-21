@@ -55,22 +55,38 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
         params.put("product", product);
 
         List<CatalogProductVo> list;
-        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<CatalogProductVo>() {
-            @Override
-            public CatalogProductVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                CatalogProductVo vo = new CatalogProductVo();
-                int rcnt = 0;
-                vo.setRowId(rs.getLong(++rcnt));
-                vo.setProduct(rs.getString(++rcnt));
-                vo.setCdma(rs.getBoolean(++rcnt));
-
-                return vo;
-            }
-        });
+        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new CatalogProductRowMapper());
         if (list.isEmpty()) {
             return null;
         } else {
             return list.get(0);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<CatalogProductVo> getCatalogProduct() {
+        log.debug("Getting all the products");
+        String sql = sqlStatements.getProperty("select.catalog_products");
+
+        return this.getJdbc().query(sql, new CatalogProductRowMapper());
+    }
+
+    class CatalogProductRowMapper implements RowMapper<CatalogProductVo> {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public CatalogProductVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            CatalogProductVo vo = new CatalogProductVo();
+            int rcnt = 0;
+            vo.setRowId(rs.getLong(++rcnt));
+            vo.setProduct(rs.getString(++rcnt));
+            vo.setCdma(rs.getBoolean(++rcnt));
+
+            return vo;
         }
     }
 }

@@ -15,6 +15,13 @@
                 ORDER BY product
             ]]>
         </prop>
+        <prop key="select.catalog_products">
+            <![CDATA[
+                SELECT row_id, product, cdma
+                FROM   invoicing_catalog_product
+                ORDER BY product
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>
