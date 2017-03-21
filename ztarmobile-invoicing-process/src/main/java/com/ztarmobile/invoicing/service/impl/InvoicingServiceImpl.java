@@ -29,6 +29,7 @@ import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import com.ztarmobile.invoicing.service.ResellerUsageService;
 import com.ztarmobile.invoicing.vo.CatalogProductVo;
+import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
  * Direct service implementation that calculates and perform the invoicing
@@ -149,7 +150,19 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public void generateReport() {
+    public List<ReportDetailsVo> generateReport(String product, Calendar start, Calendar end) {
+        validateInput(start, "calendarStart must be not null");
+        validateInput(end, "calendarEnd must be not null");
+        // delegates to the overloaded method.
+        return this.generateReport(product, start.getTime(), end.getTime());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ReportDetailsVo> generateReport(String product, Date start, Date end) {
+        return invoicingDao.generateReport(product, start, end);
     }
 
     /**
@@ -164,7 +177,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      *            The product.
      * @param rerunInvoicing
      *            If this flag is set to true, then the invoice process is run
-     *            from scracth processing the cdrs and calculating all, if it's
+     *            from scratch processing the CDR's and calculating all, if it's
      *            false the process runs as usual.
      */
     private void performAllInvoicing(Calendar calendarStart, Calendar calendarEnd, String product,
@@ -208,7 +221,7 @@ public class InvoicingServiceImpl implements InvoicingService {
         // we remove old data so that we can override with new info.
         invoicingDao.cleanUpInvoicing(start.getTime(), end.getTime(), product);
         // by default, if more than one month is requested, the information is
-        // grouped montly
+        // grouped monthly
         boolean splitByMonth = true;
         log.debug("Split by month: " + splitByMonth);
         if (splitByMonth) {

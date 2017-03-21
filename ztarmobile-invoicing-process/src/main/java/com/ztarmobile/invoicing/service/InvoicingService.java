@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing.service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
  * Service that calculates and perform the invoicing process.
@@ -27,7 +30,7 @@ public interface InvoicingService {
      *            The product.
      * @param rerunInvoicing
      *            If this flag is set to true, then the invoice process is run
-     *            from scracth processing the cdrs and calculating all, if it's
+     *            from scratch processing the CDR's and calculating all, if it's
      *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(Calendar, Calendar, String,
      *      boolean)
@@ -45,7 +48,7 @@ public interface InvoicingService {
      *            The product.
      * @param rerunInvoicing
      *            If this flag is set to true, then the invoice process is run
-     *            from scracth processing the cdrs and calculating all, if it's
+     *            from scratch processing the CDR's and calculating all, if it's
      *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(Date, Date, String, boolean)
      */
@@ -61,7 +64,7 @@ public interface InvoicingService {
      *            The product.
      * @param rerunInvoicing
      *            If this flag is set to true, then the invoice process is run
-     *            from scracth processing the cdrs and calculating all, if it's
+     *            from scratch processing the CDR's and calculating all, if it's
      *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(int, int, String, boolean)
      */
@@ -78,7 +81,7 @@ public interface InvoicingService {
      *            The product.
      * @param rerunInvoicing
      *            If this flag is set to true, then the invoice process is run
-     *            from scracth processing the cdrs and calculating all, if it's
+     *            from scratch processing the CDR's and calculating all, if it's
      *            false the process runs as usual.
      * @see InvoicingService#performInvoicing(int, String, boolean)
      */
@@ -91,8 +94,8 @@ public interface InvoicingService {
      *            The product.
      * @param rerunInvoicing
      *            If this flag is set to true, then the invoice process is run
-     *            from scracth processing the cdrs and calculating all, if it's
-     *            false the process runs as usual.
+     *            from scratch processing the CDRS's and calculating all, if
+     *            it's false the process runs as usual.
      */
     void performInvoicing(String product, boolean rerunInvoicing);
 
@@ -105,5 +108,31 @@ public interface InvoicingService {
      */
     void performInvoicing(String product);
 
-    void generateReport();
+    /**
+     * Return a list of objects for the invoicing report.
+     * 
+     * @param product
+     *            The product.
+     * @param start
+     *            Initial date.
+     * @param end
+     *            End date.
+     * @return List of objects or null if no information was found.
+     * @see InvoicingService#generateReport(String, Date, Date)
+     */
+    List<ReportDetailsVo> generateReport(String product, Calendar start, Calendar end);
+
+    /**
+     * Return a list of objects for the invoicing report.
+     * 
+     * @param product
+     *            The product.
+     * @param start
+     *            Initial date.
+     * @param end
+     *            End date.
+     * @return List of objects or null if no information was found.
+     * @see InvoicingService#generateReport(String, Calendar, Calendar)
+     */
+    List<ReportDetailsVo> generateReport(String product, Date start, Date end);
 }

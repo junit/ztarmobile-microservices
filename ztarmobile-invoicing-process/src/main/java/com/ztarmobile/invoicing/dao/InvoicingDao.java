@@ -7,6 +7,9 @@
 package com.ztarmobile.invoicing.dao;
 
 import java.util.Date;
+import java.util.List;
+
+import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
  * DAO to handle the operations for the invoicing process.
@@ -40,5 +43,18 @@ public interface InvoicingDao {
      *            The product.
      */
     void saveInvoicing(Date start, Date end, String product);
+
+    /**
+     * Return a list of objects for the invoicing report.
+     * 
+     * @param product
+     *            The product.
+     * @param start
+     *            Initial date.
+     * @param end
+     *            End date.
+     * @return List of objects or null if no information was found.
+     */
+    List<ReportDetailsVo> generateReport(String product, Date start, Date end);
 
 }
