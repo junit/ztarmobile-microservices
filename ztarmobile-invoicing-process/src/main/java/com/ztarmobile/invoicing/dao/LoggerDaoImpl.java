@@ -7,9 +7,12 @@
 package com.ztarmobile.invoicing.dao;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddDashFormat;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -161,20 +164,21 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase) {
+    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth) {
         // call the overloaded version
-        this.saveOrUpdateReportFileProcessed(product, reportDate, phase, null);
+        this.saveOrUpdateReportFileProcessed(product, reportDate, phase, byMonth, null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase,
+    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth,
             String errorDescription) {
         log.debug("Saving record for this date: " + reportDate);
         char status = errorDescription == null ? STATUS_COMPLETED : STATUS_ERROR;
-        String sql = sqlStatements.getProperty("insert.logger_report_file");
+        String sql = byMonth ? sqlStatements.getProperty("update.logger_report_file")
+                : sqlStatements.getProperty("insert.logger_report_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("product", product);
@@ -191,6 +195,14 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
             break;
         }
         params.put("error_description", errorDescription);
+
+        if (byMonth && phase == PhaseVo.USAGE) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(reportDate);
+
+            params.put("month_report_date", String.valueOf(calendar.get(MONTH) + 1));
+            params.put("year_report_date", String.valueOf(calendar.get(YEAR)));
+        }
 
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }

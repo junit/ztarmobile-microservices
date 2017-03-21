@@ -182,7 +182,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
                             product);
 
                     // saves the file processed
-                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS);
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false);
                 } else {
                     log.info("==> Allocation already processed... " + calendarCurr.getTime());
                 }
@@ -190,7 +190,8 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
                 ex.printStackTrace();
                 log.error(ex);
                 // we save the error and continue with the next file.
-                loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, ex.toString());
+                loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false,
+                        ex.toString());
             }
             calendarCurr.add(DAY_OF_MONTH, 1);
         }
@@ -201,7 +202,8 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
             ex.printStackTrace();
             log.error(ex);
             // we save the error and continue the normal flow.
-            loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, ex.toString());
+            loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false,
+                    ex.toString());
         }
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;

@@ -81,8 +81,11 @@ public interface LoggerDao {
      *            The date when the record was processed.
      * @param phase
      *            The phase.
+     * @param byMonth
+     *            Whether the table will be updated by day or month, if it's by
+     *            month, the days are ignored.
      */
-    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase);
+    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth);
 
     /**
      * Saves or updates a record to indicate that a file has been invoiced but
@@ -94,8 +97,12 @@ public interface LoggerDao {
      *            The date when the record was processed.
      * @param phase
      *            The phase.
+     * @param byMonth
+     *            Whether the table will be updated by day or month, if it's by
+     *            month, the days are ignored.
      * @param errorDescription
      *            Error description.
      */
-    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, String errorDescription);
+    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth,
+            String errorDescription);
 }

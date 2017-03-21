@@ -176,7 +176,8 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                         zipIt(currentFile);
 
                         // saves the file processed
-                        loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE);
+                        loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE,
+                                getFileFrecuency() == MONTH);
                     } else {
                         log.info("==> Usage already processed... " + currentFile);
                         // 3. finally, we compress the file (close it out)
@@ -187,7 +188,8 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                     ex.printStackTrace();
                     log.error(ex);
                     // we save the error and continue with the next file.
-                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE, ex.toString());
+                    loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE,
+                            getFileFrecuency() == MONTH, ex.toString());
                 }
                 incrementFrecuency(calendarNow);
                 if (calendarNow.after(calendarEnd)) {

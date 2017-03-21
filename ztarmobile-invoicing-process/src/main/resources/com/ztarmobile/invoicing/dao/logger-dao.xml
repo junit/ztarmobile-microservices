@@ -38,6 +38,15 @@
                 UPDATE status_allocations = :status_allocations, status_usage = :status_usage, error_description = :error_description, processed_date = NOW() 
             ]]>
         </prop>
+        <prop key="update.logger_report_file">
+            <![CDATA[
+                UPDATE invoicing_logger_report_file
+                SET status_allocations = :status_allocations, status_usage = :status_usage, error_description = :error_description, processed_date = NOW()
+                WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
+                AND YEAR(report_date) = :year_report_date
+                AND MONTH(report_date) = :month_report_date
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>
