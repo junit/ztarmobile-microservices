@@ -39,7 +39,8 @@ public class InvoicingServiceTest {
 
     @Test
     public void performInvoicing() {
-        String product = "GOOD2GOUS";
+        String product1 = "GOOD2GOUS";
+        String product2 = "GOOD2GOUS-CDMA";
         Calendar c1 = Calendar.getInstance();
         c1.set(2017, 0, 1);
         Calendar c2 = Calendar.getInstance();
@@ -47,14 +48,14 @@ public class InvoicingServiceTest {
 
         long init = System.currentTimeMillis();
 
-        // invoicingService.performInvoicing(c1, c2, "PIX_ATT", true);
-        invoicingService.performInvoicing(c1, c2, product, true);
+        invoicingService.performInvoicing(c1, c2, product2, true);
+        invoicingService.performInvoicing(c1, c2, product1, true);
 
         long end = System.currentTimeMillis();
         long total = end - init;
         System.out.println("Milliseconds: " + total);
 
-        List<ReportDetailsVo> list = invoicingService.generateReport(product, c1, c2);
+        List<ReportDetailsVo> list = invoicingService.generateReport(product1, c1, c2);
         for (ReportDetailsVo vo : list) {
             System.out.println(vo);
         }
