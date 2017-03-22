@@ -10,6 +10,9 @@ DROP TABLE IF EXISTS `invoicing_logger_cdr_file`;
 # New table that stores the status of the reports.
 DROP TABLE IF EXISTS `invoicing_logger_report_file`;
 
+# New table that stores the log of the requests of invoicing.
+DROP TABLE IF EXISTS `invoicing_logger_requests`;
+
 CREATE TABLE `cdrs`.`invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(50) NOT NULL,
@@ -78,3 +81,9 @@ CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
   `processed_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `unique_idx` (`product_id` ASC, `report_date` ASC));
+
+
+CREATE TABLE `cdrs`.`invoicing_logger_requests` (
+  `row_id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`row_id`)
+  );
