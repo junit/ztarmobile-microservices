@@ -7,9 +7,12 @@
 package com.ztarmobile.invoicing.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
 import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
+import com.ztarmobile.invoicing.vo.LoggerRequestVo;
+import com.ztarmobile.invoicing.vo.LoggerStatusVo;
 import com.ztarmobile.invoicing.vo.PhaseVo;
 
 /**
@@ -84,6 +87,8 @@ public interface LoggerDao {
      * @param byMonth
      *            Whether the table will be updated by day or month, if it's by
      *            month, the days are ignored.
+     * @see LoggerDao#saveOrUpdateReportFileProcessed(String, Date, PhaseVo,
+     *      boolean, String)
      */
     void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth);
 
@@ -102,7 +107,71 @@ public interface LoggerDao {
      *            month, the days are ignored.
      * @param errorDescription
      *            Error description.
+     * @see LoggerDao#saveOrUpdateReportFileProcessed(String, Date, PhaseVo,
+     *      boolean)
      */
     void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth,
             String errorDescription);
+
+    /**
+     * Saves or updates a record to indicate that the invoicing process has
+     * completed or is still in progress.
+     * 
+     * @param rowId
+     *            If this rowId is 0, then the record is inserted, otherwise,
+     *            it's updated.
+     * @param product
+     *            The product description.
+     * @param reportDateFrom
+     *            The initial date.
+     * @param reportDateTo
+     *            The end date.
+     * @param totalTime
+     *            Total time in miliseconds that the process took to complete.
+     * @param status
+     *            The status of the process.
+     * @return The new generated id if it was an insert operation or the amount
+     *         of records updated when the operation was update.
+     * @see LoggerDao#saveOrUpdateInvoiceProcessed(long, String, Date, Date,
+     *      long, LoggerStatusVo, String)
+     */
+    long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
+            long totalTime, LoggerStatusVo status);
+
+    /**
+     * Saves or update a record to indicate that the invoicing process has
+     * completed or in progress but during the process an error occurred.
+     * 
+     * @param rowId
+     *            If this rowId is 0, then the record is inserted, otherwise,
+     *            it's updated.
+     * @param product
+     *            The product description.
+     * @param reportDateFrom
+     *            The initial date.
+     * @param reportDateTo
+     *            The end date.
+     * @param totalTime
+     *            Total time in miliseconds that the process took to complete.
+     * @param status
+     *            The status of the process.
+     * @param errorDescription
+     *            Error description.
+     * @return The new generated id if it was an insert operation or the amount
+     *         of records updated when the operation was update.
+     * @see LoggerDao#saveOrUpdateInvoiceProcessed(long, String, Date, Date,
+     *      long, LoggerStatusVo)
+     */
+    long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
+            long totalTime, LoggerStatusVo status, String errorDescription);
+
+    /**
+     * Get a list of all the transactions made/requested when the invocing
+     * process ends.
+     * 
+     * @param max
+     *            The maximum of records to be returned.
+     * @return List of records.
+     */
+    List<LoggerRequestVo> getInvoiceProcessed(int max);
 }

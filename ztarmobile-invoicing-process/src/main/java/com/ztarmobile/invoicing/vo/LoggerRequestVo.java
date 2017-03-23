@@ -19,10 +19,11 @@ public class LoggerRequestVo {
     private String product;
     private Date from;
     private Date to;
-    private boolean availableReport;
     private long responseTime;
-    private boolean error;
+    private char status;
+    private boolean availableReport;
     private String errorDescription;
+    private Date requestDate;
 
     /**
      * @return the rowId
@@ -85,21 +86,6 @@ public class LoggerRequestVo {
     }
 
     /**
-     * @return the availableReport
-     */
-    public boolean isAvailableReport() {
-        return availableReport;
-    }
-
-    /**
-     * @param availableReport
-     *            the availableReport to set
-     */
-    public void setAvailableReport(boolean availableReport) {
-        this.availableReport = availableReport;
-    }
-
-    /**
      * @return the responseTime
      */
     public long getResponseTime() {
@@ -115,18 +101,33 @@ public class LoggerRequestVo {
     }
 
     /**
-     * @return the error
+     * @return the status
      */
-    public boolean isError() {
-        return error;
+    public char getStatus() {
+        return status;
     }
 
     /**
-     * @param error
-     *            the error to set
+     * @param status
+     *            the status to set
      */
-    public void setError(boolean error) {
-        this.error = error;
+    public void setStatus(char status) {
+        this.status = status;
+    }
+
+    /**
+     * @return the availableReport
+     */
+    public boolean isAvailableReport() {
+        return availableReport;
+    }
+
+    /**
+     * @param availableReport
+     *            the availableReport to set
+     */
+    public void setAvailableReport(boolean availableReport) {
+        this.availableReport = availableReport;
     }
 
     /**
@@ -144,6 +145,21 @@ public class LoggerRequestVo {
         this.errorDescription = errorDescription;
     }
 
+    /**
+     * @return the requestDate
+     */
+    public Date getRequestDate() {
+        return requestDate;
+    }
+
+    /**
+     * @param requestDate
+     *            the requestDate to set
+     */
+    public void setRequestDate(Date requestDate) {
+        this.requestDate = requestDate;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -152,8 +168,7 @@ public class LoggerRequestVo {
     @Override
     public String toString() {
         return "LoggerRequestVo [rowId=" + rowId + ", product=" + product + ", from=" + from + ", to=" + to
-                + ", availableReport=" + availableReport + ", responseTime=" + responseTime + ", error=" + error
-                + ", errorDescription=" + errorDescription + "]";
+                + ", responseTime=" + responseTime + ", status=" + status + ", availableReport=" + availableReport
+                + ", errorDescription=" + errorDescription + ", requestDate=" + requestDate + "]";
     }
-
 }

@@ -10,6 +10,9 @@ import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.splitTimeByMonth;
+import static com.ztarmobile.invoicing.vo.LoggerStatusVo.COMPLETED;
+import static com.ztarmobile.invoicing.vo.LoggerStatusVo.ERROR;
+import static com.ztarmobile.invoicing.vo.LoggerStatusVo.PROGRESS;
 import static java.util.Calendar.MONTH;
 
 import java.util.Calendar;
@@ -23,12 +26,14 @@ import org.springframework.stereotype.Service;
 import com.ztarmobile.invoicing.common.MontlyTime;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
 import com.ztarmobile.invoicing.dao.InvoicingDao;
+import com.ztarmobile.invoicing.dao.LoggerDao;
 import com.ztarmobile.invoicing.service.AbstractDefaultService;
 import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import com.ztarmobile.invoicing.service.ResellerUsageService;
 import com.ztarmobile.invoicing.vo.CatalogProductVo;
+import com.ztarmobile.invoicing.vo.LoggerRequestVo;
 import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
@@ -56,6 +61,12 @@ public class InvoicingServiceImpl implements InvoicingService {
      */
     @Autowired
     private CatalogProductDao catalogProductDao;
+
+    /**
+     * DAO dependency for the logger process.
+     */
+    @Autowired
+    private LoggerDao loggerDao;
 
     /**
      * Injection of the specific implementation for sprint.
@@ -175,12 +186,21 @@ public class InvoicingServiceImpl implements InvoicingService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LoggerRequestVo> getAllAvailableRequests() {
+        // gets all the available requests.
+        return loggerDao.getInvoiceProcessed(500);
+    }
+
+    /**
      * Calculates the invoicing given a initial and final time including the
      * product.
      * 
-     * @param calendarStart
+     * @param start
      *            The initial calendar.
-     * @param calendarEnd
+     * @param end
      *            The final calendar
      * @param product
      *            The product.
@@ -189,31 +209,50 @@ public class InvoicingServiceImpl implements InvoicingService {
      *            from scratch processing the CDR's and calculating all, if it's
      *            false the process runs as usual.
      */
-    private void performAllInvoicing(Calendar calendarStart, Calendar calendarEnd, String product,
-            boolean rerunInvoicing) {
+    private void performAllInvoicing(Calendar start, Calendar end, String product, boolean rerunInvoicing) {
         log.debug("Starting the invoicing process...rerun process? " + rerunInvoicing);
 
-        CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
-        validateInput(catalogProductVo, "No product information was found for [" + product + "]");
-        log.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
+        long id = 0;
+        try {
+            // save the record before staring the process.
+            id = loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, PROGRESS);
 
-        log.debug("==================> 0. preparing data <==================================");
-        CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
-        ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
-        cdrFileService.extractCdrs(calendarStart, calendarEnd);
+            long startTime = System.currentTimeMillis();
+            CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
+            validateInput(catalogProductVo, "No product information was found for [" + product + "]");
+            log.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
 
-        log.debug("==================> 1. create_reseller_allocations <=====================");
-        ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
-        allocationsService.createAllocations(calendarStart, calendarEnd, product);
+            log.debug("==================> 0. preparing data <==================================");
+            CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
+            ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
+            cdrFileService.extractCdrs(start, end);
 
-        log.debug("==================> 2. create_reseller_usage <=====================");
-        ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
-        ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
-        usageService.createUsage(calendarStart, calendarEnd, product);
+            log.debug("==================> 1. create_reseller_allocations <=====================");
+            ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
+            allocationsService.createAllocations(start, end, product);
 
-        log.debug("==================> 3. create_invoicing_details <=====================");
-        // finally, create the data so that we can use later
-        this.createInvoicingDetails(calendarStart, calendarEnd, product);
+            log.debug("==================> 2. create_reseller_usage <=====================");
+            ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
+            ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
+            usageService.createUsage(start, end, product);
+
+            log.debug("==================> 3. create_invoicing_details <=====================");
+            // finally, create the data so that we can use later
+            this.createInvoicingDetails(start, end, product);
+            long endTime = System.currentTimeMillis();
+            long totalTime = endTime - startTime;
+
+            // save the record after it has been completed.
+            loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), totalTime, COMPLETED);
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            log.fatal(ex);
+            // we save the error...
+            loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
+                    ex.toString());
+            // we rethrow the exception
+            throw ex;
+        }
     }
 
     /**

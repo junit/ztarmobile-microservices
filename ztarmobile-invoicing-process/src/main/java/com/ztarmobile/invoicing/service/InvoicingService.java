@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ztarmobile.invoicing.vo.CatalogProductVo;
+import com.ztarmobile.invoicing.vo.LoggerRequestVo;
 import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
@@ -144,4 +145,12 @@ public interface InvoicingService {
      *         were found.
      */
     List<CatalogProductVo> getAllAvailableProducts();
+
+    /**
+     * Gets all the existing invoicing requests.
+     * 
+     * @return The list of all the requets or an empty list where no request
+     *         were found.
+     */
+    List<LoggerRequestVo> getAllAvailableRequests();
 }

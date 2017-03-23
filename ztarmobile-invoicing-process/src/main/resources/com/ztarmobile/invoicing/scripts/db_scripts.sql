@@ -85,5 +85,12 @@ CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
 
 CREATE TABLE `cdrs`.`invoicing_logger_requests` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NOT NULL,
+  `report_date_from` DATE NOT NULL,
+  `report_date_to` DATE NOT NULL,
+  `total_time` BIGINT NOT NULL,
+  `status` ENUM ('P', 'C', 'E') NOT NULL COMMENT 'P = Progress, C = Completed, E = Error',
+  `error_description` LONGTEXT COMMENT 'This column is populated when the status is E',
+  `request_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`)
   );

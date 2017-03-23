@@ -47,6 +47,25 @@
                 AND MONTH(report_date) = :month_report_date
             ]]>
         </prop>
+        <prop key="insert.logger_request">
+            <![CDATA[
+                INSERT INTO invoicing_logger_requests (product_id, report_date_from, report_date_to, total_time, status, error_description)
+                VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date_from, :report_date_to, :total_time, :status, :error_description)    
+            ]]>
+        </prop>
+        <prop key="update.logger_request">
+            <![CDATA[
+                UPDATE invoicing_logger_requests SET total_time = :total_time, status = :status, error_description = :error_description WHERE row_id = :row_id
+            ]]>
+        </prop>
+        <prop key="select.logger_request">
+            <![CDATA[
+                SELECT row_id, (SELECT icp.product FROM invoicing_catalog_product icp WHERE icp.row_id = product_id) AS product, report_date_from, report_date_to, total_time, status, error_description, request_date
+                  FROM invoicing_logger_requests
+                 ORDER BY request_date desc
+                 LIMIT :max_records
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>
