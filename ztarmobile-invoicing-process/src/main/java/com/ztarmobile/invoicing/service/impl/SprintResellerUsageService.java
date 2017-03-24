@@ -46,6 +46,7 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
         sb.append(fromDateToYYYYmmFormat(calendarNow.getTime()));
         sb.append(EXTRACTED_FILE_EXT);
 
+        log.debug("Expected file name: " + sb);
         return sb.toString();
     }
 

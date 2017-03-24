@@ -54,6 +54,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
         sb.append(SUFIX_FILE_NAME);
         sb.append(EXTRACTED_FILE_EXT);
 
+        log.debug("Expected file name: " + sb);
         return sb.toString();
     }
 
@@ -101,9 +102,9 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
             break;
         case "VOICE":
             // *** NEW LOGIG
-            // we need to exclude call forward to voicemail from the chargeable
-            // minutes, as it should not be chargeable…. We are not charged by
-            // ATT either.
+            // we need to exclude call forward to voice email from the
+            // chargeable minutes, as it should not be chargeable…. We are not
+            // charged by ATT either.
             if (sln.length == 29 && sln[10].equals("Forwarding") && sln[28].equals("VM_DEP")) {
                 usage.setMou(0);
             } else {

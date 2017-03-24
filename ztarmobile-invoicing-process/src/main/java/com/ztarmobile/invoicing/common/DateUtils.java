@@ -279,7 +279,7 @@ public class DateUtils {
                         break;
                     } else {
                         list.add(createMontlyTime(startTmp, calendarNow));
-                        // we preprare for the next interval
+                        // we prepare for the next interval
                         calendarNow.add(MONTH, 1);
                         calendarNow = getMinimumCalendarMonth(calendarNow);
                         startTmp = getMinimumCalendarMonth(calendarNow);
@@ -292,13 +292,13 @@ public class DateUtils {
     }
 
     /**
-     * Creates a montly time object.
+     * Creates a monthly time object.
      * 
      * @param start
      *            The start date.
      * @param end
      *            The end date.
-     * @return The montly time.
+     * @return The monthly time.
      */
     private static MontlyTime createMontlyTime(Calendar start, Calendar end) {
         MontlyTime montlyTime = new MontlyTime();

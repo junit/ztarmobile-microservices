@@ -15,7 +15,13 @@ import java.util.Calendar;
  * @since 03/14/17
  */
 public class MontlyTime {
+    /**
+     * The start calendar.
+     */
     private Calendar start;
+    /**
+     * The end calendar.
+     */
     private Calendar end;
 
     /**

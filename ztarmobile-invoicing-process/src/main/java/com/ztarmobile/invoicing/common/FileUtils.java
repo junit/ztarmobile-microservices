@@ -69,10 +69,10 @@ public class FileUtils {
     }
 
     /**
-     * Zip a file and the existing file is deleted by default.
+     * Compresses a file and the existing file is deleted by default.
      * 
      * @param file
-     *            The file to be zipped.
+     *            The file to be compressed.
      */
     public static void zipIt(File file) {
         byte[] buffer = new byte[1024];
@@ -128,6 +128,7 @@ public class FileUtils {
             log.error(ex);
             invalidInput("Can't extract file due to: " + ex);
         } finally {
+            // the resources are closed.
             close(gzis);
             close(out);
         }

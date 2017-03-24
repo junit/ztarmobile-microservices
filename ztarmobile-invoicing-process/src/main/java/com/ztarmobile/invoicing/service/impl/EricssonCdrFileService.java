@@ -77,6 +77,7 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
         sb.append(endDateString);
         sb.append(FILE_EXT);
 
+        log.debug("Expected file name: " + sb);
         return sb.toString();
     }
 
@@ -135,6 +136,7 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
      */
     @Override
     protected char getFileType() {
+        // E = Ericsson
         return 'E';
     }
 }
