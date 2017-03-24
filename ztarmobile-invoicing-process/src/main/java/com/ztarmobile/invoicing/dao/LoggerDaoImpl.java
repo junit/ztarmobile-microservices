@@ -253,9 +253,9 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     public List<LoggerRequestVo> getInvoiceProcessed(int max) {
         String sql = sqlStatements.getProperty("select.logger_request");
 
-        Map<String, String> params = new HashMap<>();
-        params.put("max_records", String.valueOf(max));
-        
+        Map<String, Integer> params = new HashMap<>();
+        params.put("max_records", max);
+
         return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerRequestVo>() {
             @Override
             public LoggerRequestVo mapRow(ResultSet rs, int rowNum) throws SQLException {
