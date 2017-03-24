@@ -50,7 +50,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(LoggerDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(LoggerDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -107,7 +107,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     @Override
     public void saveOrUpdateCdrFileProcessed(String sourceFileName, String targetFileName, char type,
             String errorDescription) {
-        log.debug("Saving record for this file: " + sourceFileName);
+        LOG.debug("Saving record for this file: " + sourceFileName);
         LoggerStatusVo status = errorDescription == null ? COMPLETED : ERROR;
         String sql = sqlStatements.getProperty("insert.logger_cdr_file");
 
@@ -172,7 +172,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     @Override
     public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth,
             String errorDescription) {
-        log.debug("Saving record for this date: " + reportDate);
+        LOG.debug("Saving record for this date: " + reportDate);
         LoggerStatusVo status = errorDescription == null ? COMPLETED : ERROR;
         String sql = byMonth ? sqlStatements.getProperty("update.logger_report_file")
                 : sqlStatements.getProperty("insert.logger_report_file");
@@ -220,11 +220,10 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     @Override
     public long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
             long totalTime, LoggerStatusVo status, String errorDescription) {
-        log.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
+        LOG.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
 
         boolean isInsert = rowId == 0;
-        KeyHolder keyHolder = null;
-        String sql = null;
+        String sql;
 
         Map<String, String> params = new HashMap<>();
         params.put("product", product);
@@ -237,7 +236,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
         if (isInsert) {
             // we return the generated id after the insertion is done.
             sql = sqlStatements.getProperty("insert.logger_request");
-            keyHolder = new GeneratedKeyHolder();
+            KeyHolder keyHolder = new GeneratedKeyHolder();
             this.getJdbc().update(sql, new MapSqlParameterSource(params), keyHolder, new String[] { "row_id" });
             return keyHolder.getKey().longValue();
         } else {
@@ -274,10 +273,9 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
                 }
                 vo.setAvailableReport(vo.getStatus() == COMPLETED.getStatusVal());
                 vo.setErrorDescription(rs.getString(++rcnt));
-                Date date = null;
                 Timestamp timestamp = rs.getTimestamp(++rcnt);
                 if (timestamp != null) {
-                    date = new Date(timestamp.getTime());
+                    Date date = new Date(timestamp.getTime());
                     vo.setRequestDate(date);
                 }
 

@@ -34,7 +34,7 @@ public class FileUtils {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(FileUtils.class);
+    private static final Logger LOG = Logger.getLogger(FileUtils.class);
     /**
      * The file extension for compressed files.
      */
@@ -94,7 +94,7 @@ public class FileUtils {
             // we delete the original file after the process
             file.delete();
         } catch (IOException ex) {
-            log.error(ex);
+            LOG.error(ex);
             invalidInput("Can't compress file due to: " + ex);
         } finally {
             close(gzipOS);
@@ -125,7 +125,7 @@ public class FileUtils {
                 out.write(buffer, 0, len);
             }
         } catch (IOException ex) {
-            log.error(ex);
+            LOG.error(ex);
             invalidInput("Can't extract file due to: " + ex);
         } finally {
             // the resources are closed.
@@ -166,9 +166,9 @@ public class FileUtils {
             String line;
             while ((line = is.readLine()) != null) {
                 if (isError) {
-                    log.error(line);
+                    LOG.error(line);
                 } else {
-                    log.info(line);
+                    LOG.info(line);
                 }
             }
         } catch (IOException ex) {
@@ -187,7 +187,7 @@ public class FileUtils {
             try {
                 stream.close();
             } catch (IOException e) {
-                log.warn("Error while trying to close the input stream due to: " + e);
+                LOG.warn("Error while trying to close the input stream due to: " + e);
             }
         }
     }
@@ -203,7 +203,7 @@ public class FileUtils {
             try {
                 stream.close();
             } catch (IOException e) {
-                log.warn("Error while trying to close the output stream due to: " + e);
+                LOG.warn("Error while trying to close the output stream due to: " + e);
             }
         }
     }

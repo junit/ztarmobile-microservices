@@ -7,7 +7,6 @@
 package com.ztarmobile.invoicing.dao;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -20,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import com.ztarmobile.invoicing.service.ResellerUsageService;
-import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
 /**
  *
@@ -34,7 +32,7 @@ public class SampleDaoTest {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(SampleDaoTest.class);
+    private static final Logger LOG = Logger.getLogger(SampleDaoTest.class);
 
     @Autowired
     private ResellerAllocationsService resellerAllocationsService;

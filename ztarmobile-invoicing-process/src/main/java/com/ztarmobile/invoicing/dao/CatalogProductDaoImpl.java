@@ -34,7 +34,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(CatalogProductDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(CatalogProductDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -48,7 +48,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      */
     @Override
     public CatalogProductVo getCatalogProduct(String product) {
-        log.debug("Getting product by [" + product + "]");
+        LOG.debug("Getting product by [" + product + "]");
         String sql = sqlStatements.getProperty("select.catalog_product");
 
         Map<String, String> params = new HashMap<>();
@@ -68,7 +68,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      */
     @Override
     public List<CatalogProductVo> getCatalogProduct() {
-        log.debug("Getting all the products");
+        LOG.debug("Getting all the products");
         String sql = sqlStatements.getProperty("select.catalog_products");
 
         return this.getJdbc().query(sql, new CatalogProductRowMapper());

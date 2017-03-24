@@ -29,7 +29,7 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(EricssonCdrFileService.class);
+    private static final Logger LOG = Logger.getLogger(EricssonCdrFileService.class);
     /**
      * The file extension.
      */
@@ -77,7 +77,7 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
         sb.append(endDateString);
         sb.append(FILE_EXT);
 
-        log.debug("Expected file name: " + sb);
+        LOG.debug("Expected file name: " + sb);
         return sb.toString();
     }
 

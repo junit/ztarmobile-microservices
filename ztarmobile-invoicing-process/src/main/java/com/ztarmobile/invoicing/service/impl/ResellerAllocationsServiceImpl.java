@@ -48,7 +48,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(ResellerAllocationsServiceImpl.class);
+    private static final Logger LOG = Logger.getLogger(ResellerAllocationsServiceImpl.class);
 
     /**
      * DAO dependency.
@@ -124,7 +124,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
 
         List<ResellerSubsUsageVo> list;
         list = resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
-        log.debug("Reseller subsUsage found: " + list.size());
+        LOG.debug("Reseller subsUsage found: " + list.size());
         return list;
     }
 
@@ -167,7 +167,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
 
         Date durationStart;
         Date durationEnd;
-        log.debug("===> Starting Allocations... ===>");
+        LOG.debug("===> Starting Allocations... ===>");
         long startTime = System.currentTimeMillis();
         while (calendarCurr.compareTo(calendarEnd) <= 0) {
             durationStart = calendarCurr.getTime();
@@ -177,18 +177,18 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
                 // test whether the file is going to be processed or not.
                 boolean processed = isAllocationProcessed(product, calendarCurr.getTime());
                 if (!processed) {
-                    log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
+                    LOG.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
                     resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd,
                             product);
 
                     // saves the file processed
                     loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false);
                 } else {
-                    log.info("==> Allocation already processed... " + calendarCurr.getTime());
+                    LOG.info("==> Allocation already processed... " + calendarCurr.getTime());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                log.error(ex);
+                LOG.error(ex);
                 // we save the error and continue with the next file.
                 loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false,
                         ex.toString());
@@ -200,19 +200,19 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
         } catch (Exception ex) {
             calendarCurr.add(DAY_OF_MONTH, -1);
             ex.printStackTrace();
-            log.error(ex);
+            LOG.error(ex);
             // we save the error and continue the normal flow.
             loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false,
                     ex.toString());
         }
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        log.debug("<=== Ending Allocations... <===");
+        LOG.debug("<=== Ending Allocations... <===");
 
         long min = MILLISECONDS.toMinutes(totalTime);
         long sec = MILLISECONDS.toSeconds(totalTime) - MINUTES.toSeconds(MILLISECONDS.toMinutes(totalTime));
         String timeMsg = String.format("%02d min, %02d sec", min, sec);
-        log.debug("Allocations executed in: " + timeMsg);
+        LOG.debug("Allocations executed in: " + timeMsg);
     }
 
     /**

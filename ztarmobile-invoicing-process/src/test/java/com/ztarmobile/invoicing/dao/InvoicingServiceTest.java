@@ -33,7 +33,7 @@ public class InvoicingServiceTest {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(InvoicingServiceTest.class);
+    private static final Logger LOG = Logger.getLogger(InvoicingServiceTest.class);
 
     @Autowired
     private InvoicingService invoicingService;

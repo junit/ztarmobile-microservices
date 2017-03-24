@@ -48,7 +48,7 @@ public class InvoicingServiceImpl implements InvoicingService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(InvoicingServiceImpl.class);
+    private static final Logger LOG = Logger.getLogger(InvoicingServiceImpl.class);
 
     /**
      * DAO dependency for the invoicing process.
@@ -210,7 +210,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      *            false the process runs as usual.
      */
     private void performAllInvoicing(Calendar start, Calendar end, String product, boolean rerunInvoicing) {
-        log.debug("Starting the invoicing process...rerun process? " + rerunInvoicing);
+        LOG.debug("Starting the invoicing process...rerun process? " + rerunInvoicing);
 
         long id = 0;
         try {
@@ -220,23 +220,23 @@ public class InvoicingServiceImpl implements InvoicingService {
             long startTime = System.currentTimeMillis();
             CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
             validateInput(catalogProductVo, "No product information was found for [" + product + "]");
-            log.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
+            LOG.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
 
-            log.debug("==================> 0. preparing data <==================================");
+            LOG.debug("==================> 0. preparing data <==================================");
             CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
             ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
             cdrFileService.extractCdrs(start, end);
 
-            log.debug("==================> 1. create_reseller_allocations <=====================");
+            LOG.debug("==================> 1. create_reseller_allocations <=====================");
             ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
             allocationsService.createAllocations(start, end, product);
 
-            log.debug("==================> 2. create_reseller_usage <=====================");
+            LOG.debug("==================> 2. create_reseller_usage <=====================");
             ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
             ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
             usageService.createUsage(start, end, product);
 
-            log.debug("==================> 3. create_invoicing_details <=====================");
+            LOG.debug("==================> 3. create_invoicing_details <=====================");
             // finally, create the data so that we can use later
             this.createInvoicingDetails(start, end, product);
             long endTime = System.currentTimeMillis();
@@ -246,7 +246,7 @@ public class InvoicingServiceImpl implements InvoicingService {
             loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), totalTime, COMPLETED);
         } catch (Throwable ex) {
             ex.printStackTrace();
-            log.fatal(ex);
+            LOG.fatal(ex);
             // we save the error...
             loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
                     ex.toString());
@@ -271,7 +271,7 @@ public class InvoicingServiceImpl implements InvoicingService {
         // by default, if more than one month is requested, the information is
         // grouped monthly
         boolean splitByMonth = true;
-        log.debug("Split by month: " + splitByMonth);
+        LOG.debug("Split by month: " + splitByMonth);
         if (splitByMonth) {
             // calculates the intervals.
             List<MontlyTime> intervals = splitTimeByMonth(start, end);
@@ -281,7 +281,7 @@ public class InvoicingServiceImpl implements InvoicingService {
                     invoicingDao.saveInvoicing(montlyTime.getStart().getTime(), montlyTime.getEnd().getTime(), product);
                 }
             } else {
-                log.warn("There's no invoicing to be processed");
+                LOG.warn("There's no invoicing to be processed");
             }
         } else {
             invoicingDao.saveInvoicing(start.getTime(), end.getTime(), product);

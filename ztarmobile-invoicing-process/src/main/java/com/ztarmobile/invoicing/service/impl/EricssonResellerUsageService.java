@@ -29,7 +29,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(EricssonResellerUsageService.class);
+    private static final Logger LOG = Logger.getLogger(EricssonResellerUsageService.class);
 
     /**
      * The file starts with...
@@ -54,7 +54,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
         sb.append(SUFIX_FILE_NAME);
         sb.append(EXTRACTED_FILE_EXT);
 
-        log.debug("Expected file name: " + sb);
+        LOG.debug("Expected file name: " + sb);
         return sb.toString();
     }
 

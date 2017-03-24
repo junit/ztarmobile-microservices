@@ -39,7 +39,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(ResellerAllocationsDaoImpl.class);
+    private static final Logger LOG = Logger.getLogger(ResellerAllocationsDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -69,7 +69,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public void updateAllocationIndicators() {
-        log.debug("Updating status...");
+        LOG.debug("Updating status...");
         String sql = sqlStatements.getProperty("update.reseller_subs_usage.indicators");
 
         Map<String, String> params = new HashMap<>();
@@ -81,7 +81,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public List<ResellerSubsUsageVo> getResellerSubsUsage(Date startDate, Date endDate, String product) {
-        log.debug("Getting reseller subsUsage...");
+        LOG.debug("Getting reseller subsUsage...");
         String sql = sqlStatements.getProperty("select.reseller_subs_usage");
 
         Map<String, String> params = new HashMap<>();
@@ -121,7 +121,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public int[] updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
-        log.debug("Updating " + subscribers.size() + " subscriber usage...");
+        LOG.debug("Updating " + subscribers.size() + " subscriber usage...");
         String sql = sqlStatements.getProperty("update.reseller_subs_usage");
 
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(subscribers.toArray());

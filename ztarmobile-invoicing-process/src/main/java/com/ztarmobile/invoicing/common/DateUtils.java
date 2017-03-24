@@ -54,7 +54,7 @@ public class DateUtils {
      * Format used in CDR files yyyyMM.
      */
     public static final String YYYYMM = "yyyyMM";
-    private static final SimpleDateFormat yyyyMMDateFormat = new SimpleDateFormat(YYYYMM);
+    private static final SimpleDateFormat YYYYMM_DATE_FORMAT = new SimpleDateFormat(YYYYMM);
 
     /**
      * Private constructor.
@@ -131,7 +131,7 @@ public class DateUtils {
      * @return The String representation of the date.
      */
     public static String fromDateToYYYYmmFormat(Date date) {
-        return yyyyMMDateFormat.format(date);
+        return YYYYMM_DATE_FORMAT.format(date);
     }
 
     /**
@@ -179,7 +179,7 @@ public class DateUtils {
     }
 
     /**
-     * Given a calendar set the minimun value for the hour, minutes and secodns.
+     * Given a calendar set the minimum value for the hour, minutes and seconds.
      * (e.g. 0 min, 0 sec and 0 hours =&gt; 00:00:00).
      * 
      * @param calendarStart
@@ -192,7 +192,7 @@ public class DateUtils {
     }
 
     /**
-     * Given a calendar set the maximum value for the hour, minutes and secodns.
+     * Given a calendar set the maximum value for the hour, minutes and seconds.
      * If the calendar end is greater than 'now', then the calendar is set to
      * 'now'. This calendar can never be greater than 'now'.
      * 

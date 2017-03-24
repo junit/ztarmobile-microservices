@@ -29,7 +29,7 @@ public class SprintCdrFileService extends AbstractCdrFileService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(SprintCdrFileService.class);
+    private static final Logger LOG = Logger.getLogger(SprintCdrFileService.class);
     /**
      * The file extension.
      */
@@ -62,7 +62,7 @@ public class SprintCdrFileService extends AbstractCdrFileService {
         sb.append(fromDateToYYYYmmFormat(calendarNow.getTime()));
         sb.append(FILE_EXT);
 
-        log.debug("Expected file name: " + sb);
+        LOG.debug("Expected file name: " + sb);
         return sb.toString();
     }
 

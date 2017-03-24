@@ -37,7 +37,7 @@ import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
- * Parent abstract class to handle the usage for the cdrs.
+ * Parent abstract class to handle the usage for the CDR's.
  *
  * @author armandorivas
  * @since 03/06/17
@@ -46,7 +46,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(AbstractResellerUsageService.class);
+    private static final Logger LOG = Logger.getLogger(AbstractResellerUsageService.class);
     /**
      * The file extension.
      */
@@ -139,10 +139,10 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
         setMinimumCalendarDay(calendarStart);
         setMaximumCalendarDay(calendarEnd);
-        log.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
+        LOG.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);
-        String expectedFileName = null;
+        String expectedFileName;
         File[] files = file.listFiles(createFileNameFilter(EXTRACTED_FILE_EXT));
         Arrays.sort(files); // make sure the files are ordered lexicographically
 
@@ -179,14 +179,14 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                         loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE,
                                 getFileFrecuency() == MONTH);
                     } else {
-                        log.info("==> Usage already processed... " + currentFile);
+                        LOG.info("==> Usage already processed... " + currentFile);
                         // 3. finally, we compress the file (close it out)
                         // this is necesary to finish the process.
                         zipIt(currentFile);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    log.error(ex);
+                    LOG.error(ex);
                     // we save the error and continue with the next file.
                     loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE,
                             getFileFrecuency() == MONTH, ex.toString());
@@ -216,7 +216,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     }
 
     private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsageVo> subs) {
-        log.debug("==> The following file will be read... " + currentFile);
+        LOG.debug("==> The following file will be read... " + currentFile);
 
         // resetting the list of subcribers
         for (ResellerSubsUsageVo vo : subs) {
@@ -233,7 +233,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
             String lastMdn = null;
             String lastCallDate = null;
-            List<ResellerSubsUsageVo> usgList = null;
+            List<ResellerSubsUsageVo> usgList = new ArrayList<>();
             long linecnt = 0, mdnUpdCnt = 0;
 
             // read the rest of the files
@@ -266,7 +266,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 if (lastMdn == null || lastCallDate == null || !lastMdn.equals(mdn)
                         || !lastCallDate.substring(0, 8).equals(callDate.substring(0, 8))) {
                     /*
-                     * We have the MDN and calldate. Let's look in the
+                     * We have the MDN and call date. Let's look in the
                      * subscribers list, if this MDN shows up for this
                      * call-date. There can be more than one entries (if the
                      * rate plan was changed on that day). So, get all the
@@ -295,7 +295,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 lastCallDate = callDate;
                 mdnUpdCnt++;
             }
-            log.info("Lines read #: " + linecnt + ", processed mdns #:" + mdnUpdCnt);
+            LOG.info("Lines read #: " + linecnt + ", processed mdns #:" + mdnUpdCnt);
         } catch (IOException ex) {
             invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
         }

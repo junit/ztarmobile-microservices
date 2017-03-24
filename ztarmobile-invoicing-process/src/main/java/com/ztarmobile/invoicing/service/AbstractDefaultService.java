@@ -25,9 +25,9 @@ public abstract class AbstractDefaultService {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(AbstractDefaultService.class);
+    private static final Logger LOG = Logger.getLogger(AbstractDefaultService.class);
     /**
-     * Flag to reprocess the current task.
+     * Flag to re process the current task.
      */
     private boolean reProcess;
 
@@ -44,7 +44,7 @@ public abstract class AbstractDefaultService {
      *            The product.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, File sourceDirectory, String product) {
-        log.debug("Validating reseller input start, end date with source and product");
+        LOG.debug("Validating reseller input start, end date with source and product");
         validateEntries(calendarStart, calendarEnd, sourceDirectory);
         validateInput(product, "At least one product must be provided");
     }
@@ -60,7 +60,7 @@ public abstract class AbstractDefaultService {
      *            The product.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, String product) {
-        log.debug("Validating reseller input start, end date with product");
+        LOG.debug("Validating reseller input start, end date with product");
         validateCalendar(calendarStart, calendarEnd);
         validateInput(product, "At least one product must be provided");
     }
@@ -76,7 +76,7 @@ public abstract class AbstractDefaultService {
      *            The source directory.
      */
     protected void validateEntries(Calendar calendarStart, Calendar calendarEnd, File sourceDirectory) {
-        log.debug("Validating reseller input start, end date with source");
+        LOG.debug("Validating reseller input start, end date with source");
         validateCalendar(calendarStart, calendarEnd);
         validateInput(sourceDirectory, "The source direcotry cannot be null");
 
