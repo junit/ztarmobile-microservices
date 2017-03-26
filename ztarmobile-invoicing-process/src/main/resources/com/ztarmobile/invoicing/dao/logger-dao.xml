@@ -66,6 +66,13 @@
                  LIMIT :max_records
             ]]>
         </prop>
+        <prop key="count.logger_request">
+            <![CDATA[
+                SELECT COUNT(status)
+                  FROM invoicing_logger_requests
+                 WHERE status = :status
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>

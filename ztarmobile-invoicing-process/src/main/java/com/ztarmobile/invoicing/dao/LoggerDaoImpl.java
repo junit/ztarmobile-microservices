@@ -284,4 +284,19 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInvoiceInStatus(LoggerStatusVo status) {
+        String sql = sqlStatements.getProperty("count.logger_request");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("status", String.valueOf(status.getStatusVal()));
+
+        int total = this.getJdbc().queryForObject(sql, params, Integer.class);
+        // when total >=1, then this means the status matched
+        return total >= 1;
+    }
+
 }

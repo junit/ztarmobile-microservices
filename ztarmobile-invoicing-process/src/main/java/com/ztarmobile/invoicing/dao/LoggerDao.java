@@ -127,7 +127,7 @@ public interface LoggerDao {
      * @param reportDateTo
      *            The end date.
      * @param totalTime
-     *            Total time in miliseconds that the process took to complete.
+     *            Total time in milliseconds that the process took to complete.
      * @param status
      *            The status of the process.
      * @return The new generated id if it was an insert operation or the amount
@@ -152,7 +152,7 @@ public interface LoggerDao {
      * @param reportDateTo
      *            The end date.
      * @param totalTime
-     *            Total time in miliseconds that the process took to complete.
+     *            Total time in milliseconds that the process took to complete.
      * @param status
      *            The status of the process.
      * @param errorDescription
@@ -166,7 +166,7 @@ public interface LoggerDao {
             long totalTime, LoggerStatusVo status, String errorDescription);
 
     /**
-     * Get a list of all the transactions made/requested when the invocing
+     * Get a list of all the transactions made/requested when the invoicing
      * process ends.
      * 
      * @param max
@@ -174,4 +174,14 @@ public interface LoggerDao {
      * @return List of records.
      */
     List<LoggerRequestVo> getInvoiceProcessed(int max);
+
+    /**
+     * This method test whether the invoicing process is in certain status, if
+     * the status matches, then returns true, otherwise returns false.
+     * 
+     * @param status
+     *            The status of the process.
+     * @return true, the status matches, otherwise returns false.
+     */
+    boolean isInvoiceInStatus(LoggerStatusVo status);
 }

@@ -214,43 +214,50 @@ public class InvoicingServiceImpl implements InvoicingService {
 
         long id = 0;
         try {
-            // save the record before staring the process.
-            id = loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, PROGRESS);
+            if (!loggerDao.isInvoiceInStatus(PROGRESS)) {
+                // save the record before staring the process.
+                id = loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, PROGRESS);
 
-            long startTime = System.currentTimeMillis();
-            CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
-            validateInput(catalogProductVo, "No product information was found for [" + product + "]");
-            LOG.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
+                long startTime = System.currentTimeMillis();
+                CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
+                validateInput(catalogProductVo, "No product information was found for [" + product + "]");
+                LOG.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
 
-            LOG.debug("==================> 0. preparing data <==================================");
-            CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
-            ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
-            cdrFileService.extractCdrs(start, end);
+                LOG.debug("==================> 0. preparing data <==================================");
+                CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService
+                        : ericssonCdrFileService;
+                ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
+                cdrFileService.extractCdrs(start, end);
 
-            LOG.debug("==================> 1. create_reseller_allocations <=====================");
-            ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
-            allocationsService.createAllocations(start, end, product);
+                LOG.debug("==================> 1. create_reseller_allocations <=====================");
+                ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
+                allocationsService.createAllocations(start, end, product);
 
-            LOG.debug("==================> 2. create_reseller_usage <=====================");
-            ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService : ericssonUsageService;
-            ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
-            usageService.createUsage(start, end, product);
+                LOG.debug("==================> 2. create_reseller_usage <=====================");
+                ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService
+                        : ericssonUsageService;
+                ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
+                usageService.createUsage(start, end, product);
 
-            LOG.debug("==================> 3. create_invoicing_details <=====================");
-            // finally, create the data so that we can use later
-            this.createInvoicingDetails(start, end, product);
-            long endTime = System.currentTimeMillis();
-            long totalTime = endTime - startTime;
+                LOG.debug("==================> 3. create_invoicing_details <=====================");
+                // finally, create the data so that we can use later
+                this.createInvoicingDetails(start, end, product);
+                long endTime = System.currentTimeMillis();
+                long totalTime = endTime - startTime;
 
-            // save the record after it has been completed.
-            loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), totalTime, COMPLETED);
+                // save the record after it has been completed.
+                loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), totalTime,
+                        COMPLETED);
+            } else {
+                LOG.warn("There's one or more invocie requests in " + PROGRESS + " status...");
+            }
         } catch (Throwable ex) {
             ex.printStackTrace();
             LOG.fatal(ex);
             // we save the error...
             loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
                     ex.toString());
-            // we rethrow the exception
+            // we re throw the exception
             throw ex;
         }
     }
