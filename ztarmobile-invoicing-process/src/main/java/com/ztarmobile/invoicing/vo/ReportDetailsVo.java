@@ -14,6 +14,8 @@ package com.ztarmobile.invoicing.vo;
  */
 public class ReportDetailsVo {
     private long rowId;
+    private int year;
+    private int month;
     private String mdn;
     private String ratePlan;
     private int dayOnPlans;
@@ -35,6 +37,36 @@ public class ReportDetailsVo {
      */
     public void setRowId(long rowId) {
         this.rowId = rowId;
+    }
+
+    /**
+     * @return the year
+     */
+    public int getYear() {
+        return year;
+    }
+
+    /**
+     * @param year
+     *            the year to set
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    /**
+     * @return the month
+     */
+    public int getMonth() {
+        return month;
+    }
+
+    /**
+     * @param month
+     *            the month to set
+     */
+    public void setMonth(int month) {
+        this.month = month;
     }
 
     /**
@@ -149,8 +181,9 @@ public class ReportDetailsVo {
      */
     @Override
     public String toString() {
-        return "ReportDetailsVo [rowId=" + rowId + ", mdn=" + mdn + ", ratePlan=" + ratePlan + ", dayOnPlans="
-                + dayOnPlans + ", mou=" + mou + ", mbs=" + mbs + ", sms=" + sms + ", mms=" + mms + "]";
+        return "ReportDetailsVo [rowId=" + rowId + ", year=" + year + ", month=" + month + ", mdn=" + mdn
+                + ", ratePlan=" + ratePlan + ", dayOnPlans=" + dayOnPlans + ", mou=" + mou + ", mbs=" + mbs + ", sms="
+                + sms + ", mms=" + mms + "]";
     }
 
 }

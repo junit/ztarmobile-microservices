@@ -99,6 +99,8 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
                 ReportDetailsVo vo = new ReportDetailsVo();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
+                vo.setYear(rs.getInt(++rcnt));
+                vo.setMonth(rs.getInt(++rcnt));
                 vo.setMdn(rs.getString(++rcnt));
                 vo.setRatePlan(rs.getString(++rcnt));
                 vo.setMou(rs.getDouble(++rcnt));

@@ -40,6 +40,7 @@ public class InvoicingServiceTest {
 
     @Test
     public void performInvoicing() {
+        LOG.debug("Starting the test...");
         String product1 = "GOOD2GOUS";
         String product2 = "GOOD2GOUS-CDMA";
         Calendar c1 = Calendar.getInstance();
