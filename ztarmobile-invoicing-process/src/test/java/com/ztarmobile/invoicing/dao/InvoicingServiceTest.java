@@ -16,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
 import com.ztarmobile.invoicing.service.InvoicingService;
-import com.ztarmobile.invoicing.vo.CatalogProductVo;
-import com.ztarmobile.invoicing.vo.LoggerRequestVo;
-import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
  *
@@ -57,17 +57,17 @@ public class InvoicingServiceTest {
         long total = end - init;
         System.out.println("Milliseconds: " + total);
 
-        List<ReportDetailsVo> list = invoicingService.generateReport(product1, c1, c2);
-        for (ReportDetailsVo vo : list) {
+        List<ReportDetails> list = invoicingService.generateReport(product1, c1, c2);
+        for (ReportDetails vo : list) {
             System.out.println(vo);
         }
         System.out.println(list.size());
 
-        for (CatalogProductVo vo : invoicingService.getAllAvailableProducts()) {
+        for (CatalogProduct vo : invoicingService.getAllAvailableProducts()) {
             System.out.println(vo);
         }
 
-        for (LoggerRequestVo vo : invoicingService.getAllAvailableRequests()) {
+        for (LoggerRequest vo : invoicingService.getAllAvailableRequests()) {
             System.out.println(vo);
         }
     }
