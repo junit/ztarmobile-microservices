@@ -10,9 +10,9 @@ import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.splitTimeByMonth;
-import static com.ztarmobile.invoicing.vo.LoggerStatusVo.COMPLETED;
-import static com.ztarmobile.invoicing.vo.LoggerStatusVo.ERROR;
-import static com.ztarmobile.invoicing.vo.LoggerStatusVo.PROGRESS;
+import static com.ztarmobile.invoicing.model.LoggerStatus.COMPLETED;
+import static com.ztarmobile.invoicing.model.LoggerStatus.ERROR;
+import static com.ztarmobile.invoicing.model.LoggerStatus.PROGRESS;
 import static java.util.Calendar.MONTH;
 
 import java.util.Calendar;
@@ -27,14 +27,14 @@ import com.ztarmobile.invoicing.common.MontlyTime;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
 import com.ztarmobile.invoicing.dao.InvoicingDao;
 import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
 import com.ztarmobile.invoicing.service.AbstractDefaultService;
 import com.ztarmobile.invoicing.service.CdrFileService;
 import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import com.ztarmobile.invoicing.service.ResellerUsageService;
-import com.ztarmobile.invoicing.vo.CatalogProductVo;
-import com.ztarmobile.invoicing.vo.LoggerRequestVo;
-import com.ztarmobile.invoicing.vo.ReportDetailsVo;
 
 /**
  * Direct service implementation that calculates and perform the invoicing
@@ -161,7 +161,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public List<ReportDetailsVo> generateReport(String product, Calendar start, Calendar end) {
+    public List<ReportDetails> generateReport(String product, Calendar start, Calendar end) {
         validateInput(start, "calendarStart must be not null");
         validateInput(end, "calendarEnd must be not null");
         // delegates to the overloaded method.
@@ -172,7 +172,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public List<ReportDetailsVo> generateReport(String product, Date start, Date end) {
+    public List<ReportDetails> generateReport(String product, Date start, Date end) {
         return invoicingDao.generateReport(product, start, end);
     }
 
@@ -180,7 +180,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public List<CatalogProductVo> getAllAvailableProducts() {
+    public List<CatalogProduct> getAllAvailableProducts() {
         // gets all the available products.
         return catalogProductDao.getCatalogProduct();
     }
@@ -189,7 +189,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public List<LoggerRequestVo> getAllAvailableRequests() {
+    public List<LoggerRequest> getAllAvailableRequests() {
         // gets all the available requests.
         return loggerDao.getInvoiceProcessed(500);
     }
@@ -219,7 +219,7 @@ public class InvoicingServiceImpl implements InvoicingService {
                 id = loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, PROGRESS);
 
                 long startTime = System.currentTimeMillis();
-                CatalogProductVo catalogProductVo = catalogProductDao.getCatalogProduct(product);
+                CatalogProduct catalogProductVo = catalogProductDao.getCatalogProduct(product);
                 validateInput(catalogProductVo, "No product information was found for [" + product + "]");
                 LOG.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
 

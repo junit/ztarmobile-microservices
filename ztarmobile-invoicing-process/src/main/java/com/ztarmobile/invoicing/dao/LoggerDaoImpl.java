@@ -7,9 +7,9 @@
 package com.ztarmobile.invoicing.dao;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddDashFormat;
-import static com.ztarmobile.invoicing.vo.LoggerStatusVo.COMPLETED;
-import static com.ztarmobile.invoicing.vo.LoggerStatusVo.ERROR;
-import static com.ztarmobile.invoicing.vo.LoggerStatusVo.PENDING;
+import static com.ztarmobile.invoicing.model.LoggerStatus.COMPLETED;
+import static com.ztarmobile.invoicing.model.LoggerStatus.ERROR;
+import static com.ztarmobile.invoicing.model.LoggerStatus.PENDING;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 
@@ -33,11 +33,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
-import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
-import com.ztarmobile.invoicing.vo.LoggerRequestVo;
-import com.ztarmobile.invoicing.vo.LoggerStatusVo;
-import com.ztarmobile.invoicing.vo.PhaseVo;
+import com.ztarmobile.invoicing.model.LoggerCdrFile;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.LoggerStatus;
+import com.ztarmobile.invoicing.model.Phase;
 
 /**
  * Direct DAO Implementation.
@@ -63,17 +63,17 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public LoggerCdrFileVo getCdrFileProcessed(String fileName) {
+    public LoggerCdrFile getCdrFileProcessed(String fileName) {
         String sql = sqlStatements.getProperty("select.logger_cdr_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("file_name", fileName);
 
-        List<LoggerCdrFileVo> list;
-        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerCdrFileVo>() {
+        List<LoggerCdrFile> list;
+        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerCdrFile>() {
             @Override
-            public LoggerCdrFileVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                LoggerCdrFileVo vo = new LoggerCdrFileVo();
+            public LoggerCdrFile mapRow(ResultSet rs, int rowNum) throws SQLException {
+                LoggerCdrFile vo = new LoggerCdrFile();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setSourceFileName(rs.getString(++rcnt));
@@ -108,7 +108,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     public void saveOrUpdateCdrFileProcessed(String sourceFileName, String targetFileName, char type,
             String errorDescription) {
         LOG.debug("Saving record for this file: " + sourceFileName);
-        LoggerStatusVo status = errorDescription == null ? COMPLETED : ERROR;
+        LoggerStatus status = errorDescription == null ? COMPLETED : ERROR;
         String sql = sqlStatements.getProperty("insert.logger_cdr_file");
 
         Map<String, String> params = new HashMap<>();
@@ -125,18 +125,18 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public LoggerReportFileVo getReportFileProcessed(String product, Date reportDate) {
+    public LoggerReportFile getReportFileProcessed(String product, Date reportDate) {
         String sql = sqlStatements.getProperty("select.logger_report_file");
 
         Map<String, String> params = new HashMap<>();
         params.put("product", product);
         params.put("report_date", fromDateToYYYYmmddDashFormat(reportDate));
 
-        List<LoggerReportFileVo> list;
-        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerReportFileVo>() {
+        List<LoggerReportFile> list;
+        list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerReportFile>() {
             @Override
-            public LoggerReportFileVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                LoggerReportFileVo vo = new LoggerReportFileVo();
+            public LoggerReportFile mapRow(ResultSet rs, int rowNum) throws SQLException {
+                LoggerReportFile vo = new LoggerReportFile();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
                 String status = rs.getString(++rcnt);
@@ -161,7 +161,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth) {
+    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, Phase phase, boolean byMonth) {
         // call the overloaded version
         this.saveOrUpdateReportFileProcessed(product, reportDate, phase, byMonth, null);
     }
@@ -170,10 +170,10 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth,
+    public void saveOrUpdateReportFileProcessed(String product, Date reportDate, Phase phase, boolean byMonth,
             String errorDescription) {
         LOG.debug("Saving record for this date: " + reportDate);
-        LoggerStatusVo status = errorDescription == null ? COMPLETED : ERROR;
+        LoggerStatus status = errorDescription == null ? COMPLETED : ERROR;
         String sql = byMonth ? sqlStatements.getProperty("update.logger_report_file")
                 : sqlStatements.getProperty("insert.logger_report_file");
 
@@ -193,7 +193,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
         }
         params.put("error_description", errorDescription);
 
-        if (byMonth && phase == PhaseVo.USAGE) {
+        if (byMonth && phase == Phase.USAGE) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(reportDate);
 
@@ -209,7 +209,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      */
     @Override
     public long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
-            long totalTime, LoggerStatusVo status) {
+            long totalTime, LoggerStatus status) {
         // call the overloaded version
         return this.saveOrUpdateInvoiceProcessed(rowId, product, reportDateFrom, reportDateTo, totalTime, status, null);
     }
@@ -219,7 +219,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      */
     @Override
     public long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
-            long totalTime, LoggerStatusVo status, String errorDescription) {
+            long totalTime, LoggerStatus status, String errorDescription) {
         LOG.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
 
         boolean isInsert = rowId == 0;
@@ -251,16 +251,16 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoggerRequestVo> getInvoiceProcessed(int max) {
+    public List<LoggerRequest> getInvoiceProcessed(int max) {
         String sql = sqlStatements.getProperty("select.logger_request");
 
         Map<String, Integer> params = new HashMap<>();
         params.put("max_records", max);
 
-        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerRequestVo>() {
+        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<LoggerRequest>() {
             @Override
-            public LoggerRequestVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                LoggerRequestVo vo = new LoggerRequestVo();
+            public LoggerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+                LoggerRequest vo = new LoggerRequest();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setProduct(rs.getString(++rcnt));
@@ -288,7 +288,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      * {@inheritDoc}
      */
     @Override
-    public boolean isInvoiceInStatus(LoggerStatusVo status) {
+    public boolean isInvoiceInStatus(LoggerStatus status) {
         String sql = sqlStatements.getProperty("count.logger_request");
 
         Map<String, String> params = new HashMap<>();

@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ import java.util.Date;
  * @author armandorivas
  * @since 03/22/17
  */
-public class LoggerRequestVo {
+public class LoggerRequest {
     private long rowId;
     private String product;
     private Date from;
@@ -167,7 +167,7 @@ public class LoggerRequestVo {
      */
     @Override
     public String toString() {
-        return "LoggerRequestVo [rowId=" + rowId + ", product=" + product + ", from=" + from + ", to=" + to
+        return "LoggerRequest [rowId=" + rowId + ", product=" + product + ", from=" + from + ", to=" + to
                 + ", responseTime=" + responseTime + ", status=" + status + ", availableReport=" + availableReport
                 + ", errorDescription=" + errorDescription + ", requestDate=" + requestDate + "]";
     }

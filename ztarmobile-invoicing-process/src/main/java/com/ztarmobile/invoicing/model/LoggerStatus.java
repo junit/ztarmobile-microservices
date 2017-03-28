@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 /**
  * Value object with the constants available for the logger process.
@@ -12,7 +12,7 @@ package com.ztarmobile.invoicing.vo;
  * @author armandorivas
  * @since 03/23/17
  */
-public enum LoggerStatusVo {
+public enum LoggerStatus {
     /**
      * Status to indicate that the record is in progress.
      */
@@ -41,7 +41,7 @@ public enum LoggerStatusVo {
      * @param statusVal
      *            Value of the status.
      */
-    private LoggerStatusVo(char statusVal) {
+    private LoggerStatus(char statusVal) {
         this.statusVal = statusVal;
     }
 

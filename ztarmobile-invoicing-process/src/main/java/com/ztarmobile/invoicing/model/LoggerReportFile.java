@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 /**
  * Value object.
@@ -12,7 +12,7 @@ package com.ztarmobile.invoicing.vo;
  * @author armandorivas
  * @since 03/17/17
  */
-public class LoggerReportFileVo {
+public class LoggerReportFile {
     private long rowId;
     private char statusAllocations;
     private char statusUsage;
@@ -69,7 +69,7 @@ public class LoggerReportFileVo {
      */
     @Override
     public String toString() {
-        return "LoggerReportFileVo [rowId=" + rowId + ", statusAllocations=" + statusAllocations + ", statusUsage="
+        return "LoggerReportFile [rowId=" + rowId + ", statusAllocations=" + statusAllocations + ", statusUsage="
                 + statusUsage + "]";
     }
 

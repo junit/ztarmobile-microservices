@@ -26,7 +26,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
 
 /**
  * Direct DAO Implementation.
@@ -80,7 +80,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      * {@inheritDoc}
      */
     @Override
-    public List<ResellerSubsUsageVo> getResellerSubsUsage(Date startDate, Date endDate, String product) {
+    public List<ResellerSubsUsage> getResellerSubsUsage(Date startDate, Date endDate, String product) {
         LOG.debug("Getting reseller subsUsage...");
         String sql = sqlStatements.getProperty("select.reseller_subs_usage");
 
@@ -89,10 +89,10 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
         params.put("start_dt", fromDateToDbFormat(startDate));
         params.put("end_dt", fromDateToDbFormat(endDate));
 
-        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<ResellerSubsUsageVo>() {
+        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<ResellerSubsUsage>() {
             @Override
-            public ResellerSubsUsageVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ResellerSubsUsageVo vo = new ResellerSubsUsageVo();
+            public ResellerSubsUsage mapRow(ResultSet rs, int rowNum) throws SQLException {
+                ResellerSubsUsage vo = new ResellerSubsUsage();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setCallDate(new Date(rs.getDate(++rcnt).getTime()));
@@ -120,7 +120,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      * {@inheritDoc}
      */
     @Override
-    public int[] updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
+    public int[] updateResellerSubsUsage(List<ResellerSubsUsage> subscribers) {
         LOG.debug("Updating " + subscribers.size() + " subscriber usage...");
         String sql = sqlStatements.getProperty("update.reseller_subs_usage");
 

@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 import static com.ztarmobile.invoicing.common.DateUtils.fromStringToYYmmddHHmmssFormat;
@@ -17,7 +17,7 @@ import java.util.Date;
  * @author armandorivas
  * @since 03/09/17
  */
-public class ResellerSubsUsageVo {
+public class ResellerSubsUsage {
     private long rowId;
     private Date callDate;
     private String ratePlan;
@@ -343,7 +343,7 @@ public class ResellerSubsUsageVo {
      */
     @Override
     public String toString() {
-        return "ResellerSubsUsageVo [rowId=" + rowId + ", callDate=" + callDate + ", ratePlan=" + ratePlan + ", mdn="
+        return "ResellerSubsUsage [rowId=" + rowId + ", callDate=" + callDate + ", ratePlan=" + ratePlan + ", mdn="
                 + mdn + ", allocMou=" + allocMou + ", allocSms=" + allocSms + ", allocMms=" + allocMms + ", allocMbs="
                 + allocMbs + ", actualMou=" + actualMou + ", actualSms=" + actualSms + ", actualMms=" + actualMms
                 + ", actualKbs=" + actualKbs + ", durationStart=" + durationStart + ", durationEnd=" + durationEnd

@@ -9,11 +9,11 @@ package com.ztarmobile.invoicing.dao;
 import java.util.Date;
 import java.util.List;
 
-import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
-import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
-import com.ztarmobile.invoicing.vo.LoggerRequestVo;
-import com.ztarmobile.invoicing.vo.LoggerStatusVo;
-import com.ztarmobile.invoicing.vo.PhaseVo;
+import com.ztarmobile.invoicing.model.LoggerCdrFile;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.LoggerStatus;
+import com.ztarmobile.invoicing.model.Phase;
 
 /**
  * DAO to handle the operations for the transactions.
@@ -30,7 +30,7 @@ public interface LoggerDao {
      *            The file name.
      * @return The CDR file or null if this object was not found.
      */
-    LoggerCdrFileVo getCdrFileProcessed(String fileName);
+    LoggerCdrFile getCdrFileProcessed(String fileName);
 
     /**
      * Saves or updates a record to indicate that a file has been loaded
@@ -73,7 +73,7 @@ public interface LoggerDao {
      * 
      * @return The report file or null if this object was not found.
      */
-    LoggerReportFileVo getReportFileProcessed(String product, Date reportDate);
+    LoggerReportFile getReportFileProcessed(String product, Date reportDate);
 
     /**
      * Saves or updates a record to indicate that a file has been invoiced.
@@ -87,10 +87,10 @@ public interface LoggerDao {
      * @param byMonth
      *            Whether the table will be updated by day or month, if it's by
      *            month, the days are ignored.
-     * @see LoggerDao#saveOrUpdateReportFileProcessed(String, Date, PhaseVo,
+     * @see LoggerDao#saveOrUpdateReportFileProcessed(String, Date, Phase,
      *      boolean, String)
      */
-    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth);
+    void saveOrUpdateReportFileProcessed(String product, Date reportDate, Phase phase, boolean byMonth);
 
     /**
      * Saves or updates a record to indicate that a file has been invoiced but
@@ -107,10 +107,10 @@ public interface LoggerDao {
      *            month, the days are ignored.
      * @param errorDescription
      *            Error description.
-     * @see LoggerDao#saveOrUpdateReportFileProcessed(String, Date, PhaseVo,
+     * @see LoggerDao#saveOrUpdateReportFileProcessed(String, Date, Phase,
      *      boolean)
      */
-    void saveOrUpdateReportFileProcessed(String product, Date reportDate, PhaseVo phase, boolean byMonth,
+    void saveOrUpdateReportFileProcessed(String product, Date reportDate, Phase phase, boolean byMonth,
             String errorDescription);
 
     /**
@@ -133,10 +133,10 @@ public interface LoggerDao {
      * @return The new generated id if it was an insert operation or the amount
      *         of records updated when the operation was update.
      * @see LoggerDao#saveOrUpdateInvoiceProcessed(long, String, Date, Date,
-     *      long, LoggerStatusVo, String)
+     *      long, LoggerStatus, String)
      */
     long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
-            long totalTime, LoggerStatusVo status);
+            long totalTime, LoggerStatus status);
 
     /**
      * Saves or update a record to indicate that the invoicing process has
@@ -160,10 +160,10 @@ public interface LoggerDao {
      * @return The new generated id if it was an insert operation or the amount
      *         of records updated when the operation was update.
      * @see LoggerDao#saveOrUpdateInvoiceProcessed(long, String, Date, Date,
-     *      long, LoggerStatusVo)
+     *      long, LoggerStatus)
      */
     long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
-            long totalTime, LoggerStatusVo status, String errorDescription);
+            long totalTime, LoggerStatus status, String errorDescription);
 
     /**
      * Get a list of all the transactions made/requested when the invoicing
@@ -173,7 +173,7 @@ public interface LoggerDao {
      *            The maximum of records to be returned.
      * @return List of records.
      */
-    List<LoggerRequestVo> getInvoiceProcessed(int max);
+    List<LoggerRequest> getInvoiceProcessed(int max);
 
     /**
      * This method test whether the invoicing process is in certain status, if
@@ -183,5 +183,5 @@ public interface LoggerDao {
      *            The status of the process.
      * @return true, the status matches, otherwise returns false.
      */
-    boolean isInvoiceInStatus(LoggerStatusVo status);
+    boolean isInvoiceInStatus(LoggerStatus status);
 }

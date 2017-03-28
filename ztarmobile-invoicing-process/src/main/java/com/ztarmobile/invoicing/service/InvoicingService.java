@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.ztarmobile.invoicing.vo.CatalogProductVo;
-import com.ztarmobile.invoicing.vo.LoggerRequestVo;
-import com.ztarmobile.invoicing.vo.ReportDetailsVo;
+import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
 
 /**
  * Service that calculates and perform the invoicing process.
@@ -122,7 +122,7 @@ public interface InvoicingService {
      * @return List of objects or null if no information was found.
      * @see InvoicingService#generateReport(String, Date, Date)
      */
-    List<ReportDetailsVo> generateReport(String product, Calendar start, Calendar end);
+    List<ReportDetails> generateReport(String product, Calendar start, Calendar end);
 
     /**
      * Return a list of objects for the invoicing report.
@@ -136,7 +136,7 @@ public interface InvoicingService {
      * @return List of objects or null if no information was found.
      * @see InvoicingService#generateReport(String, Calendar, Calendar)
      */
-    List<ReportDetailsVo> generateReport(String product, Date start, Date end);
+    List<ReportDetails> generateReport(String product, Date start, Date end);
 
     /**
      * Gets all the existing products.
@@ -144,7 +144,7 @@ public interface InvoicingService {
      * @return The list of all the products or an empty list where no products
      *         were found.
      */
-    List<CatalogProductVo> getAllAvailableProducts();
+    List<CatalogProduct> getAllAvailableProducts();
 
     /**
      * Gets all the existing invoicing requests.
@@ -152,5 +152,5 @@ public interface InvoicingService {
      * @return The list of all the requets or an empty list where no request
      *         were found.
      */
-    List<LoggerRequestVo> getAllAvailableRequests();
+    List<LoggerRequest> getAllAvailableRequests();
 }

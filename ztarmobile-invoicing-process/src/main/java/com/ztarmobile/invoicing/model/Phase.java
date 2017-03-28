@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 /**
  * Value object.
@@ -12,7 +12,7 @@ package com.ztarmobile.invoicing.vo;
  * @author armandorivas
  * @since 03/17/17
  */
-public enum PhaseVo {
+public enum Phase {
     /**
      * Allocation process.
      */

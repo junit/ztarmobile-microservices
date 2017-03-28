@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 /**
  * Value object.
@@ -12,7 +12,7 @@ package com.ztarmobile.invoicing.vo;
  * @author armandorivas
  * @since 03/10/17
  */
-public class CatalogProductVo {
+public class CatalogProduct {
     private long rowId;
     private String product;
     private boolean cdma;
@@ -69,6 +69,6 @@ public class CatalogProductVo {
      */
     @Override
     public String toString() {
-        return "CatalogProductVo [rowId=" + rowId + ", product=" + product + ", cdma=" + cdma + "]";
+        return "CatalogProduct [rowId=" + rowId + ", product=" + product + ", cdma=" + cdma + "]";
     }
 }

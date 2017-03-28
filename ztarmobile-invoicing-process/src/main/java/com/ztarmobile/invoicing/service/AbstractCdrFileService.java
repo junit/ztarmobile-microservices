@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ztarmobile.invoicing.dao.LoggerDao;
-import com.ztarmobile.invoicing.vo.LoggerCdrFileVo;
+import com.ztarmobile.invoicing.model.LoggerCdrFile;
 
 /**
  * Parent abstract class to handle the files for the CDR's.
@@ -227,7 +227,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             return processed;
         }
 
-        LoggerCdrFileVo loggerCdrFileVo = loggerDao.getCdrFileProcessed(fileName.getName());
+        LoggerCdrFile loggerCdrFileVo = loggerDao.getCdrFileProcessed(fileName.getName());
         if (loggerCdrFileVo != null && loggerCdrFileVo.getStatus() == 'C') {
             // the record was found and it was completed.
             // make sure the target file is there...

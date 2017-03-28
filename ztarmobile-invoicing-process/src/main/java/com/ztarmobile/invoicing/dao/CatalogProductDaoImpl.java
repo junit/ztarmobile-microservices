@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.vo.CatalogProductVo;
+import com.ztarmobile.invoicing.model.CatalogProduct;
 
 /**
  * Direct DAO Implementation.
@@ -47,14 +47,14 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      * {@inheritDoc}
      */
     @Override
-    public CatalogProductVo getCatalogProduct(String product) {
+    public CatalogProduct getCatalogProduct(String product) {
         LOG.debug("Getting product by [" + product + "]");
         String sql = sqlStatements.getProperty("select.catalog_product");
 
         Map<String, String> params = new HashMap<>();
         params.put("product", product);
 
-        List<CatalogProductVo> list;
+        List<CatalogProduct> list;
         list = this.getJdbc().query(sql, new MapSqlParameterSource(params), new CatalogProductRowMapper());
         if (list.isEmpty()) {
             return null;
@@ -67,20 +67,20 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      * {@inheritDoc}
      */
     @Override
-    public List<CatalogProductVo> getCatalogProduct() {
+    public List<CatalogProduct> getCatalogProduct() {
         LOG.debug("Getting all the products");
         String sql = sqlStatements.getProperty("select.catalog_products");
 
         return this.getJdbc().query(sql, new CatalogProductRowMapper());
     }
 
-    class CatalogProductRowMapper implements RowMapper<CatalogProductVo> {
+    class CatalogProductRowMapper implements RowMapper<CatalogProduct> {
         /**
          * {@inheritDoc}
          */
         @Override
-        public CatalogProductVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-            CatalogProductVo vo = new CatalogProductVo();
+        public CatalogProduct mapRow(ResultSet rs, int rowNum) throws SQLException {
+            CatalogProduct vo = new CatalogProduct();
             int rcnt = 0;
             vo.setRowId(rs.getLong(++rcnt));
             vo.setProduct(rs.getString(++rcnt));

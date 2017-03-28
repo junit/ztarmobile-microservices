@@ -15,7 +15,7 @@ import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
 import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
 import static com.ztarmobile.invoicing.common.FileUtils.zipIt;
-import static com.ztarmobile.invoicing.vo.PhaseVo.USAGE;
+import static com.ztarmobile.invoicing.model.Phase.USAGE;
 import static java.util.Calendar.MONTH;
 
 import java.io.BufferedReader;
@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ztarmobile.invoicing.dao.LoggerDao;
-import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
-import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
-import com.ztarmobile.invoicing.vo.UsageVo;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
+import com.ztarmobile.invoicing.model.Usage;
 
 /**
  * Parent abstract class to handle the usage for the CDR's.
@@ -131,7 +131,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      */
     private void createAllUsageCdrs(Calendar calendarStart, Calendar calendarEnd, String product) {
         // finds all the subscribers for this product
-        List<ResellerSubsUsageVo> subs = allocationsService.getResellerSubsUsage(calendarStart, calendarEnd, product);
+        List<ResellerSubsUsage> subs = allocationsService.getResellerSubsUsage(calendarStart, calendarEnd, product);
         validateInput(subs.isEmpty(), "No subcribers were found, the usage cannot be calculated for [" + product + "]");
 
         File file = new File(getTargetDirectoryCdrFile());
@@ -207,7 +207,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
             return processed;
         }
 
-        LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
+        LoggerReportFile loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
         if (loggerReportFileVo != null && loggerReportFileVo.getStatusUsage() == 'C') {
             // the record was found and it was completed.
             processed = true;
@@ -215,11 +215,11 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
         return processed;
     }
 
-    private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsageVo> subs) {
+    private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsage> subs) {
         LOG.debug("==> The following file will be read... " + currentFile);
 
         // resetting the list of subcribers
-        for (ResellerSubsUsageVo vo : subs) {
+        for (ResellerSubsUsage vo : subs) {
             if (vo.isUpdated()) {
                 vo.setUpdated(false);
             }
@@ -233,7 +233,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
             String lastMdn = null;
             String lastCallDate = null;
-            List<ResellerSubsUsageVo> usgList = new ArrayList<>();
+            List<ResellerSubsUsage> usgList = new ArrayList<>();
             long linecnt = 0, mdnUpdCnt = 0;
 
             // read the rest of the files
@@ -259,7 +259,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 }
 
                 // calculate the usage
-                UsageVo usage = calculateIndividualUsage(sln);
+                Usage usage = calculateIndividualUsage(sln);
 
                 // the usage list is null. That means we reached this mdn
                 // for the first time. This row is a new mdn.
@@ -276,7 +276,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 }
                 // check for the specific subscriber and plan when
                 // record was created and add usage
-                for (ResellerSubsUsageVo rms : usgList) {
+                for (ResellerSubsUsage rms : usgList) {
                     // we know the usage list is for the mdn, and the call date.
                     // match the call date and time to fit in the rate plan
                     // duration start and end.
@@ -312,11 +312,11 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      *            The callDate in format YYYYmmdd
      * @return The list containing matching objects.
      */
-    private List<ResellerSubsUsageVo> getUsageByMdnAndCallDate(List<ResellerSubsUsageVo> subs, String mdn,
+    private List<ResellerSubsUsage> getUsageByMdnAndCallDate(List<ResellerSubsUsage> subs, String mdn,
             String callDate) {
-        List<ResellerSubsUsageVo> subList = new ArrayList<>();
+        List<ResellerSubsUsage> subList = new ArrayList<>();
 
-        for (ResellerSubsUsageVo sub : subs) {
+        for (ResellerSubsUsage sub : subs) {
             if (!sub.isEqualsByMdnAndCallDate(mdn, callDate)) {
                 // skip all list entries where MDN is does not match
                 continue;
@@ -385,7 +385,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
      *            The current line.
      * @return The usage for each line.
      */
-    protected abstract UsageVo calculateIndividualUsage(String[] sln);
+    protected abstract Usage calculateIndividualUsage(String[] sln);
 
     /**
      * Gets the position of the call date in a CDR file.

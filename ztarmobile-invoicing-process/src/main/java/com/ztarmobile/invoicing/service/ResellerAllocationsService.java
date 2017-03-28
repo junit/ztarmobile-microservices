@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
 
 /**
  * Service to handle the operations for the allocations.
@@ -92,7 +92,7 @@ public interface ResellerAllocationsService {
      *            The product.
      * @return List of subscribers.
      */
-    List<ResellerSubsUsageVo> getResellerSubsUsage(Calendar start, Calendar end, String product);
+    List<ResellerSubsUsage> getResellerSubsUsage(Calendar start, Calendar end, String product);
 
     /**
      * Updates the usage of the subscribers.
@@ -100,5 +100,5 @@ public interface ResellerAllocationsService {
      * @param subscribers
      *            List of subscribers.
      */
-    void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers);
+    void updateResellerSubsUsage(List<ResellerSubsUsage> subscribers);
 }

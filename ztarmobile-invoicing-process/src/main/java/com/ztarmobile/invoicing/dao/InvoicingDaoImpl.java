@@ -24,7 +24,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.vo.ReportDetailsVo;
+import com.ztarmobile.invoicing.model.ReportDetails;
 
 /**
  * Direct DAO Implementation.
@@ -85,7 +85,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      * {@inheritDoc}
      */
     @Override
-    public List<ReportDetailsVo> generateReport(String product, Date start, Date end) {
+    public List<ReportDetails> generateReport(String product, Date start, Date end) {
         String sql = sqlStatements.getProperty("select.invoicing_report_details");
 
         Map<String, String> params = new HashMap<>();
@@ -93,10 +93,10 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
         params.put("init_date", fromDateToYYYYmmddDashFormat(start));
         params.put("end_date", fromDateToYYYYmmddDashFormat(end));
 
-        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<ReportDetailsVo>() {
+        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<ReportDetails>() {
             @Override
-            public ReportDetailsVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ReportDetailsVo vo = new ReportDetailsVo();
+            public ReportDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+                ReportDetails vo = new ReportDetails();
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setYear(rs.getInt(++rcnt));

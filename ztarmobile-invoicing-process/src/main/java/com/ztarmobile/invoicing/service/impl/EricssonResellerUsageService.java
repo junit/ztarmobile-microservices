@@ -15,8 +15,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.ztarmobile.invoicing.model.Usage;
 import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
-import com.ztarmobile.invoicing.vo.UsageVo;
 
 /**
  * Ericsson implementation to handle the files for the CDR's.
@@ -86,8 +86,8 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
      * {@inheritDoc}
      */
     @Override
-    protected UsageVo calculateIndividualUsage(String[] sln) {
-        UsageVo usage = new UsageVo();
+    protected Usage calculateIndividualUsage(String[] sln) {
+        Usage usage = new Usage();
 
         // get usage values from specific locations
         String callType = sln[13];

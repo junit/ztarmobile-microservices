@@ -11,7 +11,7 @@ import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.setMaximumCalendarDay;
 import static com.ztarmobile.invoicing.common.DateUtils.setMinimumCalendarDay;
-import static com.ztarmobile.invoicing.vo.PhaseVo.ALLOCATIONS;
+import static com.ztarmobile.invoicing.model.Phase.ALLOCATIONS;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
@@ -32,10 +32,10 @@ import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.dao.LoggerDao;
 import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
 import com.ztarmobile.invoicing.service.AbstractDefaultService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
-import com.ztarmobile.invoicing.vo.LoggerReportFileVo;
-import com.ztarmobile.invoicing.vo.ResellerSubsUsageVo;
 
 /**
  * Service to handle the operations for the allocations.
@@ -119,10 +119,10 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
      * {@inheritDoc}
      */
     @Override
-    public List<ResellerSubsUsageVo> getResellerSubsUsage(Calendar start, Calendar end, String product) {
+    public List<ResellerSubsUsage> getResellerSubsUsage(Calendar start, Calendar end, String product) {
         this.validateEntries(start, end, product);
 
-        List<ResellerSubsUsageVo> list;
+        List<ResellerSubsUsage> list;
         list = resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
         LOG.debug("Reseller subsUsage found: " + list.size());
         return list;
@@ -132,9 +132,9 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
      * {@inheritDoc}
      */
     @Override
-    public void updateResellerSubsUsage(List<ResellerSubsUsageVo> subscribers) {
-        List<ResellerSubsUsageVo> alist = new ArrayList<>();
-        for (ResellerSubsUsageVo sub : subscribers) {
+    public void updateResellerSubsUsage(List<ResellerSubsUsage> subscribers) {
+        List<ResellerSubsUsage> alist = new ArrayList<>();
+        for (ResellerSubsUsage sub : subscribers) {
             if (!sub.isUpdated()) {
                 continue;
             }
@@ -233,7 +233,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
             return processed;
         }
 
-        LoggerReportFileVo loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
+        LoggerReportFile loggerReportFileVo = loggerDao.getReportFileProcessed(product, currentDate);
         if (loggerReportFileVo != null && loggerReportFileVo.getStatusAllocations() == 'C') {
             // the record was found and it was completed.
             processed = true;

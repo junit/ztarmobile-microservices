@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.invoicing.vo;
+package com.ztarmobile.invoicing.model;
 
 /**
  * Value object.
@@ -12,7 +12,7 @@ package com.ztarmobile.invoicing.vo;
  * @author armandorivas
  * @since 03/10/17
  */
-public class UsageVo {
+public class Usage {
     private double mou;
     private double kbs;
     private double sms;
@@ -85,7 +85,7 @@ public class UsageVo {
      */
     @Override
     public String toString() {
-        return "UsageVo [mou=" + mou + ", kbs=" + kbs + ", sms=" + sms + ", mms=" + mms + "]";
+        return "Usage [mou=" + mou + ", kbs=" + kbs + ", sms=" + sms + ", mms=" + mms + "]";
     }
 
 }

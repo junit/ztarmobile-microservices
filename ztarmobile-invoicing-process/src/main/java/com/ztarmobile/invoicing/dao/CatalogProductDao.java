@@ -8,7 +8,7 @@ package com.ztarmobile.invoicing.dao;
 
 import java.util.List;
 
-import com.ztarmobile.invoicing.vo.CatalogProductVo;
+import com.ztarmobile.invoicing.model.CatalogProduct;
 
 /**
  * DAO to handle the operations for the products.
@@ -25,7 +25,7 @@ public interface CatalogProductDao {
      *            The product.
      * @return The product or null if it was not found.
      */
-    CatalogProductVo getCatalogProduct(String product);
+    CatalogProduct getCatalogProduct(String product);
 
     /**
      * Gets all the existing products.
@@ -33,5 +33,5 @@ public interface CatalogProductDao {
      * @return The list of all the products or an empty list where no products
      *         were found.
      */
-    List<CatalogProductVo> getCatalogProduct();
+    List<CatalogProduct> getCatalogProduct();
 }
