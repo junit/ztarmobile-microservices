@@ -57,6 +57,12 @@ public class DateUtils {
     private static final SimpleDateFormat YYYYMM_DATE_FORMAT = new SimpleDateFormat(YYYYMM);
 
     /**
+     * Format used in dates MM/dd/yyyy.
+     */
+    public static final String MMddyyyy = "MM/dd/yyyy";
+    private static final SimpleDateFormat MMDDYYYY_DATE_FORMAT = new SimpleDateFormat(MMddyyyy);
+
+    /**
      * Private constructor.
      */
     private DateUtils() {
@@ -132,6 +138,22 @@ public class DateUtils {
      */
     public static String fromDateToYYYYmmFormat(Date date) {
         return YYYYMM_DATE_FORMAT.format(date);
+    }
+
+    /**
+     * Converts from a String object to a date format.
+     * 
+     * @param dateString
+     *            The date to convert to a date format.
+     * @return The Date representation of the string.
+     */
+    public static Date fromStringToMMddYYYYFormat(String dateString) {
+        try {
+            return MMDDYYYY_DATE_FORMAT.parse(dateString);
+        } catch (ParseException e) {
+            CommonUtils.invalidInput("Unable to convert string: " + dateString + ", to date " + e);
+            return null;
+        }
     }
 
     /**

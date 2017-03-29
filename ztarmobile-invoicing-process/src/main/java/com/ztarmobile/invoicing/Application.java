@@ -23,6 +23,7 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource({ "classpath:com/ztarmobile/invoicing/springframework/applicationContext.xml",
         "classpath*:com/ztarmobile/invoicing/springframework/**/*-config.xml",
         "classpath*:com/ztarmobile/invoicing/**/*-dao.xml" })
+
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
