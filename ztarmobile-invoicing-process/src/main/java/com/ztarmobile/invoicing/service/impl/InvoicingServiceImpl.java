@@ -211,7 +211,7 @@ public class InvoicingServiceImpl implements InvoicingService {
      *            false the process runs as usual.
      */
     private void performAllInvoicing(Calendar start, Calendar end, String product, boolean rerunInvoicing) {
-        LOG.debug("Starting the invoicing process...rerun process? " + rerunInvoicing);
+        LOG.debug(">> Starting the invoicing process...rerun process? " + rerunInvoicing);
         LOG.debug("Invoicing with: Start " + start.getTime() + ", End " + end.getTime() + ", Product: " + product);
 
         long id = 0;
@@ -266,6 +266,7 @@ public class InvoicingServiceImpl implements InvoicingService {
             // we re throw the exception
             throw ex;
         }
+        LOG.debug("<< Ending invoicing process");
     }
 
     /**

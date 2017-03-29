@@ -8,6 +8,7 @@ package com.ztarmobile.invoicing.controllers;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
+import static com.ztarmobile.invoicing.model.Response.SUCCESS;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ztarmobile.invoicing.model.Invoicing;
 import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.Response;
 import com.ztarmobile.invoicing.service.InvoicingService;
 
 /**
@@ -46,7 +47,7 @@ public class InvoicingServiceController {
     private InvoicingService invoicingService;
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public Invoicing processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
+    public Response processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
             @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
             @RequestParam("product") String product, @RequestParam("rerunInvoicing") boolean rerunInvoicing) {
 
@@ -61,8 +62,10 @@ public class InvoicingServiceController {
         calendarTo.setTime(reportTo);
 
         invoicingService.performInvoicing(calendarFrom, calendarTo, product, rerunInvoicing);
-
-        return new Invoicing();
+        Response response = new Response();
+        response.setStatus(SUCCESS);
+        response.setDetail("More json goes here...");
+        return response;
     }
 
     /**
