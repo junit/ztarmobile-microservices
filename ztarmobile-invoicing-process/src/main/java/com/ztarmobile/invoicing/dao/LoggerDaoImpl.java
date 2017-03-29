@@ -223,6 +223,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
         LOG.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
 
         boolean isInsert = rowId == 0;
+        LOG.debug("isInsert: " + isInsert);
         String sql;
 
         Map<String, String> params = new HashMap<>();

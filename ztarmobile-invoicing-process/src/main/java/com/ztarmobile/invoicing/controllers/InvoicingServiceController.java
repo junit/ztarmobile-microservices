@@ -6,7 +6,8 @@
  */
 package com.ztarmobile.invoicing.controllers;
 
-import static com.ztarmobile.invoicing.common.DateUtils.fromStringToMMddYYYYFormat;
+import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
+import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,9 +15,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ztarmobile.invoicing.model.Invoicing;
@@ -44,18 +46,19 @@ public class InvoicingServiceController {
     private InvoicingService invoicingService;
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public Invoicing processInvoicing(@PathVariable("reportFrom") String reportFrom,
-            @PathVariable("reportTo") String reportTo, @PathVariable("product") String product,
-            @PathVariable("rerunInvoicing") boolean rerunInvoicing) {
+    public Invoicing processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
+            @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
+            @RequestParam("product") String product, @RequestParam("rerunInvoicing") boolean rerunInvoicing) {
 
-        Date dateFrom = fromStringToMMddYYYYFormat(reportFrom);
-        Date dateTo = fromStringToMMddYYYYFormat(reportTo);
+        validateInput(reportFrom, "Please provide a 'reportFrom' parameter using this format: " + MMDDYYYY);
+        validateInput(reportTo, "Please provide a 'reportTo' parameter using this format: " + MMDDYYYY);
+        validateInput(product, "The 'product' cannot be empty");
 
         Calendar calendarFrom = Calendar.getInstance();
-        calendarFrom.setTime(dateFrom);
+        calendarFrom.setTime(reportFrom);
 
         Calendar calendarTo = Calendar.getInstance();
-        calendarTo.setTime(dateTo);
+        calendarTo.setTime(reportTo);
 
         invoicingService.performInvoicing(calendarFrom, calendarTo, product, rerunInvoicing);
 

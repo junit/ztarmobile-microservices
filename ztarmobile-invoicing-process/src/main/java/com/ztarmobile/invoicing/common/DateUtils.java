@@ -59,8 +59,8 @@ public class DateUtils {
     /**
      * Format used in dates MM/dd/yyyy.
      */
-    public static final String MMddyyyy = "MM/dd/yyyy";
-    private static final SimpleDateFormat MMDDYYYY_DATE_FORMAT = new SimpleDateFormat(MMddyyyy);
+    public static final String MMDDYYYY = "MM/dd/yyyy";
+    private static final SimpleDateFormat MMDDYYYY_DATE_FORMAT = new SimpleDateFormat(MMDDYYYY);
 
     /**
      * Private constructor.
@@ -311,6 +311,19 @@ public class DateUtils {
             }
         }
         return list;
+    }
+
+    /**
+     * This method test whether the date passed in the argument is in the future
+     * or not.
+     * 
+     * @param calendar
+     *            The input calendar.
+     * @return true, if this date is in the future, false it is not.
+     */
+    public static boolean isFutureDate(Calendar calendar) {
+        Calendar now = Calendar.getInstance();
+        return calendar.after(now);
     }
 
     /**

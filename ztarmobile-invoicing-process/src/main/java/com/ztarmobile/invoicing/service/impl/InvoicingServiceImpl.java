@@ -9,6 +9,7 @@ package com.ztarmobile.invoicing.service.impl;
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
 import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.isFutureDate;
 import static com.ztarmobile.invoicing.common.DateUtils.splitTimeByMonth;
 import static com.ztarmobile.invoicing.model.LoggerStatus.COMPLETED;
 import static com.ztarmobile.invoicing.model.LoggerStatus.ERROR;
@@ -211,21 +212,25 @@ public class InvoicingServiceImpl implements InvoicingService {
      */
     private void performAllInvoicing(Calendar start, Calendar end, String product, boolean rerunInvoicing) {
         LOG.debug("Starting the invoicing process...rerun process? " + rerunInvoicing);
+        LOG.debug("Invoicing with: Start " + start.getTime() + ", End " + end.getTime() + ", Product: " + product);
 
         long id = 0;
+        CatalogProduct catalogProduct = null;
         try {
             if (!loggerDao.isInvoiceInStatus(PROGRESS)) {
+                catalogProduct = catalogProductDao.getCatalogProduct(product);
+                validateInput(catalogProduct, "No product information was found for [" + product + "]");
+                validateInput(isFutureDate(start), "The start date cannot be in the future");
+                validateInput(isFutureDate(end), "The end date cannot be in the future");
+
                 // save the record before staring the process.
                 id = loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, PROGRESS);
 
                 long startTime = System.currentTimeMillis();
-                CatalogProduct catalogProductVo = catalogProductDao.getCatalogProduct(product);
-                validateInput(catalogProductVo, "No product information was found for [" + product + "]");
-                LOG.debug("CDR files to be processed => " + (catalogProductVo.isCdma() ? "SPRINT" : "ERICSSON"));
+                LOG.debug("CDR files to be processed => " + (catalogProduct.isCdma() ? "SPRINT" : "ERICSSON"));
 
                 LOG.debug("==================> 0. preparing data <==================================");
-                CdrFileService cdrFileService = catalogProductVo.isCdma() ? sprintCdrFileService
-                        : ericssonCdrFileService;
+                CdrFileService cdrFileService = catalogProduct.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
                 ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
                 cdrFileService.extractCdrs(start, end);
 
@@ -234,8 +239,7 @@ public class InvoicingServiceImpl implements InvoicingService {
                 allocationsService.createAllocations(start, end, product);
 
                 LOG.debug("==================> 2. create_reseller_usage <=====================");
-                ResellerUsageService usageService = catalogProductVo.isCdma() ? sprintUsageService
-                        : ericssonUsageService;
+                ResellerUsageService usageService = catalogProduct.isCdma() ? sprintUsageService : ericssonUsageService;
                 ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
                 usageService.createUsage(start, end, product);
 
@@ -254,9 +258,11 @@ public class InvoicingServiceImpl implements InvoicingService {
         } catch (Throwable ex) {
             ex.printStackTrace();
             LOG.fatal(ex);
-            // we save the error...
-            loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
-                    ex.toString());
+            if (catalogProduct != null) {
+                // we save the error as long as the product is not null...
+                loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
+                        ex.toString());
+            }
             // we re throw the exception
             throw ex;
         }
