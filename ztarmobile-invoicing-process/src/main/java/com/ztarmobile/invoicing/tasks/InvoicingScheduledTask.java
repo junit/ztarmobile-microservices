@@ -53,7 +53,7 @@ public class InvoicingScheduledTask {
      *            The request.
      */
     @Scheduled(cron = "${invoice.report.cron}")
-    public void scheduleMonthlyInvoice(InvoicingRequest request) {
+    public void scheduleMonthlyInvoice() {
         LOG.debug("Requesting montly invoicing report...");
 
         for (CatalogProduct catalogProduct : invoicingService.getAllAvailableProducts()) {
