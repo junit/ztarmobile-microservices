@@ -10,18 +10,19 @@ import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
 import static com.ztarmobile.invoicing.model.Response.SUCCESS;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ztarmobile.invoicing.model.InvoicingRequest;
 import com.ztarmobile.invoicing.model.LoggerRequest;
 import com.ztarmobile.invoicing.model.Response;
 import com.ztarmobile.invoicing.service.InvoicingService;
@@ -45,6 +46,8 @@ public class InvoicingServiceController {
      */
     @Autowired
     private InvoicingService invoicingService;
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
     public Response processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
@@ -55,13 +58,15 @@ public class InvoicingServiceController {
         validateInput(reportTo, "Please provide a 'reportTo' parameter using this format: " + MMDDYYYY);
         validateInput(product, "The 'product' cannot be empty");
 
-        Calendar calendarFrom = Calendar.getInstance();
-        calendarFrom.setTime(reportFrom);
+        InvoicingRequest invoicingRequest = new InvoicingRequest();
+        invoicingRequest.setReportFrom(reportFrom);
+        invoicingRequest.setReportTo(reportTo);
+        invoicingRequest.setProduct(product);
+        invoicingRequest.setRerunInvoicing(rerunInvoicing);
 
-        Calendar calendarTo = Calendar.getInstance();
-        calendarTo.setTime(reportTo);
+        // send the request to the queue
+        jmsTemplate.convertAndSend("invoicing.requests", invoicingRequest);
 
-        invoicingService.performInvoicing(calendarFrom, calendarTo, product, rerunInvoicing);
         Response response = new Response();
         response.setStatus(SUCCESS);
         response.setDetail("More json goes here...");

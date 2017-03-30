@@ -47,10 +47,16 @@
                 AND MONTH(report_date) = :month_report_date
             ]]>
         </prop>
-        <prop key="insert.logger_request">
+        <prop key="insert.logger_request.with.product">
             <![CDATA[
                 INSERT INTO invoicing_logger_requests (product_id, report_date_from, report_date_to, total_time, status, error_description)
                 VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date_from, :report_date_to, :total_time, :status, :error_description)    
+            ]]>
+        </prop>
+        <prop key="insert.logger_request.no.product">
+            <![CDATA[
+                INSERT INTO invoicing_logger_requests (report_date_from, report_date_to, total_time, status, error_description)
+                VALUES (:report_date_from, :report_date_to, :total_time, :status, :error_description)    
             ]]>
         </prop>
         <prop key="update.logger_request">

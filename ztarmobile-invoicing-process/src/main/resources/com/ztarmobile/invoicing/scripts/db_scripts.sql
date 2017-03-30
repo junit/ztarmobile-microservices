@@ -85,7 +85,7 @@ CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
 
 CREATE TABLE `cdrs`.`invoicing_logger_requests` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
-  `product_id` INT NOT NULL,
+  `product_id` INT NOT NULL DEFAULT 0,
   `report_date_from` DATE NOT NULL,
   `report_date_to` DATE NOT NULL,
   `total_time` BIGINT NOT NULL,

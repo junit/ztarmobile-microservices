@@ -236,7 +236,11 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
 
         if (isInsert) {
             // we return the generated id after the insertion is done.
-            sql = sqlStatements.getProperty("insert.logger_request");
+            if (product == null || product.trim().isEmpty()) {
+                sql = sqlStatements.getProperty("insert.logger_request.no.product");
+            } else {
+                sql = sqlStatements.getProperty("insert.logger_request.with.product");
+            }
             KeyHolder keyHolder = new GeneratedKeyHolder();
             this.getJdbc().update(sql, new MapSqlParameterSource(params), keyHolder, new String[] { "row_id" });
             return keyHolder.getKey().longValue();

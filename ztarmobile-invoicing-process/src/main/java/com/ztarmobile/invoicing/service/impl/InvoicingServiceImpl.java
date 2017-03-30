@@ -217,9 +217,14 @@ public class InvoicingServiceImpl implements InvoicingService {
         long id = 0;
         CatalogProduct catalogProduct = null;
         try {
+            // as long as the process is not in 'progress', we can process...
             if (!loggerDao.isInvoiceInStatus(PROGRESS)) {
                 catalogProduct = catalogProductDao.getCatalogProduct(product);
-                validateInput(catalogProduct, "No product information was found for [" + product + "]");
+                String productRequested = product;
+                // make sure the product has the right value.
+                product = catalogProduct == null ? null : product;
+
+                validateInput(catalogProduct, "No product information was found for [" + productRequested + "]");
                 validateInput(isFutureDate(start), "The start date cannot be in the future");
                 validateInput(isFutureDate(end), "The end date cannot be in the future");
 
@@ -258,11 +263,9 @@ public class InvoicingServiceImpl implements InvoicingService {
         } catch (Throwable ex) {
             ex.printStackTrace();
             LOG.fatal(ex);
-            if (catalogProduct != null) {
-                // we save the error as long as the product is not null...
-                loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
-                        ex.toString());
-            }
+            // we save the error
+            loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
+                    ex.toString());
             // we re throw the exception
             throw ex;
         }
