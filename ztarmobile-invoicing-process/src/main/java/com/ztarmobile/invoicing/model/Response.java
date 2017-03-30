@@ -25,7 +25,7 @@ public class Response {
      * Creates a success response with an empty body.
      */
     public Response() {
-        this.description = "";
+        this.detail = "";
     }
 
     /**
@@ -35,7 +35,7 @@ public class Response {
      *            A non null object.
      */
     public Response(Object response) {
-        this.description = toJson(response);
+        this.detail = toJson(response);
     }
 
     /**
@@ -79,14 +79,6 @@ public class Response {
     }
 
     /**
-     * @param description
-     *            the description to set
-     */
-    public void setDescription(Object description) {
-        this.description = toJson(description);
-    }
-
-    /**
      * @return the detail
      */
     public String getDetail() {
@@ -99,6 +91,14 @@ public class Response {
      */
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    /**
+     * @param detail
+     *            the detail to set
+     */
+    public void setDetail(Object detail) {
+        this.detail = toJson(detail);
     }
 
     /*

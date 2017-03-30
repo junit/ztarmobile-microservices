@@ -27,6 +27,10 @@ import java.util.List;
  */
 public class DateUtils {
     /**
+     * Format used commonly to deserialize dates. e.g. Jun 2, 2016 9:46:15 AM
+     */
+    public static final String MEDIUM = "MMM d, yyyy hh:mm:ss a";
+    /**
      * Format used commonly by the db.
      */
     public static final String YYYYMMDD_HHMMSS = "yyyy-MM-dd HH:mm:ss";

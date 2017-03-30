@@ -6,7 +6,11 @@
  */
 package com.ztarmobile.invoicing.model;
 
+import static com.ztarmobile.invoicing.common.DateUtils.MEDIUM;
+
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Value object.
@@ -17,12 +21,15 @@ import java.util.Date;
 public class LoggerRequest {
     private long rowId;
     private String product;
+    @JsonFormat(pattern = MEDIUM)
     private Date from;
+    @JsonFormat(pattern = MEDIUM)
     private Date to;
     private long responseTime;
     private char status;
     private boolean availableReport;
     private String errorDescription;
+    @JsonFormat(pattern = MEDIUM)
     private Date requestDate;
 
     /**
