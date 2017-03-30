@@ -16,6 +16,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,11 +48,13 @@ public class InvoicingServiceController {
      */
     @Autowired
     private InvoicingService invoicingService;
+
     @Autowired
     private JmsTemplate jmsTemplate;
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public Response processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
+    public ResponseEntity<?> processInvoicing(
+            @RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
             @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
             @RequestParam("product") String product, @RequestParam("rerunInvoicing") boolean rerunInvoicing) {
 
@@ -70,7 +74,7 @@ public class InvoicingServiceController {
         Response response = new Response();
         response.setStatus(SUCCESS);
         response.setDetail("More json goes here...");
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
