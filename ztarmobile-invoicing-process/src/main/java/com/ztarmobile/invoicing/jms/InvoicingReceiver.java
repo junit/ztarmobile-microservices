@@ -50,16 +50,27 @@ public class InvoicingReceiver {
     public void receiveMessage(InvoicingRequest request) {
         LOG.debug("Receiving request: " + request);
 
-        Calendar calendarFrom = Calendar.getInstance();
-        calendarFrom.setTime(request.getReportFrom());
+        Calendar calendarFrom = null;
+        Calendar calendarTo = null;
+        String product = null;
 
-        Calendar calendarTo = Calendar.getInstance();
-        calendarTo.setTime(request.getReportTo());
+        product = request.getProduct();
+        if (!request.isRunPreviousMonth()) {
+            calendarFrom = Calendar.getInstance();
+            calendarFrom.setTime(request.getReportFrom());
+
+            calendarTo = Calendar.getInstance();
+            calendarTo.setTime(request.getReportTo());
+        }
 
         try {
             // performs the invoicing stuff.
-            invoicingService.performInvoicing(calendarFrom, calendarTo, request.getProduct(),
-                    request.isRerunInvoicing());
+            if (!request.isRunPreviousMonth()) {
+                invoicingService.performInvoicing(calendarFrom, calendarTo, product, request.isRerunInvoicing());
+            } else {
+                // process the previous month.
+                invoicingService.performInvoicing(product, request.isRerunInvoicing());
+            }
         } catch (Throwable ex) {
             LOG.debug("Request did not finish correctly :( ");
             // we log the error...

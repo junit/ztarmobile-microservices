@@ -72,15 +72,28 @@ public class InvoicingServiceController {
     }
 
     /**
-     * Get all the requests available.
+     * Get all the requests.
      * 
      * @return The list of requests available.
      */
     @RequestMapping(value = "/log", method = RequestMethod.GET)
-    public Response processdInvoicing() {
-        LOG.debug("Requesting all the requests available...");
+    public Response getAllAvailableRequests() {
+        LOG.debug("Requesting all the requests...");
 
         // we just send the response to the client.
         return new Response(invoicingService.getAllAvailableRequests());
+    }
+
+    /**
+     * Get all the products.
+     * 
+     * @return The list of products.
+     */
+    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    public Response getAllAvailableProducts() {
+        LOG.debug("Requesting all the products...");
+
+        // we just send the response to the client.
+        return new Response(invoicingService.getAllAvailableProducts());
     }
 }

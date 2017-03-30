@@ -19,6 +19,7 @@ public class InvoicingRequest {
     private Date reportTo;
     private String product;
     private boolean rerunInvoicing;
+    private boolean runPreviousMonth;
 
     /**
      * @return the reportFrom
@@ -80,6 +81,21 @@ public class InvoicingRequest {
         this.rerunInvoicing = rerunInvoicing;
     }
 
+    /**
+     * @return the runPreviousMonth
+     */
+    public boolean isRunPreviousMonth() {
+        return runPreviousMonth;
+    }
+
+    /**
+     * @param runPreviousMonth
+     *            the runPreviousMonth to set
+     */
+    public void setRunPreviousMonth(boolean runPreviousMonth) {
+        this.runPreviousMonth = runPreviousMonth;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -88,7 +104,6 @@ public class InvoicingRequest {
     @Override
     public String toString() {
         return "InvoicingRequest [reportFrom=" + reportFrom + ", reportTo=" + reportTo + ", product=" + product
-                + ", rerunInvoicing=" + rerunInvoicing + "]";
+                + ", rerunInvoicing=" + rerunInvoicing + ", runPreviousMonth=" + runPreviousMonth + "]";
     }
-
 }

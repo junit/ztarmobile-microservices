@@ -90,7 +90,8 @@ public interface InvoicingService {
     void performInvoicing(int fromMonth, int toMonth, String product, boolean rerunInvoicing);
 
     /**
-     * Perform the invoicing process based on a specific product.
+     * Perform the invoicing process based on a specific product. The process
+     * will consider the previous month.
      * 
      * @param product
      *            The product.
