@@ -28,8 +28,9 @@ public class InvoicingReceiver {
      * The queue name.
      */
     public static final String INVOICING_REQ_QUEUE = "invoicing.requests";
+
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(InvoicingReceiver.class);
 
@@ -55,8 +56,15 @@ public class InvoicingReceiver {
         Calendar calendarTo = Calendar.getInstance();
         calendarTo.setTime(request.getReportTo());
 
-        // performs the invoicing stuff.
-        invoicingService.performInvoicing(calendarFrom, calendarTo, request.getProduct(), request.isRerunInvoicing());
+        try {
+            // performs the invoicing stuff.
+            invoicingService.performInvoicing(calendarFrom, calendarTo, request.getProduct(),
+                    request.isRerunInvoicing());
+        } catch (Throwable ex) {
+            LOG.debug("Request did not finish correctly :( ");
+            // we log the error...
+            LOG.error(ex);
+        }
     }
 
 }

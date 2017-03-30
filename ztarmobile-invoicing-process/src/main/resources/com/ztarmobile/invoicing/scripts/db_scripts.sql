@@ -1,3 +1,5 @@
+USE `cdrs`;
+
 # New table that stores all invoicing data.
 DROP TABLE IF EXISTS `invoicing_report_details`;
 
@@ -13,28 +15,28 @@ DROP TABLE IF EXISTS `invoicing_logger_report_file`;
 # New table that stores the log of the requests of invoicing.
 DROP TABLE IF EXISTS `invoicing_logger_requests`;
 
-CREATE TABLE `cdrs`.`invoicing_catalog_product` (
+CREATE TABLE `invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(50) NOT NULL,
   `cdma` TINYINT(1) NULL,
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `product_UNIQUE` (`product` ASC));
 
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('ANELTO_ATT', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('DATAWIND', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-CDMA', '1');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-TRAVEL', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('JOLT_ATT', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX-CDMA', '1');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX_ATT', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('REALMOBILE', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('REALMOBILE-CDMA', '1');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('STREAM_ATT', '0');
-INSERT INTO `cdrs`.`invoicing_catalog_product` (`product`, `cdma`) VALUES ('TELBILL', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('ANELTO_ATT', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('DATAWIND', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-CDMA', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-TRAVEL', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('JOLT_ATT', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX-CDMA', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX_ATT', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('REALMOBILE', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('REALMOBILE-CDMA', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('STREAM_ATT', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('TELBILL', '0');
 
 
-CREATE TABLE `cdrs`.`invoicing_report_details` (
+CREATE TABLE `invoicing_report_details` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
   `year` INT NOT NULL,
@@ -54,12 +56,12 @@ CREATE TABLE `cdrs`.`invoicing_report_details` (
   KEY `fk_invoicing_product_idx` (`product_id`),
   CONSTRAINT `fk_invoicing_product_idx`
     FOREIGN KEY (`product_id`)
-    REFERENCES `cdrs`.`invoicing_catalog_product` (`row_id`)
+    REFERENCES `invoicing_catalog_product` (`row_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
     
-CREATE TABLE `cdrs`.`invoicing_logger_cdr_file` (
+CREATE TABLE `invoicing_logger_cdr_file` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `source_file_name` VARCHAR(100) NOT NULL,
   `target_file_name` VARCHAR(100) NOT NULL,
@@ -71,7 +73,7 @@ CREATE TABLE `cdrs`.`invoicing_logger_cdr_file` (
   UNIQUE INDEX `unique_idx` (`source_file_name` ASC));
   
 
-CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
+CREATE TABLE `invoicing_logger_report_file` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
   `report_date` DATE NOT NULL,
@@ -83,7 +85,7 @@ CREATE TABLE `cdrs`.`invoicing_logger_report_file` (
   UNIQUE INDEX `unique_idx` (`product_id` ASC, `report_date` ASC));
 
 
-CREATE TABLE `cdrs`.`invoicing_logger_requests` (
+CREATE TABLE `invoicing_logger_requests` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL DEFAULT 0,
   `report_date_from` DATE NOT NULL,
