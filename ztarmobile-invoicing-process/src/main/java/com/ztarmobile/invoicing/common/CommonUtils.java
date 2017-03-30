@@ -6,6 +6,9 @@
  */
 package com.ztarmobile.invoicing.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Utility to handle some common operations.
  *
@@ -127,4 +130,21 @@ public class CommonUtils {
         return elements;
     }
 
+    /**
+     * Returns a representation of the object in JSON format.
+     * 
+     * @param object
+     *            The object.
+     * @return The string representation.
+     */
+    public static String toJson(Object object) {
+        String json = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            json = mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            invalidInput("Error while converting object into json format: " + e);
+        }
+        return json;
+    }
 }

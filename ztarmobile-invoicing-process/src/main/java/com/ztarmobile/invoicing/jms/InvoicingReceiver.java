@@ -25,6 +25,10 @@ import com.ztarmobile.invoicing.service.InvoicingService;
 @Component
 public class InvoicingReceiver {
     /**
+     * The queue name.
+     */
+    public static final String INVOICING_REQ_QUEUE = "invoicing.requests";
+    /**
      * Logger for this class
      */
     private static final Logger LOG = Logger.getLogger(InvoicingReceiver.class);
@@ -41,7 +45,7 @@ public class InvoicingReceiver {
      * @param request
      *            The request.
      */
-    @JmsListener(destination = "invoicing.requests", containerFactory = "myFactory")
+    @JmsListener(destination = INVOICING_REQ_QUEUE, containerFactory = "myFactory")
     public void receiveMessage(InvoicingRequest request) {
         LOG.debug("Receiving request: " + request);
 

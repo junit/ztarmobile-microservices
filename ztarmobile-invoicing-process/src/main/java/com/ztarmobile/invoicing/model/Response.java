@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing.model;
 
+import static com.ztarmobile.invoicing.common.CommonUtils.toJson;
+
 /**
  * Value object.
  *
@@ -18,6 +20,33 @@ public class Response {
     private int status = SUCCESS;
     private String description;
     private String detail;
+
+    /**
+     * Creates a success response with an empty body.
+     */
+    public Response() {
+        this.description = "";
+    }
+
+    /**
+     * Creates a success response with a given object.
+     * 
+     * @param response
+     *            A non null object.
+     */
+    public Response(Object response) {
+        this.description = toJson(response);
+    }
+
+    /**
+     * Creates a success response with a given string.
+     * 
+     * @param response
+     *            A non null string.
+     */
+    public Response(String response) {
+        this.description = response;
+    }
 
     /**
      * @return the status
@@ -47,6 +76,14 @@ public class Response {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(Object description) {
+        this.description = toJson(description);
     }
 
     /**

@@ -8,16 +8,13 @@ package com.ztarmobile.invoicing.controllers;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
-import static com.ztarmobile.invoicing.model.Response.SUCCESS;
+import static com.ztarmobile.invoicing.jms.InvoicingReceiver.INVOICING_REQ_QUEUE;
 
 import java.util.Date;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ztarmobile.invoicing.model.InvoicingRequest;
-import com.ztarmobile.invoicing.model.LoggerRequest;
 import com.ztarmobile.invoicing.model.Response;
 import com.ztarmobile.invoicing.service.InvoicingService;
 
@@ -39,7 +35,7 @@ import com.ztarmobile.invoicing.service.InvoicingService;
 @RequestMapping(value = "v1/invoice/report/")
 public class InvoicingServiceController {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(InvoicingServiceController.class);
 
@@ -48,16 +44,18 @@ public class InvoicingServiceController {
      */
     @Autowired
     private InvoicingService invoicingService;
-
+    /**
+     * The JSM template.
+     */
     @Autowired
     private JmsTemplate jmsTemplate;
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public ResponseEntity<?> processInvoicing(
-            @RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
+    public Response processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
             @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
             @RequestParam("product") String product, @RequestParam("rerunInvoicing") boolean rerunInvoicing) {
 
+        // we validate some inputs before sending the request to the queue
         validateInput(reportFrom, "Please provide a 'reportFrom' parameter using this format: " + MMDDYYYY);
         validateInput(reportTo, "Please provide a 'reportTo' parameter using this format: " + MMDDYYYY);
         validateInput(product, "The 'product' cannot be empty");
@@ -69,12 +67,8 @@ public class InvoicingServiceController {
         invoicingRequest.setRerunInvoicing(rerunInvoicing);
 
         // send the request to the queue
-        jmsTemplate.convertAndSend("invoicing.requests", invoicingRequest);
-
-        Response response = new Response();
-        response.setStatus(SUCCESS);
-        response.setDetail("More json goes here...");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        jmsTemplate.convertAndSend(INVOICING_REQ_QUEUE, invoicingRequest);
+        return new Response();
     }
 
     /**
@@ -83,9 +77,10 @@ public class InvoicingServiceController {
      * @return The list of requests available.
      */
     @RequestMapping(value = "/log", method = RequestMethod.GET)
-    public List<LoggerRequest> processdInvoicing() {
+    public Response processdInvoicing() {
         LOG.debug("Requesting all the requests available...");
 
-        return invoicingService.getAllAvailableRequests();
+        // we just send the response to the client.
+        return new Response(invoicingService.getAllAvailableRequests());
     }
 }
