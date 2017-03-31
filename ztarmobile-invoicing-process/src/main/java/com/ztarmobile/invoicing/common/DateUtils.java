@@ -31,6 +31,10 @@ public class DateUtils {
      */
     public static final String MEDIUM = "MMM d, yyyy hh:mm:ss a";
     /**
+     * Default timezone of the JVM
+     */
+    public static final String DEFAULT_TIMEZONE = "America/Chicago";
+    /**
      * Format used commonly by the db.
      */
     public static final String YYYYMMDD_HHMMSS = "yyyy-MM-dd HH:mm:ss";

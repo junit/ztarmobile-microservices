@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.invoicing.model;
 
+import static com.ztarmobile.invoicing.common.DateUtils.DEFAULT_TIMEZONE;
 import static com.ztarmobile.invoicing.common.DateUtils.MEDIUM;
 
 import java.util.Date;
@@ -29,7 +30,7 @@ public class LoggerRequest {
     private char status;
     private boolean availableReport;
     private String errorDescription;
-    @JsonFormat(pattern = MEDIUM)
+    @JsonFormat(pattern = MEDIUM, timezone = DEFAULT_TIMEZONE)
     private Date requestDate;
 
     /**
