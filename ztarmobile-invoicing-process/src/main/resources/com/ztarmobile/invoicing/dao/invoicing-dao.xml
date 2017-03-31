@@ -47,7 +47,7 @@
         </prop>
         <prop key="select.invoicing_report_details">
             <![CDATA[
-                SELECT row_id, year, month, mdn, rate_plan, mou, mbs, sms, mms
+                SELECT row_id, year, month, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms
                   FROM invoicing_report_details
                  WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
                    AND STR_TO_DATE(CONCAT(year, '-', month, '-', day), '%Y-%m-%d') between :init_date and :end_date 

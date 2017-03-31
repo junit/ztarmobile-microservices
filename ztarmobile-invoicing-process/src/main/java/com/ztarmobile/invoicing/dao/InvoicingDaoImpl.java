@@ -103,6 +103,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
                 vo.setMonth(rs.getInt(++rcnt));
                 vo.setMdn(rs.getString(++rcnt));
                 vo.setRatePlan(rs.getString(++rcnt));
+                vo.setDayOnPlans(rs.getInt(++rcnt));
                 vo.setMou(rs.getDouble(++rcnt));
                 vo.setMbs(rs.getDouble(++rcnt));
                 vo.setSms(rs.getDouble(++rcnt));
