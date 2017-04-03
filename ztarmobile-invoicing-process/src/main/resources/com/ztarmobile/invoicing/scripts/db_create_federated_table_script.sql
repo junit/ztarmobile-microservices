@@ -21,7 +21,7 @@ CREATE TABLE `invoicing_ztar_test_accounts` (
   `creation_date` datetime NOT NULL COMMENT 'Date when this mdn was created',
   PRIMARY KEY (`row_id`),
   KEY `mdn_idx` (`mdn`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
+) ENGINE=FEDERATED DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
 
 CREATE TABLE `invoicing_ztar_account_subscribers` (
   `row_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -34,7 +34,7 @@ CREATE TABLE `invoicing_ztar_account_subscribers` (
   KEY `mdn_index` (`mdn`),
   KEY `uan_index` (`uan`),
   KEY `idx_mdn_uan` (`uan`,`mdn`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
+) ENGINE=FEDERATED DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
 
 CREATE TABLE `invoicing_ztar_us_rate_plan_billing` (
   `row_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -48,7 +48,7 @@ CREATE TABLE `invoicing_ztar_us_rate_plan_billing` (
   `billing_end_date` datetime DEFAULT NULL,
   PRIMARY KEY (`row_id`),
   KEY `urpb_mdn` (`mdn`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
+) ENGINE=FEDERATED DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
 
 CREATE TABLE `invoicing_ztar_scythe_notes` (
   `note_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -60,4 +60,4 @@ CREATE TABLE `invoicing_ztar_scythe_notes` (
   `note_text` text NOT NULL,
   PRIMARY KEY (`note_id`),
   KEY `scynotes` (`uan`,`market`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
+) ENGINE=FEDERATED DEFAULT CHARSET=latin1 CONNECTION='fedlink/test_accounts';
