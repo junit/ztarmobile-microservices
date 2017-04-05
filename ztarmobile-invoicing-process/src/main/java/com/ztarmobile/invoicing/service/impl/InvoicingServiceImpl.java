@@ -261,15 +261,42 @@ public class InvoicingServiceImpl implements InvoicingService {
                 LOG.warn("There's one or more invocie requests in " + PROGRESS + " status...");
             }
         } catch (Throwable ex) {
-            ex.printStackTrace();
-            LOG.fatal(ex);
-            // we save the error
-            loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, ERROR,
-                    ex.toString());
-            // we re throw the exception
+            // we handle the error...
+            handleExceptionError(ex, id, product, start.getTime(), end.getTime());
+            // now we re throw the exception to the caller method
             throw ex;
         }
         LOG.debug("<< Ending invoicing process");
+    }
+
+    /**
+     * After getting the exception, we handle differently based on the type so
+     * that can be fixed.
+     * 
+     * @param ex
+     *            The generic exception.
+     * @param id
+     *            The identifier of the transaction.
+     * @param product
+     *            The product description.
+     * @param end
+     *            The end date.
+     * @param start
+     *            The start date.
+     */
+    private void handleExceptionError(Throwable ex, long id, String product, Date start, Date end) {
+        String friendlyError = null;
+        if (ex instanceof IllegalArgumentException) {
+            // it was a validation error
+            LOG.error(ex);
+            friendlyError = ex.getMessage() == null ? "Unknown Error" : ex.getMessage();
+        } else {
+            // it was an unknown error and needs to be fixed inmediately.
+            LOG.fatal(ex);
+            friendlyError = "An unexpected error has occured";
+        }
+        // we save the error
+        loggerDao.saveOrUpdateInvoiceProcessed(id, product, start, end, 0, ERROR, ex.toString(), friendlyError);
     }
 
     /**

@@ -211,7 +211,8 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     public long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
             long totalTime, LoggerStatus status) {
         // call the overloaded version
-        return this.saveOrUpdateInvoiceProcessed(rowId, product, reportDateFrom, reportDateTo, totalTime, status, null);
+        return this.saveOrUpdateInvoiceProcessed(rowId, product, reportDateFrom, reportDateTo, totalTime, status, null,
+                null);
     }
 
     /**
@@ -219,7 +220,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
      */
     @Override
     public long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
-            long totalTime, LoggerStatus status, String errorDescription) {
+            long totalTime, LoggerStatus status, String errorDescription, String friendlyErrorDescription) {
         LOG.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
 
         boolean isInsert = rowId == 0;
@@ -233,6 +234,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
         params.put("total_time", String.valueOf(totalTime));
         params.put("status", String.valueOf(status.getStatusVal()));
         params.put("error_description", errorDescription);
+        params.put("friendly_error_description", friendlyErrorDescription);
 
         if (isInsert) {
             // we return the generated id after the insertion is done.

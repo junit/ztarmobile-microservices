@@ -133,7 +133,7 @@ public interface LoggerDao {
      * @return The new generated id if it was an insert operation or the amount
      *         of records updated when the operation was update.
      * @see LoggerDao#saveOrUpdateInvoiceProcessed(long, String, Date, Date,
-     *      long, LoggerStatus, String)
+     *      long, LoggerStatus, String, String)
      */
     long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
             long totalTime, LoggerStatus status);
@@ -157,13 +157,16 @@ public interface LoggerDao {
      *            The status of the process.
      * @param errorDescription
      *            Error description.
+     * @param friendlyErrorDescription
+     *            A friendly error description with a real non thecnical
+     *            meaning.
      * @return The new generated id if it was an insert operation or the amount
      *         of records updated when the operation was update.
      * @see LoggerDao#saveOrUpdateInvoiceProcessed(long, String, Date, Date,
      *      long, LoggerStatus)
      */
     long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
-            long totalTime, LoggerStatus status, String errorDescription);
+            long totalTime, LoggerStatus status, String errorDescription, String friendlyErrorDescription);
 
     /**
      * Get a list of all the transactions made/requested when the invoicing

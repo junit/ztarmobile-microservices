@@ -93,6 +93,7 @@ CREATE TABLE `invoicing_logger_requests` (
   `total_time` BIGINT NOT NULL,
   `status` ENUM ('P', 'C', 'E') NOT NULL COMMENT 'P = Progress, C = Completed, E = Error',
   `error_description` LONGTEXT COMMENT 'This column is populated when the status is E',
+  `friendly_error_description` VARCHAR(200) COMMENT 'This column is populated when the status is E',
   `request_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`)
   );

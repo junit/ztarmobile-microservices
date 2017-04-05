@@ -49,24 +49,24 @@
         </prop>
         <prop key="insert.logger_request.with.product">
             <![CDATA[
-                INSERT INTO invoicing_logger_requests (product_id, report_date_from, report_date_to, total_time, status, error_description)
-                VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date_from, :report_date_to, :total_time, :status, :error_description)    
+                INSERT INTO invoicing_logger_requests (product_id, report_date_from, report_date_to, total_time, status, error_description, friendly_error_description)
+                VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date_from, :report_date_to, :total_time, :status, :error_description, :friendly_error_description)    
             ]]>
         </prop>
         <prop key="insert.logger_request.no.product">
             <![CDATA[
-                INSERT INTO invoicing_logger_requests (report_date_from, report_date_to, total_time, status, error_description)
-                VALUES (:report_date_from, :report_date_to, :total_time, :status, :error_description)    
+                INSERT INTO invoicing_logger_requests (report_date_from, report_date_to, total_time, status, error_description, friendly_error_description)
+                VALUES (:report_date_from, :report_date_to, :total_time, :status, :error_description, :friendly_error_description)    
             ]]>
         </prop>
         <prop key="update.logger_request">
             <![CDATA[
-                UPDATE invoicing_logger_requests SET total_time = :total_time, status = :status, error_description = :error_description WHERE row_id = :row_id
+                UPDATE invoicing_logger_requests SET total_time = :total_time, status = :status, error_description = :error_description, friendly_error_description = :friendly_error_description WHERE row_id = :row_id
             ]]>
         </prop>
         <prop key="select.logger_request">
             <![CDATA[
-                SELECT row_id, (SELECT icp.product FROM invoicing_catalog_product icp WHERE icp.row_id = product_id) AS product, report_date_from, report_date_to, total_time, status, error_description, request_date
+                SELECT row_id, (SELECT icp.product FROM invoicing_catalog_product icp WHERE icp.row_id = product_id) AS product, report_date_from, report_date_to, total_time, status, friendly_error_description, request_date
                   FROM invoicing_logger_requests
                  ORDER BY request_date desc
                  LIMIT :max_records
