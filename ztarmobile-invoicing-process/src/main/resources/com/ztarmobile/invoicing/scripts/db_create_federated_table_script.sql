@@ -1,5 +1,7 @@
 # Creates the connection to the remote database;
 
+DROP SERVER IF EXISTS `fedlink`;
+
 CREATE SERVER fedlink
 FOREIGN DATA WRAPPER mysql
 OPTIONS (USER 'root', HOST '127.0.0.1', PASSWORD 'ztar11', PORT 3306, DATABASE 'ztar');
