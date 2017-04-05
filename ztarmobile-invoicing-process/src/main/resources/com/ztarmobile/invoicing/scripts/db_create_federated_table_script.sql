@@ -2,7 +2,7 @@
 
 CREATE SERVER fedlink
 FOREIGN DATA WRAPPER mysql
-OPTIONS (USER 'root', HOST 'localhost', PASSWORD 'ztar11', PORT 3306, DATABASE 'ztar');
+OPTIONS (USER 'root', HOST '127.0.0.1', PASSWORD 'ztar11', PORT 3306, DATABASE 'ztar');
 
 USE `cdrs`;
 
@@ -54,7 +54,7 @@ CREATE TABLE `invoicing_ztar_scythe_notes` (
   `note_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uan` bigint(20) NOT NULL,
   `market` varchar(20) NOT NULL DEFAULT '',
-  `note_timestamp` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `note_timestamp` datetime NOT NULL,
   `note_created_by` varchar(45) NOT NULL DEFAULT '',
   `note_title` varchar(45) NOT NULL DEFAULT '',
   `note_text` text NOT NULL,
