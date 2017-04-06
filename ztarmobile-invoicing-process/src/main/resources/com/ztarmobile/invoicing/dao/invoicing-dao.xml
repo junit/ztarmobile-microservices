@@ -51,6 +51,7 @@
                   FROM invoicing_report_details
                  WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
                    AND STR_TO_DATE(CONCAT(year, '-', month, '-', day), '%Y-%m-%d') between :init_date and :end_date 
+              ORDER BY mdn, rate_plan -- make sure we have the right order as the old reports.
             ]]>
         </prop>
     </util:properties>
