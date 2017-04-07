@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS `invoicing_logger_requests`;
 CREATE TABLE `invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(50) NOT NULL,
-  `cdma` TINYINT(1) NULL,
+  `cdma` TINYINT(1) NULL COMMENT 'Is this a cmda version? (sprint)',
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `product_UNIQUE` (`product` ASC));
 
@@ -27,6 +27,7 @@ INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('DATAWIND', 
 INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS', '0');
 INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-CDMA', '1');
 INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-TRAVEL', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('JOLT-CDMA', '1');
 INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('JOLT_ATT', '0');
 INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX-CDMA', '1');
 INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX_ATT', '0');
