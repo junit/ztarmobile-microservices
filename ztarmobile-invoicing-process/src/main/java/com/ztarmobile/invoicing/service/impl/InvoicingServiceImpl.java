@@ -234,21 +234,21 @@ public class InvoicingServiceImpl implements InvoicingService {
                 long startTime = System.currentTimeMillis();
                 LOG.debug("CDR files to be processed => " + (catalogProduct.isCdma() ? "SPRINT" : "ERICSSON"));
 
-                LOG.debug("==================> 0. preparing data <==================================");
+                LOG.debug("==================> 0. [" + product + "] preparing data <================================");
                 CdrFileService cdrFileService = catalogProduct.isCdma() ? sprintCdrFileService : ericssonCdrFileService;
                 ((AbstractDefaultService) cdrFileService).setReProcess(rerunInvoicing);
                 cdrFileService.extractCdrs(start, end);
 
-                LOG.debug("==================> 1. create_reseller_allocations <=====================");
+                LOG.debug("==================> 1. [" + product + "] create_reseller_allocations <===================");
                 ((AbstractDefaultService) allocationsService).setReProcess(rerunInvoicing);
                 allocationsService.createAllocations(start, end, product);
 
-                LOG.debug("==================> 2. create_reseller_usage <=====================");
+                LOG.debug("==================> 2. [" + product + "] create_reseller_usage <=========================");
                 ResellerUsageService usageService = catalogProduct.isCdma() ? sprintUsageService : ericssonUsageService;
                 ((AbstractDefaultService) usageService).setReProcess(rerunInvoicing);
                 usageService.createUsage(start, end, product);
 
-                LOG.debug("==================> 3. create_invoicing_details <=====================");
+                LOG.debug("==================> 3. [" + product + "] create_invoicing_details <======================");
                 // finally, create the data so that we can use later
                 this.createInvoicingDetails(start, end, product);
                 long endTime = System.currentTimeMillis();

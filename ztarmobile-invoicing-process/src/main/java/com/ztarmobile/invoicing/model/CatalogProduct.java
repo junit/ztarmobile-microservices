@@ -84,22 +84,29 @@ public class CatalogProduct {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         CatalogProduct other = (CatalogProduct) obj;
-        if (cdma != other.cdma)
+        if (cdma != other.cdma) {
             return false;
+        }
         if (product == null) {
-            if (other.product != null)
+            if (other.product != null) {
                 return false;
-        } else if (!product.equals(other.product))
+            }
+        } else if (!product.equals(other.product)) {
             return false;
-        if (rowId != other.rowId)
+        }
+        if (rowId != other.rowId) {
             return false;
+        }
         return true;
     }
 

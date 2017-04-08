@@ -48,9 +48,6 @@ public class InvoicingScheduledTask {
 
     /**
      * This method receives the request from the queue and process it.
-     * 
-     * @param request
-     *            The request.
      */
     @Scheduled(cron = "${invoice.report.cron}")
     public void scheduleMonthlyInvoice() {

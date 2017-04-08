@@ -93,6 +93,15 @@ public class InvoicingServiceController {
 
     /**
      * Gets an stream to download a requested invoice file.
+     * 
+     * @param response
+     *            The HTTP response.
+     * @param reportFrom
+     *            The report from.
+     * @param reportTo
+     *            The report to.
+     * @param product
+     *            The product description.
      */
     @RequestMapping(value = "/report/download", method = RequestMethod.GET, produces = { "text/csv" })
     public void getFileStreamingOutput(HttpServletResponse response,
