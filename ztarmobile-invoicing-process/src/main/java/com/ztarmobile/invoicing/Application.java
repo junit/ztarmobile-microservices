@@ -21,6 +21,7 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -34,6 +35,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ImportResource({ "classpath:com/ztarmobile/invoicing/springframework/applicationContext.xml",
         "classpath*:com/ztarmobile/invoicing/springframework/**/*-config.xml",
         "classpath*:com/ztarmobile/invoicing/**/*-dao.xml" })
+@EnableAsync
 @EnableJms
 @EnableScheduling
 public class Application {
