@@ -16,6 +16,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import com.ztarmobile.invoicing.model.EmailAttachment;
 import com.ztarmobile.invoicing.model.EmailNotification;
@@ -41,6 +43,12 @@ public class InvoicingMailSender {
     private JavaMailSender mailSender;
 
     /**
+     * The template engine.
+     */
+    @Autowired
+    private SpringTemplateEngine templateEngine;
+
+    /**
      * Sends the email asynchronously
      * 
      * @param email
@@ -49,6 +57,9 @@ public class InvoicingMailSender {
     @Async
     public void sendEmail(EmailNotification email) {
         LOG.debug("Sending email to: " + email.getTo());
+
+        // create the message body...
+        createMessageBody(email);
 
         MimeMessage message = mailSender.createMimeMessage();
         int totalAttachments = 0;
@@ -70,6 +81,25 @@ public class InvoicingMailSender {
             LOG.debug("Email sent succesfully to: " + email.getTo() + ", with " + totalAttachments + " attachments");
         } catch (MessagingException e) {
             LOG.warn("Unable to send email: " + e);
+        }
+    }
+
+    /**
+     * Creates a message body.
+     * 
+     * @param email
+     *            The email parameters.
+     */
+    private void createMessageBody(EmailNotification email) {
+        if (email.getMessageBody() == null) {
+            // creates the body based on a template.
+            final Context ctx = new Context();
+            ctx.setVariable("nome", "mi Peke");
+            ctx.setVariable("obra", "sddssdds");
+
+            final String htmlContent = this.templateEngine.process("invoicing", ctx);
+            // overrides the content of the body...
+            email.setMessageBody(htmlContent);
         }
     }
 }

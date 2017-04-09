@@ -13,8 +13,8 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ztarmobile.invoicing.model.CatalogProduct;
 import com.ztarmobile.invoicing.model.LoggerRequest;
@@ -25,10 +25,8 @@ import com.ztarmobile.invoicing.service.InvoicingService;
  *
  * @author armandorivas
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:com/ztarmobile/invoicing/springframework/applicationContext.xml",
-        "classpath*:com/ztarmobile/invoicing/springframework/**/*-config.xml",
-        "classpath*:com/ztarmobile/invoicing/**/*-dao.xml" })
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class InvoicingServiceTest {
     /**
      * Logger for this class

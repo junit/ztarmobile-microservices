@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class EmailNotification {
     private String to;
-    private String from;
-    private String subject;
+    private String from = "admin@good2gomobile.com";
+    private String subject = "Here's your Invoicing Report";
     private String messageBody;
     private List<EmailAttachment> content;
 
