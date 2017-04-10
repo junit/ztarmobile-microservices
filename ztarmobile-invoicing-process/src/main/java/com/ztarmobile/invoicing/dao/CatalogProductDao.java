@@ -8,7 +8,9 @@ package com.ztarmobile.invoicing.dao;
 
 import java.util.List;
 
+import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailProductNotification;
 
 /**
  * DAO to handle the operations for the products.
@@ -34,4 +36,13 @@ public interface CatalogProductDao {
      *         were found.
      */
     List<CatalogProduct> getCatalogProduct();
+
+    /**
+     * Get all products by email notification.
+     * 
+     * @param email
+     *            The email.
+     * @return All the products by notification.
+     */
+    List<EmailProductNotification> getProductsByEmail(CatalogEmail email);
 }

@@ -12,7 +12,11 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.ztarmobile.invoicing.email.InvoicingMailSender;
+import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailNotification;
+import com.ztarmobile.invoicing.model.EmailProductNotification;
 import com.ztarmobile.invoicing.model.InvoicingRequest;
 import com.ztarmobile.invoicing.service.InvoicingService;
 
@@ -47,6 +51,12 @@ public class InvoicingScheduledTask {
     private InvoicingService invoicingService;
 
     /**
+     * Dependency to send notifications.
+     */
+    @Autowired
+    private InvoicingMailSender invoicingMailSender;
+
+    /**
      * This method receives the request from the queue and process it.
      */
     @Scheduled(cron = "${invoice.report.cron}")
@@ -62,6 +72,35 @@ public class InvoicingScheduledTask {
 
             // send the request to the queue
             jmsTemplate.convertAndSend(INVOICING_REQ_QUEUE, invoicingRequest);
+        }
+    }
+
+    /**
+     * This method sends notifications.
+     */
+    @Scheduled(cron = "${invoice.notification.cron}")
+    public void scheduleNotificationInvoice() {
+        LOG.debug("Sending invoicing notifications...");
+
+        for (CatalogEmail catalogEmail : invoicingService.getAllAvailableEmails()) {
+            LOG.debug("Sending notification: " + catalogEmail);
+            boolean sendEmail = false;
+            for (EmailProductNotification notification : invoicingService.getAllProductsByEmail(catalogEmail)) {
+                // only notifies those ones enabled
+                if (notification.isNotificationEnabled()) {
+                    // at least one report is available..., we send email
+                    sendEmail = true;
+                }
+            }
+            if (sendEmail) {
+                String fullName = catalogEmail.getFirstName() + " " + catalogEmail.getLastName();
+
+                // we notify the user...
+                EmailNotification notification = new EmailNotification();
+                notification.setTo(catalogEmail.getEmail());
+                notification.setReceiptName(fullName);
+                invoicingMailSender.sendEmail(notification);
+            }
         }
     }
 }

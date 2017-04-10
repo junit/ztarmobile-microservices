@@ -25,10 +25,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ztarmobile.invoicing.common.MontlyTime;
+import com.ztarmobile.invoicing.dao.CatalogEmailDao;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
 import com.ztarmobile.invoicing.dao.InvoicingDao;
 import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailProductNotification;
 import com.ztarmobile.invoicing.model.LoggerRequest;
 import com.ztarmobile.invoicing.model.ReportDetails;
 import com.ztarmobile.invoicing.service.AbstractDefaultService;
@@ -62,6 +65,12 @@ public class InvoicingServiceImpl implements InvoicingService {
      */
     @Autowired
     private CatalogProductDao catalogProductDao;
+
+    /**
+     * DAO dependency for the email's.
+     */
+    @Autowired
+    private CatalogEmailDao catalogEmailDao;
 
     /**
      * DAO dependency for the logger process.
@@ -190,6 +199,24 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
+    public List<CatalogEmail> getAllAvailableEmails() {
+        // gets all the available email's.
+        return catalogEmailDao.getCatalogEmail();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<EmailProductNotification> getAllProductsByEmail(CatalogEmail email) {
+        // gets all the products by email.
+        return catalogProductDao.getProductsByEmail(email);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<LoggerRequest> getAllAvailableRequests() {
         // gets all the available requests.
         return loggerDao.getInvoiceProcessed(500);
@@ -291,7 +318,7 @@ public class InvoicingServiceImpl implements InvoicingService {
             LOG.error(ex);
             friendlyError = ex.getMessage() == null ? "Unknown Error" : ex.getMessage();
         } else {
-            // it was an unknown error and needs to be fixed inmediately.
+            // it was an unknown error and needs to be fixed immediately.
             LOG.fatal(ex);
             friendlyError = "An unexpected error has occured";
         }
@@ -331,5 +358,4 @@ public class InvoicingServiceImpl implements InvoicingService {
             invoicingDao.saveInvoicing(start.getTime(), end.getTime(), product);
         }
     }
-
 }

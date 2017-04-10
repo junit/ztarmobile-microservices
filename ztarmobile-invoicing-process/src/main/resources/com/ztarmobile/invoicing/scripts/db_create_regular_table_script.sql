@@ -3,6 +3,9 @@ USE `cdrs`;
 # New table that stores all invoicing data.
 DROP TABLE IF EXISTS `invoicing_report_details`;
 
+# New table to store the relation between email and products
+DROP TABLE IF EXISTS `invoicing_email2product`;
+
 # New table that stores all the products.
 DROP TABLE IF EXISTS `invoicing_catalog_product`;
 
@@ -14,6 +17,9 @@ DROP TABLE IF EXISTS `invoicing_logger_report_file`;
 
 # New table that stores the log of the requests of invoicing.
 DROP TABLE IF EXISTS `invoicing_logger_requests`;
+
+# New table that stores all the e-mails.
+DROP TABLE IF EXISTS `invoicing_catalog_email`;
 
 CREATE TABLE `invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
@@ -98,3 +104,32 @@ CREATE TABLE `invoicing_logger_requests` (
   `request_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`row_id`)
   );
+  
+CREATE TABLE `invoicing_catalog_email` (
+  `row_id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(100) NOT NULL,
+  `first_name` VARCHAR(100) NOT NULL,
+  `last_name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`row_id`)
+  );
+
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('rivasarmando271084@icloud.com', 'Armando', 'Rivas');
+
+CREATE TABLE `invoicing_email2product` (
+  `row_id` INT NOT NULL AUTO_INCREMENT,
+  `email_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `notification_enabled` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`row_id`),
+  INDEX `row_id_idx` (`email_id` ASC),
+  INDEX `product_id_idx` (`product_id` ASC),
+  CONSTRAINT `fk_email_id`
+    FOREIGN KEY (`email_id`)
+    REFERENCES `invoicing_catalog_email` (`row_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_product_id`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `invoicing_catalog_product` (`row_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

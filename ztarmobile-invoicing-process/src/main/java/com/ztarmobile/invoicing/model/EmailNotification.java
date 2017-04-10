@@ -19,6 +19,7 @@ public class EmailNotification {
     private String from = "admin@good2gomobile.com";
     private String subject = "Here's your Invoicing Report";
     private String messageBody;
+    private String receiptName;
     private List<EmailAttachment> content;
 
     /**
@@ -82,6 +83,21 @@ public class EmailNotification {
     }
 
     /**
+     * @return the receiptName
+     */
+    public String getReceiptName() {
+        return receiptName;
+    }
+
+    /**
+     * @param receiptName
+     *            the receiptName to set
+     */
+    public void setReceiptName(String receiptName) {
+        this.receiptName = receiptName;
+    }
+
+    /**
      * @return the content
      */
     public List<EmailAttachment> getContent() {
@@ -104,6 +120,6 @@ public class EmailNotification {
     @Override
     public String toString() {
         return "EmailNotification [to=" + to + ", from=" + from + ", subject=" + subject + ", messageBody="
-                + messageBody + ", content=" + content + "]";
+                + messageBody + ", receiptName=" + receiptName + ", content=" + content + "]";
     }
 }

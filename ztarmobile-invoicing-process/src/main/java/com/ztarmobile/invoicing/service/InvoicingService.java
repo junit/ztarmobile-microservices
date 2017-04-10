@@ -10,7 +10,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailProductNotification;
 import com.ztarmobile.invoicing.model.LoggerRequest;
 import com.ztarmobile.invoicing.model.ReportDetails;
 
@@ -148,9 +150,25 @@ public interface InvoicingService {
     List<CatalogProduct> getAllAvailableProducts();
 
     /**
+     * Gets all the existing email's.
+     * 
+     * @return The list of all the email's or an empty list where no email's
+     *         were found.
+     */
+    List<CatalogEmail> getAllAvailableEmails();
+
+    /**
+     * Gets all the products by email.
+     * 
+     * @return The list of all the products by email or an empty list where no
+     *         products were found.
+     */
+    List<EmailProductNotification> getAllProductsByEmail(CatalogEmail email);
+
+    /**
      * Gets all the existing invoicing requests.
      * 
-     * @return The list of all the requets or an empty list where no request
+     * @return The list of all the requests or an empty list where no request
      *         were found.
      */
     List<LoggerRequest> getAllAvailableRequests();

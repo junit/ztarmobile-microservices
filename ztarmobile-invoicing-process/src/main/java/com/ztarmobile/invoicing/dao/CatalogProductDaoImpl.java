@@ -21,7 +21,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailProductNotification;
 
 /**
  * Direct DAO Implementation.
@@ -74,19 +76,51 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
         return this.getJdbc().query(sql, new CatalogProductRowMapper());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<EmailProductNotification> getProductsByEmail(CatalogEmail email) {
+        LOG.debug("Getting all the products by email");
+        String sql = sqlStatements.getProperty("select.products_by_email");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("product_id", String.valueOf(email.getRowId()));
+        return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<EmailProductNotification>() {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public EmailProductNotification mapRow(ResultSet rs, int rowNum) throws SQLException {
+                EmailProductNotification vo = new EmailProductNotification();
+                int rcnt = 0;
+                vo.setRowId(rs.getLong(++rcnt));
+
+                CatalogProduct product = new CatalogProduct();
+                product.setRowId(rs.getLong(++rcnt));
+                product.setProduct(rs.getString(++rcnt));
+                product.setCdma(rs.getBoolean(++rcnt));
+
+                vo.setCatalogProduct(product);
+                vo.setNotificationEnabled(rs.getBoolean(++rcnt));
+                return vo;
+            }
+        });
+    }
+
     class CatalogProductRowMapper implements RowMapper<CatalogProduct> {
         /**
          * {@inheritDoc}
          */
         @Override
         public CatalogProduct mapRow(ResultSet rs, int rowNum) throws SQLException {
-            CatalogProduct vo = new CatalogProduct();
+            CatalogProduct product = new CatalogProduct();
             int rcnt = 0;
-            vo.setRowId(rs.getLong(++rcnt));
-            vo.setProduct(rs.getString(++rcnt));
-            vo.setCdma(rs.getBoolean(++rcnt));
+            product.setRowId(rs.getLong(++rcnt));
+            product.setProduct(rs.getString(++rcnt));
+            product.setCdma(rs.getBoolean(++rcnt));
 
-            return vo;
+            return product;
         }
     }
 }

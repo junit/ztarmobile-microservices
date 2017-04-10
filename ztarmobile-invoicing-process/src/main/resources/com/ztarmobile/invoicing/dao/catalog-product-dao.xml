@@ -22,6 +22,14 @@
                 ORDER BY product
             ]]>
         </prop>
+        <prop key="select.products_by_email">
+            <![CDATA[
+                SELECT i.row_id, p.row_id AS product_id, p.product, p.cdma, i.notification_enabled
+                  FROM invoicing_email2product i, invoicing_catalog_product p
+                 WHERE p.row_id = i.product_id AND i.email_id = :email_id
+              ORDER BY p.product
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>

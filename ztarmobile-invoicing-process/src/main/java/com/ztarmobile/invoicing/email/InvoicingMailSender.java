@@ -94,8 +94,7 @@ public class InvoicingMailSender {
         if (email.getMessageBody() == null) {
             // creates the body based on a template.
             final Context ctx = new Context();
-            ctx.setVariable("nome", "mi Peke");
-            ctx.setVariable("obra", "sddssdds");
+            ctx.setVariable("name", email.getReceiptName());
 
             final String htmlContent = this.templateEngine.process("invoicing", ctx);
             // overrides the content of the body...
