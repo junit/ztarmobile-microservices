@@ -308,10 +308,10 @@ public class ResellerSubsUsage {
     }
 
     /**
-     * Compare if the mdn, and call date matches that of this object.
+     * Compare if the MDN, and call date matches that of this object.
      * 
      * @param mdn
-     *            The mdn.
+     *            The MDN.
      * @param callDate
      *            The call date under this format yyyyMMdd
      * @return true if it's the same or false it that does not match.

@@ -114,6 +114,13 @@ CREATE TABLE `invoicing_catalog_email` (
   );
 
 INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('rivasarmando271084@icloud.com', 'Armando', 'Rivas');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('arivas@ztarmobile.com', 'Armando', 'Rivas');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('yjoyas@ztarmobile.com', 'Yael', 'Joyas');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('khaddad@ztarmobile.com', 'Kevin', 'Haddad');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('lkorte@ztarmobile.com', 'Lisa', 'Korte');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('csepmoree@ztarmobile.com', 'Cheryl', 'Sepmoree');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('driewski@ztarmobile.com', 'Douglas', 'Riewski');
+INSERT INTO `invoicing_catalog_email` (`email`, `first_name`, `last_name`) VALUES ('matt_callahan@ztarmobile.com', 'Matt', 'Callahan');
 
 CREATE TABLE `invoicing_email2product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
@@ -133,3 +140,17 @@ CREATE TABLE `invoicing_email2product` (
     REFERENCES `invoicing_catalog_product` (`row_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '1', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '2', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '3', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '4', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '5', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '6', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '7', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '8', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '9', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '10', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '11', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '12', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '13', '1');

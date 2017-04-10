@@ -6,6 +6,17 @@
  */
 package com.ztarmobile.invoicing.tasks;
 
+import static com.ztarmobile.invoicing.common.DateUtils.getMaximumDayOfMonth;
+import static com.ztarmobile.invoicing.common.DateUtils.getMinimunDayOfMonth;
+import static com.ztarmobile.invoicing.common.ReportHelper.createHeader;
+import static com.ztarmobile.invoicing.common.ReportHelper.createReportName;
+import static com.ztarmobile.invoicing.common.ReportHelper.createRow;
+import static java.util.Calendar.MONTH;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -15,13 +26,15 @@ import org.springframework.stereotype.Component;
 import com.ztarmobile.invoicing.email.InvoicingMailSender;
 import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailAttachment;
 import com.ztarmobile.invoicing.model.EmailNotification;
 import com.ztarmobile.invoicing.model.EmailProductNotification;
 import com.ztarmobile.invoicing.model.InvoicingRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
 import com.ztarmobile.invoicing.service.InvoicingService;
 
 /**
- * Performs an schedule task to create the montly reports.
+ * Performs an schedule task to create the monthly reports.
  *
  * @author armandorivas
  * @since 03/30/17
@@ -82,12 +95,33 @@ public class InvoicingScheduledTask {
     public void scheduleNotificationInvoice() {
         LOG.debug("Sending invoicing notifications...");
 
+        // calculates the previous month.
+        int previousMonth = Calendar.getInstance().get(MONTH) - 1;
+        Calendar start = getMinimunDayOfMonth(previousMonth);
+        Calendar end = getMaximumDayOfMonth(previousMonth);
+
         for (CatalogEmail catalogEmail : invoicingService.getAllAvailableEmails()) {
             LOG.debug("Sending notification: " + catalogEmail);
+
             boolean sendEmail = false;
+            String product = null;
+            List<EmailAttachment> attachments = new ArrayList<>();
+
             for (EmailProductNotification notification : invoicingService.getAllProductsByEmail(catalogEmail)) {
+                product = notification.getCatalogProduct().getProduct();
                 // only notifies those ones enabled
                 if (notification.isNotificationEnabled()) {
+                    StringBuilder sb = new StringBuilder(createHeader());
+
+                    for (ReportDetails detail : invoicingService.generateReport(product, start, end)) {
+                        // creates the content of the attachment
+                        sb.append(createRow(detail));
+                    }
+
+                    EmailAttachment report = new EmailAttachment();
+                    report.setName(createReportName(product, start, end));
+                    report.setContent(sb.toString().getBytes());
+                    attachments.add(report);
                     // at least one report is available..., we send email
                     sendEmail = true;
                 }
@@ -99,7 +133,10 @@ public class InvoicingScheduledTask {
                 EmailNotification notification = new EmailNotification();
                 notification.setTo(catalogEmail.getEmail());
                 notification.setReceiptName(fullName);
+                notification.setContent(attachments);
                 invoicingMailSender.sendEmail(notification);
+            } else {
+                LOG.warn("No email was sent...");
             }
         }
     }

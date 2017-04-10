@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing.controllers;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
+import static com.ztarmobile.invoicing.common.ReportHelper.createHeader;
+import static com.ztarmobile.invoicing.common.ReportHelper.createReportName;
+import static com.ztarmobile.invoicing.common.ReportHelper.createRow;
 import static com.ztarmobile.invoicing.jms.InvoicingReceiver.INVOICING_REQ_QUEUE;
 
 import java.io.IOException;
@@ -45,14 +48,13 @@ public class InvoicingServiceController {
      * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(InvoicingServiceController.class);
-    private static final String BL = "\n";
-    private static final String COMMA = ",";
 
     /**
      * Dependency of the invoicing service.
      */
     @Autowired
     private InvoicingService invoicingService;
+
     /**
      * The JSM template.
      */
@@ -123,15 +125,15 @@ public class InvoicingServiceController {
 
         List<ReportDetails> list = invoicingService.generateReport(product, calendarFrom, calendarTo);
         OutputStream outputStream = null;
-        String fileName = "download.csv";
+        String fileName = createReportName(product, calendarFrom, calendarTo);
         try {
             response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
             int totalDownloaded = 0;
             outputStream = response.getOutputStream();
-            outputStream.write(createHeader());
+            outputStream.write(createHeader().getBytes());
             for (ReportDetails detail : list) {
-                outputStream.write(createRow(detail));
+                outputStream.write(createRow(detail).getBytes());
                 totalDownloaded++;
             }
             outputStream.flush();
@@ -178,63 +180,5 @@ public class InvoicingServiceController {
         validateInput(reportFrom, "Please provide a 'reportFrom' parameter using this format: " + MMDDYYYY);
         validateInput(reportTo, "Please provide a 'reportTo' parameter using this format: " + MMDDYYYY);
         validateInput(product, "The 'product' cannot be empty");
-    }
-
-    /**
-     * Based on an object it creates a single row in the report.
-     *
-     * @param vo
-     *            The single object.
-     * @return The array of bytes.
-     */
-    private byte[] createRow(ReportDetails vo) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(vo.getYear());
-        sb.append(COMMA);
-        sb.append(vo.getMonth());
-        sb.append(COMMA);
-        sb.append(vo.getMdn());
-        sb.append(COMMA);
-        sb.append(vo.getRatePlan());
-        sb.append(COMMA);
-        sb.append(vo.getDayOnPlans());
-        sb.append(COMMA);
-        sb.append(vo.getMou());
-        sb.append(COMMA);
-        sb.append(vo.getMbs());
-        sb.append(COMMA);
-        sb.append(vo.getSms());
-        sb.append(COMMA);
-        sb.append(vo.getMms());
-        sb.append(BL);
-        return sb.toString().getBytes();
-    }
-
-    /**
-     * Creates the header of the report.
-     *
-     * @return The array of bytes.
-     */
-    private byte[] createHeader() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Year");
-        sb.append(COMMA);
-        sb.append("Month");
-        sb.append(COMMA);
-        sb.append("MDN");
-        sb.append(COMMA);
-        sb.append("Rate-Plan");
-        sb.append(COMMA);
-        sb.append("Days-On-Plan");
-        sb.append(COMMA);
-        sb.append("Actual-MOU");
-        sb.append(COMMA);
-        sb.append("Actual-MBS");
-        sb.append(COMMA);
-        sb.append("Actual-SMS");
-        sb.append(COMMA);
-        sb.append("Actual-MMS");
-        sb.append(BL);
-        return sb.toString().getBytes();
     }
 }

@@ -160,6 +160,8 @@ public interface InvoicingService {
     /**
      * Gets all the products by email.
      * 
+     * @param email
+     *            The email.
      * @return The list of all the products by email or an empty list where no
      *         products were found.
      */

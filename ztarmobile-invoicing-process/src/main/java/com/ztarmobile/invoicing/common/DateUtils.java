@@ -189,8 +189,8 @@ public class DateUtils {
      */
     public static Calendar getMaximumDayOfMonth(int month) {
         Calendar calendar = Calendar.getInstance();
-        // we first set the calendar to the first day fo the month so that when
-        // we set the month, the calulatation of the last day works on the same
+        // we first set the calendar to the first day of the month so that when
+        // we set the month, the calculation of the last day works on the same
         // month.
         calendar.set(DAY_OF_MONTH, calendar.getActualMinimum(DAY_OF_MONTH));
         calendar.set(MONTH, month);

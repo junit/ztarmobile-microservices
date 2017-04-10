@@ -85,7 +85,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
         String sql = sqlStatements.getProperty("select.products_by_email");
 
         Map<String, String> params = new HashMap<>();
-        params.put("product_id", String.valueOf(email.getRowId()));
+        params.put("email_id", String.valueOf(email.getRowId()));
         return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<EmailProductNotification>() {
             /**
              * {@inheritDoc}
