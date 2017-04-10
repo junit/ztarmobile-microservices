@@ -59,8 +59,14 @@ public class Application {
         return converter;
     }
 
+    /**
+     * Starts the service.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         // Launch the application
-        SpringApplication.run(Application.class, args);
+        SpringApplication app = new SpringApplication(Application.class);
+        app.run(args);
     }
 }
