@@ -242,9 +242,9 @@
         <!-- Defining the profiles -->
         <profile>
             <!-- This is our local environment -->
-            <id>default</id>
+            <id>local</id>
             <properties>
-                <activatedProperties>default</activatedProperties>
+                <activatedProperties>local</activatedProperties>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>

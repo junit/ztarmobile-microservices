@@ -41,7 +41,7 @@ public enum LoggerStatus {
      * @param statusVal
      *            Value of the status.
      */
-    private LoggerStatus(char statusVal) {
+    LoggerStatus(char statusVal) {
         this.statusVal = statusVal;
     }
 

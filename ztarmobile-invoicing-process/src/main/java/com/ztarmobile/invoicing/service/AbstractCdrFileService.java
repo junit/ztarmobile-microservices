@@ -181,11 +181,16 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             if (isFileCompressed()) {
                 File compressedFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
                 if (compressedFile.exists()) {
-                    compressedFile.delete();
+                    if (!compressedFile.delete()) {
+                        LOG.warn("This file: " + targetFile + " could not be deleted");
+                    }
                 }
             }
+            // we make sure the file gets deleted.
             if (targetFile.exists()) {
-                targetFile.delete();
+                if (!targetFile.delete()) {
+                    LOG.warn("This file: " + targetFile + " could not be deleted");
+                }
             }
 
             // make sure that the resulting file has a valid extension like .txt
@@ -195,7 +200,9 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                     int index = processedFileName.indexOf(STANDARD_FILE_EXT);
                     String finalFileName = processedFileName.substring(0, index + STANDARD_FILE_EXT.length());
                     File finalName = new File(processedFile.getParentFile(), finalFileName);
-                    processedFile.renameTo(finalName);
+                    if (!processedFile.renameTo(finalName)) {
+                        LOG.warn("This file: " + processedFile + " could not be renamed");
+                    }
                     LOG.debug("Final file: " + finalName);
 
                     // saves the file processed
@@ -238,7 +245,9 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             }
             if (processed) {
                 gunzipIt(file);
-                file.delete();
+                if (!file.delete()) {
+                    LOG.warn("This file: " + file + " could not be deleted");
+                }
             }
         }
         return processed;

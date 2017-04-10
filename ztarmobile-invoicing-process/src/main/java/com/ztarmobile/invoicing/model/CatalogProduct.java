@@ -104,10 +104,7 @@ public class CatalogProduct {
         } else if (!product.equals(other.product)) {
             return false;
         }
-        if (rowId != other.rowId) {
-            return false;
-        }
-        return true;
+        return rowId == other.rowId;
     }
 
     /*

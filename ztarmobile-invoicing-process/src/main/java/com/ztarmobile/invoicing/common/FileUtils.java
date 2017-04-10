@@ -92,7 +92,9 @@ public class FileUtils {
                 gzipOS.write(buffer, 0, len);
             }
             // we delete the original file after the process
-            file.delete();
+            if (!file.delete()) {
+                LOG.warn("This file: " + file + " could not be deleted");
+            }
         } catch (IOException ex) {
             LOG.error(ex);
             invalidInput("Can't compress file due to: " + ex);
