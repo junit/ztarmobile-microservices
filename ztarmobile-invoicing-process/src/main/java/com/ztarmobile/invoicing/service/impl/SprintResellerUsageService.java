@@ -34,7 +34,7 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
     /**
      * Reference to the extracted directory of the Sprint CDR's.
      */
-    @Value("${cdrs.extracted.sprint.dir}")
+    @Value("${invoicing.cdrs.extracted.sprint.dir}")
     private String targetSprintCdrs;
 
     /**

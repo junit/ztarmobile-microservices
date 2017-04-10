@@ -41,12 +41,12 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
     /**
      * Reference to the directory of the Ericsson CDR's.
      */
-    @Value("${cdrs.source.ericsson.dir}")
+    @Value("${invoicing.cdrs.source.ericsson.dir}")
     private String sourceEricssonCdrs;
     /**
      * Reference to the extracted directory of the Ericsson CDR's.
      */
-    @Value("${cdrs.extracted.ericsson.dir}")
+    @Value("${invoicing.cdrs.extracted.ericsson.dir}")
     private String targetEricssonCdrs;
 
     /**

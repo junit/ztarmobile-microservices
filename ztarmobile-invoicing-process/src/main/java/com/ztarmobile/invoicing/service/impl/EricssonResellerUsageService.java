@@ -39,7 +39,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
     /**
      * Reference to the extracted directory of the Ericsson CDR's.
      */
-    @Value("${cdrs.extracted.ericsson.dir}")
+    @Value("${invoicing.cdrs.extracted.ericsson.dir}")
     private String targetEricssonCdrs;
 
     /**
