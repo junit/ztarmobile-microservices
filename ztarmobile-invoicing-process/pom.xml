@@ -115,36 +115,6 @@
         
     </dependencies>
     
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <activatedProperties>dev</activatedProperties>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>solo</id>
-            <properties>
-                <activatedProperties>solo</activatedProperties>
-            </properties>
-        </profile>
-        <profile>
-            <id>denali</id>
-            <properties>
-                <activatedProperties>denali</activatedProperties>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <activatedProperties>prod</activatedProperties>
-            </properties>
-        </profile>
-    </profiles>
-    
     <build>
         <!-- http://dolszewski.com/spring/spring-boot-properties-per-maven-profile/ -->
         <resources>
@@ -266,4 +236,39 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <!-- Defining the profiles -->
+        <profile>
+            <!-- This is our local enviroment -->
+            <id>default</id>
+            <properties>
+                <activatedProperties>default</activatedProperties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <!-- Development environment -->
+            <id>solo</id>
+            <properties>
+                <activatedProperties>solo</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <!-- User testing environment -->
+            <id>denali</id>
+            <properties>
+                <activatedProperties>denali</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <!-- Production envinment -->
+            <id>prod</id>
+            <properties>
+                <activatedProperties>prod</activatedProperties>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -45,7 +45,7 @@ public class CatalogEmailDaoImpl extends AbstractJdbc implements CatalogEmailDao
      */
     @Override
     public List<CatalogEmail> getCatalogEmail() {
-        LOG.debug("Getting all the catalogs");
+        LOG.debug("Getting all the email catalogs");
         String sql = sqlStatements.getProperty("select.catalog_emails");
 
         return this.getJdbc().query(sql, new CatalogEmailRowMapper());

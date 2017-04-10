@@ -44,7 +44,7 @@ public class ReportHelper {
      * @return The report name.
      */
     public static String createReportName(String product, Calendar start, Calendar end) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("report_details_");
         sb.append(product);
         sb.append("_");
         sb.append(fromDateToYYYYmmddFormat(start.getTime()));
