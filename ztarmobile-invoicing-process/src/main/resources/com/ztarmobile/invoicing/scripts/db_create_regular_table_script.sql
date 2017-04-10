@@ -154,3 +154,72 @@ INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_e
 INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '11', '1');
 INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '12', '1');
 INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('1', '13', '1');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '1', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '2', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '3', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '4', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '5', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '6', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '7', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '8', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '9', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '10', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '11', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '12', '1');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('2', '13', '1');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '1', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '2', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '3', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '4', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '5', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '6', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '7', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '8', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '9', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '10', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '11', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '12', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('3', '13', '0');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '1', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '2', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '8', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '9', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '10', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '11', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '12', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('4', '13', '0');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '1', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '2', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '6', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '7', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '8', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '9', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '10', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '11', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '12', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('5', '13', '0');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('6', '10', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('6', '11', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('6', '12', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('6', '13', '0');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '1', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '2', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '3', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '4', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '5', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '6', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '7', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '8', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '9', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '10', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '11', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '12', '0');
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('7', '13', '0');
+
+INSERT INTO `invoicing_email2product` (`email_id`, `product_id`, `notification_enabled`) VALUES ('8', '12', '0');
