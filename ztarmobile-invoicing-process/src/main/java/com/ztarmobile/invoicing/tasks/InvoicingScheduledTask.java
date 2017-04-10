@@ -72,7 +72,7 @@ public class InvoicingScheduledTask {
     /**
      * This method receives the request from the queue and process it.
      */
-    @Scheduled(cron = "${invoicing.report.cron}")
+    @Scheduled(cron = "${invoicing.cron.report}")
     public void scheduleMonthlyInvoice() {
         LOG.debug("Requesting montly invoicing report...");
 
@@ -91,7 +91,7 @@ public class InvoicingScheduledTask {
     /**
      * This method sends notifications.
      */
-    @Scheduled(cron = "${invoicing.notification.cron}")
+    @Scheduled(cron = "${invoicing.cron.notification}")
     public void scheduleNotificationInvoice() {
         LOG.debug("Sending invoicing notifications...");
 
