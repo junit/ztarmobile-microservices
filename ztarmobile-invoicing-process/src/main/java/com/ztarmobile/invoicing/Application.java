@@ -54,6 +54,12 @@ public class Application {
     private String activeProfile;
 
     /**
+     * The application name.
+     */
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    /**
      * We just print a reminder message to state that we are using a profile.
      * 
      * @return The spring bean.
@@ -61,7 +67,7 @@ public class Application {
     @Bean
     CommandLineRunner values() {
         return args -> {
-            LOG.debug("Running under profile: " + activeProfile);
+            LOG.debug("*** [" + applicationName + "] Running under profile: " + activeProfile + " ***");
         };
     }
 
