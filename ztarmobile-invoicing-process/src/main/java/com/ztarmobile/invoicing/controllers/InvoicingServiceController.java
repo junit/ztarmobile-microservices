@@ -42,7 +42,7 @@ import com.ztarmobile.invoicing.service.InvoicingService;
  * @since 03/27/17
  */
 @RestController
-@RequestMapping(value = "api/v1/invoice/")
+@RequestMapping(value = "${invoicing.rest.base-path}/v1/invoice", produces = "application/json")
 public class InvoicingServiceController {
     /**
      * Logger for this class.

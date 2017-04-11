@@ -78,7 +78,7 @@
             <artifactId>spring-boot-starter-log4j</artifactId>
             <version>${spring-boot-starter-log4j.version}</version>
         </dependency>
-        <!-- JSM depedencies -->
+        <!-- JSM dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
@@ -106,7 +106,7 @@
             <version>${log4j.version}</version>
         </dependency>
         
-        <!-- Junit -->
+        <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
