@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing;
 
 import javax.jms.ConnectionFactory;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,6 +42,28 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJms
 @EnableScheduling
 public class Application {
+    /**
+     * Logger for this class.
+     */
+    private static final Logger LOG = Logger.getLogger(Application.class);
+
+    /**
+     * The active profile.
+     */
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
+    /**
+     * We just print a reminder message to state that we are using a profile.
+     * 
+     * @return The spring bean.
+     */
+    @Bean
+    CommandLineRunner values() {
+        return args -> {
+            LOG.debug("Running under profile: " + activeProfile);
+        };
+    }
 
     @Bean
     public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
