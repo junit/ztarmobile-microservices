@@ -49,7 +49,7 @@ public class InvoicingMailSender {
     private SpringTemplateEngine templateEngine;
 
     /**
-     * Sends the email asynchronously
+     * Sends the email asynchronously.
      * 
      * @param email
      *            The content of the email with attachments.

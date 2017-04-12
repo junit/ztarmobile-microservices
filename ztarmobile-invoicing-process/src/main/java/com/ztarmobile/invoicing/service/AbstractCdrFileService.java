@@ -278,7 +278,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
     }
 
     /**
-     * Increments the frecuency of the calendar based on the type of file.
+     * Increments the frequency of the calendar based on the type of file.
      * 
      * @param calendarNow
      *            The calendar.
@@ -288,7 +288,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
     }
 
     /**
-     * Gets the file extension of the cdr file.
+     * Gets the file extension of the CDR file.
      * 
      * @return The file extension.
      */
@@ -318,10 +318,10 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
     protected abstract String getTargetDirectoryCdrFile();
 
     /**
-     * Get the file frecuency, that means, how ofter the cdr file is dropped in
+     * Get the file frequency, that means, how after the cdr file is dropped in
      * the servers.
      * 
-     * @return The frecuency constant that must match with the Calendar
+     * @return The frequency constant that must match with the Calendar
      *         constant. It could be, every month or every day or every year
      *         depending on the Calendar constant.
      */

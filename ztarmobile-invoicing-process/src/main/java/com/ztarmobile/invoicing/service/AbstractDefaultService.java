@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractDefaultService {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(AbstractDefaultService.class);
     /**
