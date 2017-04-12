@@ -6,10 +6,10 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
+
 import java.util.Date;
 import java.util.List;
-
-import com.ztarmobile.invoicing.model.ResellerSubsUsage;
 
 /**
  * DAO to handle the operations for the allocations.
@@ -39,7 +39,7 @@ public interface ResellerAllocationsDao {
     void updateAllocationIndicators();
 
     /**
-     * Gets a list of all the reseller subscribers
+     * Gets a list of all the reseller subscribers.
      * 
      * @param startDate
      *            The start date.
@@ -52,7 +52,7 @@ public interface ResellerAllocationsDao {
     List<ResellerSubsUsage> getResellerSubsUsage(Date startDate, Date endDate, String product);
 
     /**
-     * Updates the subscriber usage into the db.
+     * Updates the subscriber usage into the DB.
      * 
      * @param subscribers
      *            The list of subscribers.

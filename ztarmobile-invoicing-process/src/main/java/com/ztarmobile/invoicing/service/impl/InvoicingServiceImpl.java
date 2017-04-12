@@ -16,14 +16,6 @@ import static com.ztarmobile.invoicing.model.LoggerStatus.ERROR;
 import static com.ztarmobile.invoicing.model.LoggerStatus.PROGRESS;
 import static java.util.Calendar.MONTH;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ztarmobile.invoicing.common.MontlyTime;
 import com.ztarmobile.invoicing.dao.CatalogEmailDao;
 import com.ztarmobile.invoicing.dao.CatalogProductDao;
@@ -40,6 +32,14 @@ import com.ztarmobile.invoicing.service.InvoicingService;
 import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 import com.ztarmobile.invoicing.service.ResellerUsageService;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Direct service implementation that calculates and perform the invoicing
  * process.
@@ -50,7 +50,7 @@ import com.ztarmobile.invoicing.service.ResellerUsageService;
 @Service
 public class InvoicingServiceImpl implements InvoicingService {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(InvoicingServiceImpl.class);
 
@@ -171,19 +171,19 @@ public class InvoicingServiceImpl implements InvoicingService {
      * {@inheritDoc}
      */
     @Override
-    public List<ReportDetails> generateReport(String product, Calendar start, Calendar end) {
+    public List<ReportDetails> generateReport(Calendar start, Calendar end, String product) {
         validateInput(start, "calendarStart must be not null");
         validateInput(end, "calendarEnd must be not null");
         // delegates to the overloaded method.
-        return this.generateReport(product, start.getTime(), end.getTime());
+        return this.generateReport(start.getTime(), end.getTime(), product);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ReportDetails> generateReport(String product, Date start, Date end) {
-        return invoicingDao.generateReport(product, start, end);
+    public List<ReportDetails> generateReport(Date start, Date end, String product) {
+        return invoicingDao.generateReport(start, end, product);
     }
 
     /**

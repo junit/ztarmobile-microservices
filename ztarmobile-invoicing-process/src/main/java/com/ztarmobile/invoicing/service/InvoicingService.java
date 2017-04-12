@@ -6,15 +6,15 @@
  */
 package com.ztarmobile.invoicing.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
 import com.ztarmobile.invoicing.model.EmailProductNotification;
 import com.ztarmobile.invoicing.model.LoggerRequest;
 import com.ztarmobile.invoicing.model.ReportDetails;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Service that calculates and perform the invoicing process.
@@ -116,30 +116,31 @@ public interface InvoicingService {
     /**
      * Return a list of objects for the invoicing report.
      * 
-     * @param product
-     *            The product.
      * @param start
      *            Initial date.
      * @param end
      *            End date.
+     * @param product
+     *            The product.
      * @return List of objects or null if no information was found.
-     * @see InvoicingService#generateReport(String, Date, Date)
+     * @see InvoicingService#generateReport(Date, Date,String)
      */
-    List<ReportDetails> generateReport(String product, Calendar start, Calendar end);
+    List<ReportDetails> generateReport(Calendar start, Calendar end, String product);
 
     /**
      * Return a list of objects for the invoicing report.
      * 
-     * @param product
-     *            The product.
+     * 
      * @param start
      *            Initial date.
      * @param end
      *            End date.
+     * @param product
+     *            The product.
      * @return List of objects or null if no information was found.
-     * @see InvoicingService#generateReport(String, Calendar, Calendar)
+     * @see InvoicingService#generateReport(Calendar, Calendar,String)
      */
-    List<ReportDetails> generateReport(String product, Date start, Date end);
+    List<ReportDetails> generateReport(Date start, Date end, String product);
 
     /**
      * Gets all the existing products.

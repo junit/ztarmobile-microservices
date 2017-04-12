@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing.dao;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddDashFormat;
 
+import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.model.ReportDetails;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -23,9 +26,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.model.ReportDetails;
-
 /**
  * Direct DAO Implementation.
  *
@@ -35,7 +35,7 @@ import com.ztarmobile.invoicing.model.ReportDetails;
 @Repository
 public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(InvoicingDaoImpl.class);
 
@@ -55,11 +55,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
 
         String sql = sqlStatements.getProperty("delete.invoicing_report_details");
 
-        Map<String, String> params = new HashMap<>();
-        params.put("init_date", fromDateToYYYYmmddDashFormat(start));
-        params.put("end_date", fromDateToYYYYmmddDashFormat(end));
-        params.put("product", product);
-
+        Map<String, String> params = createParameters(start, end, product);
         int rowAffected = this.getJdbc().update(sql, new MapSqlParameterSource(params));
         LOG.debug("Rows deleted: " + rowAffected);
     }
@@ -69,15 +65,11 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      */
     @Override
     public void saveInvoicing(Date start, Date end, String product) {
-        LOG.debug("Saving invoicing details from " + start + " - " + end);
+        LOG.debug("Saving invoicing details from " + start + " to " + end);
 
         String sql = sqlStatements.getProperty("select.insert.invoicing_report_details");
 
-        Map<String, String> params = new HashMap<>();
-        params.put("init_date", fromDateToYYYYmmddDashFormat(start));
-        params.put("end_date", fromDateToYYYYmmddDashFormat(end));
-        params.put("product", product);
-
+        Map<String, String> params = createParameters(start, end, product);
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }
 
@@ -85,14 +77,10 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      * {@inheritDoc}
      */
     @Override
-    public List<ReportDetails> generateReport(String product, Date start, Date end) {
+    public List<ReportDetails> generateReport(Date start, Date end, String product) {
         String sql = sqlStatements.getProperty("select.invoicing_report_details");
 
-        Map<String, String> params = new HashMap<>();
-        params.put("product", product);
-        params.put("init_date", fromDateToYYYYmmddDashFormat(start));
-        params.put("end_date", fromDateToYYYYmmddDashFormat(end));
-
+        Map<String, String> params = createParameters(start, end, product);
         return this.getJdbc().query(sql, new MapSqlParameterSource(params), new RowMapper<ReportDetails>() {
             @Override
             public ReportDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -112,5 +100,19 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
                 return vo;
             }
         });
+    }
+
+    /**
+     * Creates the parameters to be executed in the database.
+     * 
+     * @return
+     */
+    private Map<String, String> createParameters(Date start, Date end, String product) {
+        Map<String, String> params = new HashMap<>();
+        params.put("init_date", fromDateToYYYYmmddDashFormat(start));
+        params.put("end_date", fromDateToYYYYmmddDashFormat(end));
+        params.put("product", product);
+
+        return params;
     }
 }

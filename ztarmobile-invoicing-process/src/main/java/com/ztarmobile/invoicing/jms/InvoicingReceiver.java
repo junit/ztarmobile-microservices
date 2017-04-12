@@ -6,15 +6,15 @@
  */
 package com.ztarmobile.invoicing.jms;
 
+import com.ztarmobile.invoicing.model.InvoicingRequest;
+import com.ztarmobile.invoicing.service.InvoicingService;
+
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-
-import com.ztarmobile.invoicing.model.InvoicingRequest;
-import com.ztarmobile.invoicing.service.InvoicingService;
 
 /**
  * Receives all the messages from the JMS.

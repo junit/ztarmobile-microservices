@@ -6,11 +6,11 @@
  */
 package com.ztarmobile.invoicing.service;
 
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import com.ztarmobile.invoicing.model.ResellerSubsUsage;
 
 /**
  * Service to handle the operations for the allocations.

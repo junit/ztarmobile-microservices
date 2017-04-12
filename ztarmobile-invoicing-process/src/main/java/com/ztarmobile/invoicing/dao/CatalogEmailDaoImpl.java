@@ -6,6 +6,9 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.model.CatalogEmail;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -17,9 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.model.CatalogEmail;
-
 /**
  * Direct DAO Implementation.
  *
@@ -29,7 +29,7 @@ import com.ztarmobile.invoicing.model.CatalogEmail;
 @Repository
 public class CatalogEmailDaoImpl extends AbstractJdbc implements CatalogEmailDao {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(CatalogEmailDaoImpl.class);
 

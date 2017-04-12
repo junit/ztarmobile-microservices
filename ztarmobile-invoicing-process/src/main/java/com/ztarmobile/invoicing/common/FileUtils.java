@@ -32,13 +32,13 @@ import org.apache.log4j.Logger;
  */
 public class FileUtils {
     /**
-     * Logger for this class
-     */
-    private static final Logger LOG = Logger.getLogger(FileUtils.class);
-    /**
      * The file extension for compressed files.
      */
     public static final String GZIP_EXT = ".gz";
+    /**
+     * Logger for this class.
+     */
+    private static final Logger LOG = Logger.getLogger(FileUtils.class);
 
     /**
      * Private constructor.
@@ -48,7 +48,7 @@ public class FileUtils {
     }
 
     /**
-     * Copies a file from one directory into another directory
+     * Copies a file from one directory into another directory.
      * 
      * @param source
      *            The source file.

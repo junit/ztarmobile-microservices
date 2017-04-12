@@ -18,6 +18,11 @@ import static com.ztarmobile.invoicing.common.FileUtils.zipIt;
 import static com.ztarmobile.invoicing.model.Phase.USAGE;
 import static java.util.Calendar.MONTH;
 
+import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
+import com.ztarmobile.invoicing.model.Usage;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -31,11 +36,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ztarmobile.invoicing.dao.LoggerDao;
-import com.ztarmobile.invoicing.model.LoggerReportFile;
-import com.ztarmobile.invoicing.model.ResellerSubsUsage;
-import com.ztarmobile.invoicing.model.Usage;
-
 /**
  * Parent abstract class to handle the usage for the CDR's.
  *
@@ -44,13 +44,13 @@ import com.ztarmobile.invoicing.model.Usage;
  */
 public abstract class AbstractResellerUsageService extends AbstractDefaultService implements ResellerUsageService {
     /**
-     * Logger for this class
-     */
-    private static final Logger LOG = Logger.getLogger(AbstractResellerUsageService.class);
-    /**
      * The file extension.
      */
     public static final String EXTRACTED_FILE_EXT = ".txt";
+    /**
+     * Logger for this class.
+     */
+    private static final Logger LOG = Logger.getLogger(AbstractResellerUsageService.class);
 
     /**
      * Service dependency.
@@ -181,7 +181,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                     } else {
                         LOG.info("==> Usage already processed... " + currentFile);
                         // 3. finally, we compress the file (close it out)
-                        // this is necesary to finish the process.
+                        // this is necessary to finish the process.
                         zipIt(currentFile);
                     }
                 } catch (Exception ex) {
@@ -218,7 +218,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsage> subs) {
         LOG.debug("==> The following file will be read... " + currentFile);
 
-        // resetting the list of subcribers
+        // resetting the list of subscribers
         for (ResellerSubsUsage vo : subs) {
             if (vo.isUpdated()) {
                 vo.setUpdated(false);
@@ -228,7 +228,8 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
         String line;
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
             if (hasHeader()) {
-                reader.readLine();// ignores the first line
+                // ignores the first line
+                reader.readLine();
             }
 
             String lastMdn = null;
@@ -261,8 +262,8 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 // calculate the usage
                 Usage usage = calculateIndividualUsage(sln);
 
-                // the usage list is null. That means we reached this mdn
-                // for the first time. This row is a new mdn.
+                // the usage list is null. That means we reached this MDN
+                // for the first time. This row is a new MDN.
                 if (lastMdn == null || lastCallDate == null || !lastMdn.equals(mdn)
                         || !lastCallDate.substring(0, 8).equals(callDate.substring(0, 8))) {
                     /*
@@ -277,7 +278,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 // check for the specific subscriber and plan when
                 // record was created and add usage
                 for (ResellerSubsUsage rms : usgList) {
-                    // we know the usage list is for the mdn, and the call date.
+                    // we know the usage list is for the MDN, and the call date.
                     // match the call date and time to fit in the rate plan
                     // duration start and end.
 
@@ -302,7 +303,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     }
 
     /**
-     * Get all usage rows that match MDN, and the call date
+     * Get all usage rows that match MDN, and the call date.
      * 
      * @param subs
      *            The list of subscribers.
@@ -336,7 +337,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     }
 
     /**
-     * Increments the frecuency of the calendar based on the type of file.
+     * Increments the frequency of the calendar based on the type of file.
      * 
      * @param calendarNow
      *            The calendar.
@@ -355,17 +356,17 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     protected abstract String getExpectedFileName(Calendar calendarNow);
 
     /**
-     * Gets the target directory where the cdrs files are located.
+     * Gets the target directory where the CDR's files are located.
      * 
-     * @return The directory of the cdrs target files.
+     * @return The directory of the CDR's target files.
      */
     protected abstract String getTargetDirectoryCdrFile();
 
     /**
-     * Get the file frecuency, that means, how ofter the cdr file is dropped in
+     * Get the file frequency, that means, how after the CDR file is dropped in
      * the servers.
      * 
-     * @return The frecuency constant that must match with the Calendar
+     * @return The frequency constant that must match with the Calendar
      *         constant. It could be, every month or every day or every year
      *         depending on the Calendar constant.
      */

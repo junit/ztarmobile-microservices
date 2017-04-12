@@ -9,9 +9,9 @@ package com.ztarmobile.invoicing.model;
 import static com.ztarmobile.invoicing.common.DateUtils.DEFAULT_TIMEZONE;
 import static com.ztarmobile.invoicing.common.DateUtils.MEDIUM;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 /**
  * Value object.

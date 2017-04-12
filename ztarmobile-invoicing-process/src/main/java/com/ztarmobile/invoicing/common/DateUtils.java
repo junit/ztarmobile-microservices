@@ -31,11 +31,11 @@ public class DateUtils {
      */
     public static final String MEDIUM = "MMM d, yyyy hh:mm:ss a";
     /**
-     * Default timezone of the JVM
+     * Default timezone of the JVM.
      */
     public static final String DEFAULT_TIMEZONE = "America/Chicago";
     /**
-     * Format used commonly by the db.
+     * Format used commonly by the DB.
      */
     public static final String YYYYMMDD_HHMMSS = "yyyy-MM-dd HH:mm:ss";
     private static final SimpleDateFormat DB_DATE_FORMAT = new SimpleDateFormat(YYYYMMDD_HHMMSS);

@@ -6,6 +6,11 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.model.CatalogEmail;
+import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.EmailProductNotification;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -20,11 +25,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.model.CatalogEmail;
-import com.ztarmobile.invoicing.model.CatalogProduct;
-import com.ztarmobile.invoicing.model.EmailProductNotification;
-
 /**
  * Direct DAO Implementation.
  *
@@ -34,7 +34,7 @@ import com.ztarmobile.invoicing.model.EmailProductNotification;
 @Repository
 public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProductDao {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(CatalogProductDaoImpl.class);
 

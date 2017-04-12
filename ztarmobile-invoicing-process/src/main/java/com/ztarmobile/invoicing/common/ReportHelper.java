@@ -8,9 +8,9 @@ package com.ztarmobile.invoicing.common;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 
-import java.util.Calendar;
-
 import com.ztarmobile.invoicing.model.ReportDetails;
+
+import java.util.Calendar;
 
 /**
  * Utility to handle the reports.
@@ -20,17 +20,17 @@ import com.ztarmobile.invoicing.model.ReportDetails;
  */
 public class ReportHelper {
     /**
+     * Break line and separator for the reports.
+     */
+    private static final String BL = "\n";
+    private static final String COMMA = ",";
+
+    /**
      * Private constructor.
      */
     private ReportHelper() {
         // no objects are allowed to be created.
     }
-
-    /**
-     * Break line and separator for the reports.
-     */
-    private static final String BL = "\n";
-    private static final String COMMA = ",";
 
     /**
      * Creates the report name.
@@ -45,10 +45,12 @@ public class ReportHelper {
      */
     public static String createReportName(String product, Calendar start, Calendar end) {
         StringBuilder sb = new StringBuilder("report_details_");
+        final String separator = "_";
+
         sb.append(product);
-        sb.append("_");
+        sb.append(separator);
         sb.append(fromDateToYYYYmmddFormat(start.getTime()));
-        sb.append("_");
+        sb.append(separator);
         sb.append(fromDateToYYYYmmddFormat(end.getTime()));
         sb.append(".csv");
 

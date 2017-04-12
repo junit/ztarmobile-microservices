@@ -13,6 +13,11 @@ import static com.ztarmobile.invoicing.common.ReportHelper.createReportName;
 import static com.ztarmobile.invoicing.common.ReportHelper.createRow;
 import static com.ztarmobile.invoicing.jms.InvoicingReceiver.INVOICING_REQ_QUEUE;
 
+import com.ztarmobile.invoicing.model.InvoicingRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
+import com.ztarmobile.invoicing.model.Response;
+import com.ztarmobile.invoicing.service.InvoicingService;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
@@ -29,11 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.ztarmobile.invoicing.model.InvoicingRequest;
-import com.ztarmobile.invoicing.model.ReportDetails;
-import com.ztarmobile.invoicing.model.Response;
-import com.ztarmobile.invoicing.service.InvoicingService;
 
 /**
  * The controller class.
@@ -123,7 +123,7 @@ public class InvoicingServiceController {
         calendarTo = Calendar.getInstance();
         calendarTo.setTime(reportTo);
 
-        List<ReportDetails> list = invoicingService.generateReport(product, calendarFrom, calendarTo);
+        List<ReportDetails> list = invoicingService.generateReport(calendarFrom, calendarTo, product);
         OutputStream outputStream = null;
         String fileName = createReportName(product, calendarFrom, calendarTo);
         try {

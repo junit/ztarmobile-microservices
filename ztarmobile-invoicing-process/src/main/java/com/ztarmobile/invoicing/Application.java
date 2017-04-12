@@ -94,6 +94,7 @@ public class Application {
      * Starts the service.
      * 
      * @param args
+     *            The command line arguments.
      */
     public static void main(String[] args) {
         // Launch the application

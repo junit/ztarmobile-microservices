@@ -6,14 +6,14 @@
  */
 package com.ztarmobile.invoicing.dao;
 
-import java.util.Date;
-import java.util.List;
-
 import com.ztarmobile.invoicing.model.LoggerCdrFile;
 import com.ztarmobile.invoicing.model.LoggerReportFile;
 import com.ztarmobile.invoicing.model.LoggerRequest;
 import com.ztarmobile.invoicing.model.LoggerStatus;
 import com.ztarmobile.invoicing.model.Phase;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * DAO to handle the operations for the transactions.

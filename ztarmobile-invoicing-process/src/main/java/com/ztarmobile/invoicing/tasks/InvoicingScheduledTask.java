@@ -13,16 +13,6 @@ import static com.ztarmobile.invoicing.common.ReportHelper.createReportName;
 import static com.ztarmobile.invoicing.common.ReportHelper.createRow;
 import static java.util.Calendar.MONTH;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.ztarmobile.invoicing.email.InvoicingMailSender;
 import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
@@ -32,6 +22,16 @@ import com.ztarmobile.invoicing.model.EmailProductNotification;
 import com.ztarmobile.invoicing.model.InvoicingRequest;
 import com.ztarmobile.invoicing.model.ReportDetails;
 import com.ztarmobile.invoicing.service.InvoicingService;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * Performs an schedule task to create the monthly reports.
@@ -113,7 +113,7 @@ public class InvoicingScheduledTask {
                 if (notification.isNotificationEnabled()) {
                     StringBuilder sb = new StringBuilder(createHeader());
 
-                    for (ReportDetails detail : invoicingService.generateReport(product, start, end)) {
+                    for (ReportDetails detail : invoicingService.generateReport(start, end, product)) {
                         // creates the content of the attachment
                         sb.append(createRow(detail));
                     }

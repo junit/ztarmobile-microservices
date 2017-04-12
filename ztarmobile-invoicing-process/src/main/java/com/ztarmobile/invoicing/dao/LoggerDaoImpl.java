@@ -13,6 +13,13 @@ import static com.ztarmobile.invoicing.model.LoggerStatus.PENDING;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 
+import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.model.LoggerCdrFile;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.LoggerStatus;
+import com.ztarmobile.invoicing.model.Phase;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -32,13 +39,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.model.LoggerCdrFile;
-import com.ztarmobile.invoicing.model.LoggerReportFile;
-import com.ztarmobile.invoicing.model.LoggerRequest;
-import com.ztarmobile.invoicing.model.LoggerStatus;
-import com.ztarmobile.invoicing.model.Phase;
-
 /**
  * Direct DAO Implementation.
  *
@@ -48,7 +48,7 @@ import com.ztarmobile.invoicing.model.Phase;
 @Repository
 public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(LoggerDaoImpl.class);
 

@@ -6,11 +6,11 @@
  */
 package com.ztarmobile.invoicing.dao;
 
-import java.util.List;
-
 import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
 import com.ztarmobile.invoicing.model.EmailProductNotification;
+
+import java.util.List;
 
 /**
  * DAO to handle the operations for the products.

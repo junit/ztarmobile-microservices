@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing.dao;
 
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToDbFormat;
 
+import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -25,9 +28,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
-import com.ztarmobile.invoicing.common.AbstractJdbc;
-import com.ztarmobile.invoicing.model.ResellerSubsUsage;
-
 /**
  * Direct DAO Implementation.
  *
@@ -37,7 +37,7 @@ import com.ztarmobile.invoicing.model.ResellerSubsUsage;
 @Repository
 public class ResellerAllocationsDaoImpl extends AbstractJdbc implements ResellerAllocationsDao {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(ResellerAllocationsDaoImpl.class);
 

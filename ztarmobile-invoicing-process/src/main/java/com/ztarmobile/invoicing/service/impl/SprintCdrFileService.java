@@ -9,14 +9,14 @@ package com.ztarmobile.invoicing.service.impl;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmFormat;
 import static java.util.Calendar.MONTH;
 
+import com.ztarmobile.invoicing.service.AbstractCdrFileService;
+
 import java.io.File;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 
 /**
  * Sprint implementation to handle the files for the CDR's.
@@ -27,7 +27,7 @@ import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 @Service
 public class SprintCdrFileService extends AbstractCdrFileService {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(SprintCdrFileService.class);
     /**

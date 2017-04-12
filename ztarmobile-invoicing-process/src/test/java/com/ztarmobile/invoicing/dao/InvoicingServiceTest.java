@@ -6,6 +6,11 @@
  */
 package com.ztarmobile.invoicing.dao;
 
+import com.ztarmobile.invoicing.model.CatalogProduct;
+import com.ztarmobile.invoicing.model.LoggerRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
+import com.ztarmobile.invoicing.service.InvoicingService;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -15,11 +20,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import com.ztarmobile.invoicing.model.CatalogProduct;
-import com.ztarmobile.invoicing.model.LoggerRequest;
-import com.ztarmobile.invoicing.model.ReportDetails;
-import com.ztarmobile.invoicing.service.InvoicingService;
 
 /**
  *
@@ -55,7 +55,7 @@ public class InvoicingServiceTest {
         long total = end - init;
         System.out.println("Milliseconds: " + total);
 
-        List<ReportDetails> list = invoicingService.generateReport(product1, c1, c2);
+        List<ReportDetails> list = invoicingService.generateReport(c1, c2, product1);
         for (ReportDetails vo : list) {
             System.out.println(vo);
         }

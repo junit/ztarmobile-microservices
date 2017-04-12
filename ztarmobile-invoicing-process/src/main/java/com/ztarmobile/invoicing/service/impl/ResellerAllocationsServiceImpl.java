@@ -21,6 +21,13 @@ import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
+import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
+import com.ztarmobile.invoicing.model.LoggerReportFile;
+import com.ztarmobile.invoicing.model.ResellerSubsUsage;
+import com.ztarmobile.invoicing.service.AbstractDefaultService;
+import com.ztarmobile.invoicing.service.ResellerAllocationsService;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,13 +36,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.ztarmobile.invoicing.dao.LoggerDao;
-import com.ztarmobile.invoicing.dao.ResellerAllocationsDao;
-import com.ztarmobile.invoicing.model.LoggerReportFile;
-import com.ztarmobile.invoicing.model.ResellerSubsUsage;
-import com.ztarmobile.invoicing.service.AbstractDefaultService;
-import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 
 /**
  * Service to handle the operations for the allocations.
@@ -46,7 +46,7 @@ import com.ztarmobile.invoicing.service.ResellerAllocationsService;
 @Service
 public class ResellerAllocationsServiceImpl extends AbstractDefaultService implements ResellerAllocationsService {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(ResellerAllocationsServiceImpl.class);
 

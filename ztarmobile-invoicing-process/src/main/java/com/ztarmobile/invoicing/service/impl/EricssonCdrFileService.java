@@ -9,14 +9,14 @@ package com.ztarmobile.invoicing.service.impl;
 import static com.ztarmobile.invoicing.common.DateUtils.fromDateToYYYYmmddFormat;
 import static java.util.Calendar.DAY_OF_MONTH;
 
+import com.ztarmobile.invoicing.service.AbstractCdrFileService;
+
 import java.io.File;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 
 /**
  * Ericsson implementation to handle the files for the CDR's.
@@ -27,7 +27,7 @@ import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 @Service
 public class EricssonCdrFileService extends AbstractCdrFileService {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
     private static final Logger LOG = Logger.getLogger(EricssonCdrFileService.class);
     /**

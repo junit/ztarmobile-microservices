@@ -6,6 +6,9 @@
  */
 package com.ztarmobile.invoicing.email;
 
+import com.ztarmobile.invoicing.model.EmailAttachment;
+import com.ztarmobile.invoicing.model.EmailNotification;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -18,9 +21,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-
-import com.ztarmobile.invoicing.model.EmailAttachment;
-import com.ztarmobile.invoicing.model.EmailNotification;
 
 /**
  * Sends notifications thought email.
