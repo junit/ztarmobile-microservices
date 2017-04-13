@@ -62,7 +62,6 @@ public class SprintCdrFileService extends AbstractCdrFileService {
         sb.append(fromDateToYYYYmmFormat(calendarNow.getTime()));
         sb.append(FILE_EXT);
 
-        LOG.debug("Expected file name: " + sb);
         return sb.toString();
     }
 

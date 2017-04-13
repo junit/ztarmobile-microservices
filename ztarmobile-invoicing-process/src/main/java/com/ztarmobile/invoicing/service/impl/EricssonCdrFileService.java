@@ -77,7 +77,6 @@ public class EricssonCdrFileService extends AbstractCdrFileService {
         sb.append(endDateString);
         sb.append(FILE_EXT);
 
-        LOG.debug("Expected file name: " + sb);
         return sb.toString();
     }
 
