@@ -96,31 +96,50 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
                 int rcnt = 0;
                 vo.setRowId(rs.getLong(++rcnt));
 
-                CatalogProduct product = new CatalogProduct();
-                product.setRowId(rs.getLong(++rcnt));
-                product.setProduct(rs.getString(++rcnt));
-                product.setCdma(rs.getBoolean(++rcnt));
-
-                vo.setCatalogProduct(product);
+                vo.setCatalogProduct(createCatalogProduct(rs, rcnt));
                 vo.setNotificationEnabled(rs.getBoolean(++rcnt));
                 return vo;
             }
         });
     }
 
+    /**
+     * RowMapper for the Catalog Product.
+     * 
+     * @author armandorivas
+     * @since 04/13/17
+     */
     class CatalogProductRowMapper implements RowMapper<CatalogProduct> {
         /**
          * {@inheritDoc}
          */
         @Override
         public CatalogProduct mapRow(ResultSet rs, int rowNum) throws SQLException {
-            CatalogProduct product = new CatalogProduct();
-            int rcnt = 0;
-            product.setRowId(rs.getLong(++rcnt));
-            product.setProduct(rs.getString(++rcnt));
-            product.setCdma(rs.getBoolean(++rcnt));
-
-            return product;
+            return createCatalogProduct(rs, 0);
         }
+    }
+
+    /**
+     * Creates a catalog product object based on the database query result.
+     * 
+     * @param rs
+     *            The result set.
+     * @param rcnt
+     *            Current counter.
+     * @return A new CatalogProduct.
+     * @throws SQLException
+     *             Thrown if there's an error while retrieving the info from the
+     *             DB.
+     */
+    private CatalogProduct createCatalogProduct(ResultSet rs, int rcnt) throws SQLException {
+        // we populate the CatalogProduct object
+        CatalogProduct product = new CatalogProduct();
+        product.setRowId(rs.getLong(++rcnt));
+        product.setProduct(rs.getString(++rcnt));
+        product.setCdma(rs.getBoolean(++rcnt));
+        product.setInvoicingEnabled(rs.getBoolean(++rcnt));
+
+        return product;
+
     }
 }

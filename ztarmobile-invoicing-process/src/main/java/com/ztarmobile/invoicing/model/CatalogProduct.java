@@ -16,6 +16,7 @@ public class CatalogProduct {
     private long rowId;
     private String product;
     private boolean cdma;
+    private boolean invoicingEnabled;
 
     /**
      * @return the rowId
@@ -62,6 +63,21 @@ public class CatalogProduct {
         this.cdma = cdma;
     }
 
+    /**
+     * @return the invoicingEnabled
+     */
+    public boolean isInvoicingEnabled() {
+        return invoicingEnabled;
+    }
+
+    /**
+     * @param invoicingEnabled
+     *            the invoicingEnabled to set
+     */
+    public void setInvoicingEnabled(boolean invoicingEnabled) {
+        this.invoicingEnabled = invoicingEnabled;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -72,6 +88,7 @@ public class CatalogProduct {
         final int prime = 31;
         int result = 1;
         result = prime * result + (cdma ? 1231 : 1237);
+        result = prime * result + (invoicingEnabled ? 1231 : 1237);
         result = prime * result + ((product == null) ? 0 : product.hashCode());
         result = prime * result + (int) (rowId ^ (rowId >>> 32));
         return result;
@@ -97,6 +114,9 @@ public class CatalogProduct {
         if (cdma != other.cdma) {
             return false;
         }
+        if (invoicingEnabled != other.invoicingEnabled) {
+            return false;
+        }
         if (product == null) {
             if (other.product != null) {
                 return false;
@@ -104,7 +124,10 @@ public class CatalogProduct {
         } else if (!product.equals(other.product)) {
             return false;
         }
-        return rowId == other.rowId;
+        if (rowId != other.rowId) {
+            return false;
+        }
+        return true;
     }
 
     /*
@@ -114,6 +137,8 @@ public class CatalogProduct {
      */
     @Override
     public String toString() {
-        return "CatalogProduct [rowId=" + rowId + ", product=" + product + ", cdma=" + cdma + "]";
+        return "CatalogProduct [rowId=" + rowId + ", product=" + product + ", cdma=" + cdma + ", invoicingEnabled="
+                + invoicingEnabled + "]";
     }
+
 }

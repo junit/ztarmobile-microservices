@@ -9,7 +9,7 @@
     <util:properties id="catalogProductDaoSql">
         <prop key="select.catalog_product">
             <![CDATA[
-                SELECT row_id, product, cdma
+                SELECT row_id, product, cdma, invoicing_enabled
                 FROM   invoicing_catalog_product
                 WHERE  product = :product
                 ORDER BY product
@@ -17,14 +17,14 @@
         </prop>
         <prop key="select.catalog_products">
             <![CDATA[
-                SELECT row_id, product, cdma
+                SELECT row_id, product, cdma, invoicing_enabled
                 FROM   invoicing_catalog_product
                 ORDER BY product
             ]]>
         </prop>
         <prop key="select.products_by_email">
             <![CDATA[
-                SELECT i.row_id, p.row_id AS product_id, p.product, p.cdma, i.notification_enabled
+                SELECT i.row_id, p.row_id AS product_id, p.product, p.cdma, p.invoicing_enabled, i.notification_enabled
                   FROM invoicing_email2product i, invoicing_catalog_product p
                  WHERE p.row_id = i.product_id AND i.email_id = :email_id
               ORDER BY p.product

@@ -110,7 +110,7 @@ public class InvoicingScheduledTask {
             for (EmailProductNotification notification : invoicingService.getAllProductsByEmail(catalogEmail)) {
                 product = notification.getCatalogProduct().getProduct();
                 // only notifies those ones enabled
-                if (notification.isNotificationEnabled()) {
+                if (notification.isNotificationEnabled() && notification.getCatalogProduct().isInvoicingEnabled()) {
                     StringBuilder sb = new StringBuilder(createHeader());
 
                     for (ReportDetails detail : invoicingService.generateReport(start, end, product)) {

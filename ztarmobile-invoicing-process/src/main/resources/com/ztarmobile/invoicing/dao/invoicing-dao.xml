@@ -10,7 +10,7 @@
         <prop key="delete.invoicing_report_details">
             <![CDATA[
                 DELETE FROM invoicing_report_details
-                      WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
+                      WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product AND invoicing_enabled = 1)
                         AND STR_TO_DATE(CONCAT(month,'-',day,'-',year),'%m-%d-%Y') between :init_date and :end_date
             ]]>
         </prop>
@@ -18,7 +18,7 @@
             <![CDATA[
                 INSERT INTO invoicing_report_details (product_id, year, month, day, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms) 
                     SELECT * FROM (
-                    SELECT (SELECT row_id FROM invoicing_catalog_product WHERE product = :product),
+                    SELECT (SELECT row_id FROM invoicing_catalog_product WHERE product = :product AND invoicing_enabled = 1),
                            year(call_date) as 'Year',
                            month(call_date) as 'Month',
                            day(call_date) as 'Day',

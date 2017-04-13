@@ -25,22 +25,23 @@ CREATE TABLE `invoicing_catalog_product` (
   `row_id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(50) NOT NULL,
   `cdma` TINYINT(1) NULL COMMENT 'Is this a cmda version? (sprint)',
+  `invoicing_enabled` TINYINT(1) NULL COMMENT 'Enable or disable invoicing for this product',
   PRIMARY KEY (`row_id`),
   UNIQUE INDEX `product_UNIQUE` (`product` ASC));
 
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('ANELTO_ATT', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('DATAWIND', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-CDMA', '1');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('GOOD2GOUS-TRAVEL', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('JOLT-CDMA', '1');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('JOLT_ATT', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX-CDMA', '1');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('PIX_ATT', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('REALMOBILE', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('REALMOBILE-CDMA', '1');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('STREAM_ATT', '0');
-INSERT INTO `invoicing_catalog_product` (`product`, `cdma`) VALUES ('TELBILL', '0');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('ANELTO_ATT', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('DATAWIND', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('GOOD2GOUS', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('GOOD2GOUS-CDMA', '1', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('GOOD2GOUS-TRAVEL', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('JOLT-CDMA', '1', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('JOLT_ATT', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('PIX-CDMA', '1', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('PIX_ATT', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('REALMOBILE', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('REALMOBILE-CDMA', '1', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('STREAM_ATT', '0', '1');
+INSERT INTO `invoicing_catalog_product` (`product`, `cdma`, `invoicing_enabled`) VALUES ('TELBILL', '0', '1');
 
 
 CREATE TABLE `invoicing_report_details` (

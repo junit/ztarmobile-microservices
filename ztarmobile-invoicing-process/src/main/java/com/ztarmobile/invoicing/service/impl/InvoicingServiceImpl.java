@@ -243,6 +243,7 @@ public class InvoicingServiceImpl implements InvoicingService {
 
         long id = 0;
         CatalogProduct catalogProduct = null;
+        boolean enabled = false;
         try {
             // as long as the process is not in 'progress', we can process...
             if (!loggerDao.isInvoiceInStatus(PROGRESS)) {
@@ -251,9 +252,14 @@ public class InvoicingServiceImpl implements InvoicingService {
                 // make sure the product has the right value.
                 product = catalogProduct == null ? null : product;
 
+                // we add some common validations
                 validateInput(catalogProduct, "No product information was found for [" + productRequested + "]");
                 validateInput(isFutureDate(start), "The start date cannot be in the future");
                 validateInput(isFutureDate(end), "The end date cannot be in the future");
+
+                // and make sure the product is available or enabled
+                enabled = catalogProduct.isInvoicingEnabled();
+                validateInput(!enabled, "Product not enabled for invoicing: " + productRequested);
 
                 // save the record before staring the process.
                 id = loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), 0, PROGRESS);
