@@ -166,6 +166,17 @@ public class InvoicingServiceController {
     }
 
     /**
+     * This is just a ping endPoint.
+     */
+    @RequestMapping(value = "/echo", method = RequestMethod.GET)
+    public Response echo() {
+        LOG.debug("Requesting echo...");
+
+        // a simple message...
+        return new Response("I'm alive :)");
+    }
+
+    /**
      * Validate the common input parameters.
      * 
      * @param reportFrom
