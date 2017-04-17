@@ -16,6 +16,7 @@
     </parent>
     
     <properties>
+        <maven.test.skip>true</maven.test.skip>
         <project-findbugs.skip>true</project-findbugs.skip>
         <project-checkstyle.failOnViolation>true</project-checkstyle.failOnViolation>
         
