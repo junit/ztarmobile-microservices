@@ -167,6 +167,8 @@ public class InvoicingServiceController {
 
     /**
      * This is just a ping endPoint.
+     * 
+     * @return Just a 'ok' message to indicate that the service is alive.
      */
     @RequestMapping(value = "/echo", method = RequestMethod.GET)
     public Response echo() {
