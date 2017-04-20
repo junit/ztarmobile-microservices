@@ -18,9 +18,6 @@ import static com.ztarmobile.invoicing.common.FileUtils.executeShellCommand;
 import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
 import static java.util.Calendar.MONTH;
 
-import com.ztarmobile.invoicing.dao.LoggerDao;
-import com.ztarmobile.invoicing.model.LoggerCdrFile;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,6 +25,9 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.model.LoggerCdrFile;
 
 /**
  * Parent abstract class to handle the files for the CDR's.
@@ -121,7 +121,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
         LOG.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);
-        String expectedFileName;
+        String expectedFileName = null;
         File[] files = file.listFiles(createFileNameFilter(getFileExtension()));
         Arrays.sort(files); // make sure the files are ordered lexicographically
 
@@ -149,6 +149,11 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                     break;
                 }
             }
+        }
+        // none of the expected files were found, we report it.
+        if (!foundFileInRange) {
+            String fileNotFound = getSourceDirectoryCdrFile() + File.separator + expectedFileName;
+            invalidInput("The following file could not be found: " + fileNotFound);
         }
     }
 
