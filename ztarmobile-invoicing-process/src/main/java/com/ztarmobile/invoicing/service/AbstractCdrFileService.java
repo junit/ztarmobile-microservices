@@ -18,6 +18,9 @@ import static com.ztarmobile.invoicing.common.FileUtils.executeShellCommand;
 import static com.ztarmobile.invoicing.common.FileUtils.gunzipIt;
 import static java.util.Calendar.MONTH;
 
+import com.ztarmobile.invoicing.dao.LoggerDao;
+import com.ztarmobile.invoicing.model.LoggerCdrFile;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -25,9 +28,6 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.ztarmobile.invoicing.dao.LoggerDao;
-import com.ztarmobile.invoicing.model.LoggerCdrFile;
 
 /**
  * Parent abstract class to handle the files for the CDR's.
