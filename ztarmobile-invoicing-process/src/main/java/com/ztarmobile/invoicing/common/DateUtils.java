@@ -240,6 +240,8 @@ public class DateUtils {
         // Based on the current time, we calculate the hour, min and sec to set
         // the date.
         if (calendarEnd.compareTo(calendarNow) >= 0) {
+            // if calendarEnd is greater than today, we set today as
+            // calendarEnd.
             calendarEnd = calendarNow;
         } else {
             calendarEnd.set(HOUR_OF_DAY, calendarEnd.getActualMaximum(HOUR_OF_DAY));
