@@ -1,0 +1,6 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
+        username: root
+        password: ztar11
+        driver-class-name: com.mysql.jdbc.Driver
