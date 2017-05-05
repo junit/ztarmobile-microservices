@@ -46,5 +46,5 @@ spring:
     username: <<youremailaccount@gmail.com>>
 # PROFILES
   profiles:
-    active: @activatedProperties@
+    active: "@activatedProperties@"
     

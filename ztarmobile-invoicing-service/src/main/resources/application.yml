@@ -11,6 +11,14 @@ endpoints:
     enabled: true
     sensitive: false
 
+# BUILD INFO.
+info:
+  build:
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+  contact-dev: arivas@ztarmobile.com 
 # MANAGEMENT HTTP SERVER (ManagementServerProperties)
 management:
   security:
@@ -29,8 +37,11 @@ spring:
     build:
       location: classpath:META-INF/build-info.properties  
 # PROFILES
+# Luckily adding quotes around the @@ placeholders is another workaround
+# https://jira.spring.io/browse/STS-4250
+# https://jira.spring.io/browse/STS-4201
   profiles:
-    active: @activatedProperties@
+    active: "@activatedProperties@"
     
 # THYMELEAF (ThymeleafAutoConfiguration)
   thymeleaf:

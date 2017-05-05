@@ -44,5 +44,5 @@ spring:
     username: admin@good2gomobile.com
 # PROFILES
   profiles:
-    active: @activatedProperties@
+    active: "@activatedProperties@"
     
