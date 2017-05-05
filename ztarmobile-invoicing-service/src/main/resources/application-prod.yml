@@ -1,0 +1,48 @@
+# INVOICING configuration stuff
+invoicing:
+  cdrs:
+    extracted:
+      ericsson:
+        dir: /data/extracted/EricssonDumpFiles/US
+      sprint:
+        dir: /data/extracted/SprintDumpFiles/Usage
+    source:
+      ericsson:
+        dir: /mnt/lima/EricssonDumpFiles/US
+      sprint:
+        dir: /mnt/lima/SprintDumpFiles/Usage
+  cron:
+    notification: 0 0 9 3 * ?
+    report: 0 0 8 3 * ?
+  rest:
+    base-path: /api
+
+spring:
+# ACTIVEMQ (ActiveMQProperties)
+  activemq:
+    broker-url: tcp://localhost:61616
+    in-memory: false
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: xxxxxx
+    url: jdbc:mysql://10.0.0.142:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: xxxxxx
+# Email (MailProperties)
+  mail:
+    defaultEncoding: UTF-8
+    host: smtpout.secureserver.net
+    password: unlmtd45
+    port: 80
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: true
+    username: admin@good2gomobile.com
+# PROFILES
+  profiles:
+    active: @activatedProperties@
+    

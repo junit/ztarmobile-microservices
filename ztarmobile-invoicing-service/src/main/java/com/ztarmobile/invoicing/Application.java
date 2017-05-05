@@ -6,8 +6,17 @@
  */
 package com.ztarmobile.invoicing;
 
+import com.ztarmobile.invoicing.notification.ApplicationStateMailSender;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -24,6 +33,30 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class Application {
     /**
+     * Logger for this class.
+     */
+    private final Logger log = LoggerFactory.getLogger(Application.class);
+
+    /**
+     * Dependency to send notifications.
+     */
+    @Autowired
+    private ApplicationStateMailSender applicationStateMailSender;
+
+    /**
+     * We just print a reminder message to state that we are using a profile.
+     * 
+     * @return The spring bean.
+     */
+    @Bean
+    CommandLineRunner values() {
+        return args -> {
+            log.debug("*** [**");
+            System.out.println("sdsdsdsddsdsdsds");
+        };
+    }
+
+    /**
      * Starts the service.
      * 
      * @param args
@@ -32,6 +65,15 @@ public class Application {
     public static void main(String[] args) {
         // Launch the application
         SpringApplication app = new SpringApplication(Application.class);
+        app.addListeners(new ApplicationListener<ApplicationReadyEvent>() {
+
+            @Override
+            public void onApplicationEvent(ApplicationReadyEvent event) {
+                System.out.println("I'm ready");
+
+            }
+
+        });
         app.run(args);
     }
 }

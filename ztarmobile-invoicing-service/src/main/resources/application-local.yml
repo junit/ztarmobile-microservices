@@ -1,0 +1,50 @@
+# INVOICING configuration stuff
+invoicing:
+  cdrs:
+    extracted:
+      ericsson:
+        dir: /Users/armandorivas/data/extracted/EricssonDumpFiles/US
+      sprint:
+        dir: /Users/armandorivas/data/extracted/SprintDumpFiles/Usage
+    source:
+      ericsson:
+        dir: /Users/armandorivas/mnt/lima/EricssonDumpFiles/US
+      sprint:
+        dir: /Users/armandorivas/mnt/lima/SprintDumpFiles/Usage
+  cron:
+    notification: 0 0 12 1/1 * ?
+    report: 0 0 12 1/1 * ?
+  rest:
+    base-path: /api
+
+spring:
+# ACTIVEMQ (ActiveMQProperties)
+# No needed on local env so that it can be easy to work with: 
+# http://stackoverflow.com/questions/38750843/how-to-configure-embedded-activemq-broker-url-with-spring-boot
+
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: ztar11
+    url: jdbc:mysql://localhost:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: root
+# Email (MailProperties)
+# http://stackoverflow.com/questions/17987334/not-able-to-send-mail-using-java-mail-api
+# https://myaccount.google.com/lesssecureapps
+  mail:
+    defaultEncoding: UTF-8
+    host: smtp.gmail.com
+    password: <<yourgmailpass>>
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: false
+    username: <<youremailaccount@gmail.com>>
+# PROFILES
+  profiles:
+    active: @activatedProperties@
+    
