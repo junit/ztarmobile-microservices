@@ -34,10 +34,10 @@ public class ApplicationEmailNotification extends EmailNotification {
     public ApplicationEmailNotification(boolean success, Throwable reason) {
         this.reason = reason;
         if (success) {
-            this.setSubject("Microservice has started successfully!!!");
+            this.setSubject("Microservice Invoicing has started successfully!!!");
             this.reason = null;
         } else {
-            this.setSubject("Ohh no!!, Microservice could not start");
+            this.setSubject("Ohh no!!, Microservice Invoicing could not start");
         }
     }
 
