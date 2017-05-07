@@ -4,10 +4,10 @@
         <title>Invoicing Reports</title>
     </head>
     <body>
-        Hello <h3><span th:text="${name}" ></span></h3>
+        These are not good news, this Microservice could not start correctly, please find below the details:
         <p/>
-        Here's your monthly invoicing report. <br/>
-        These reports were generated based on the previous month data.
+        <h3><span style="color: red;" th:text="${reason}" ></span></h3>
         <p/>
+        <span style="font-family: Courier New" th:text="${trace}" ></span>
     </body>
 </html>
