@@ -19,6 +19,7 @@ info:
     description: "@project.description@"
     version: "@project.version@"
   contact-dev: arivas@ztarmobile.com
+  notify-dev: true
 
 # MANAGEMENT HTTP SERVER (ManagementServerProperties)
 management:
