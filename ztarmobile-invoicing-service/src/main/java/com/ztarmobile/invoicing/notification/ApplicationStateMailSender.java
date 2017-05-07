@@ -35,7 +35,7 @@ public class ApplicationStateMailSender {
     /**
      * Logger for this class.
      */
-    private final Logger log = LoggerFactory.getLogger(ApplicationStateMailSender.class);
+    private static final Logger log = LoggerFactory.getLogger(ApplicationStateMailSender.class);
 
     /**
      * Dependency of the mail sender.

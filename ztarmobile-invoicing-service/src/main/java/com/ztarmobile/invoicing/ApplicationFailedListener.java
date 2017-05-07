@@ -9,6 +9,8 @@ package com.ztarmobile.invoicing;
 import com.ztarmobile.invoicing.model.ApplicationEmailNotification;
 import com.ztarmobile.invoicing.notification.ApplicationStateMailSender;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
@@ -23,6 +25,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApplicationFailedListener implements ApplicationListener<ApplicationFailedEvent> {
+    /**
+     * Logger for this class.
+     */
+    private static final Logger log = LoggerFactory.getLogger(ApplicationFailedListener.class);
+
     /**
      * Dependency for the application email sender.
      */
@@ -51,6 +58,8 @@ public class ApplicationFailedListener implements ApplicationListener<Applicatio
             ApplicationEmailNotification notification = new ApplicationEmailNotification(false, event.getException());
             notification.setTo(contactDev);
             applicationStateMailSender.sendNotificationAtStartup(notification);
+        } else {
+            log.debug("Notification ApplicationFailedListener not available");
         }
     }
 }

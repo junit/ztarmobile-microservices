@@ -36,7 +36,7 @@ public class Application {
     /**
      * Logger for this class.
      */
-    private final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     /**
      * The active profile.
