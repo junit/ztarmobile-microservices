@@ -26,8 +26,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     password: ztar11
+    test-while-idle: false
     url: jdbc:mysql://localhost:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
     username: root
+    validation-query: SELECT 1
 # Email (MailProperties)
 # http://stackoverflow.com/questions/17987334/not-able-to-send-mail-using-java-mail-api
 # https://myaccount.google.com/lesssecureapps

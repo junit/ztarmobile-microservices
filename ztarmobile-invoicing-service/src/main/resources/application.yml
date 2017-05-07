@@ -34,6 +34,10 @@ spring:
 # IDENTITY (ContextIdApplicationContextInitializer)
   application:
     name: Invoicing Microservice v2
+# DATA REST (RepositoryRestProperties)
+  data:
+    rest:
+      base-path: /api
 # PROJECT INFORMATION (ProjectInfoProperties)
   info:
     build:

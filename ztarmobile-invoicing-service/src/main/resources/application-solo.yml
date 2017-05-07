@@ -26,8 +26,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     password: ztar11admin
+    test-while-idle: true
     url: jdbc:mysql://solo.ztarmobile.local:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
     username: ztar_db_user
+    validation-query: SELECT 1
 # Email (MailProperties)
   mail:
     defaultEncoding: UTF-8
