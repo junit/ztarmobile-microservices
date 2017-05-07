@@ -8,6 +8,9 @@ package com.ztarmobile.invoicing.notification;
 
 import com.ztarmobile.invoicing.model.ApplicationEmailNotification;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -86,9 +89,23 @@ public class ApplicationStateMailSender {
             String templateName = null;
             final Context ctx = new Context();
             if (email.isSuccess()) {
+                ctx.setVariable("version", email.getVersion());
+                ctx.setVariable("artifact", email.getArtifact());
+                ctx.setVariable("name", email.getName());
+                ctx.setVariable("description", email.getDescription());
+
                 templateName = "startup_success";
             } else {
                 ctx.setVariable("reason", email.getReason());
+
+                StringWriter writer = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(writer);
+                email.getReason().printStackTrace(printWriter);
+                printWriter.flush();
+                String stackTrace = writer.toString();
+
+                ctx.setVariable("trace", stackTrace);
+
                 templateName = "startup_failure";
             }
             final String htmlContent = this.templateEngine.process(templateName, ctx);
