@@ -18,9 +18,34 @@ public class ApplicationEmailNotification extends EmailNotification {
      */
     private Throwable reason;
     /**
+     * The artifact.
+     */
+    private String artifact;
+    /**
+     * The name.
+     */
+    private String name;
+    /**
+     * The description.
+     */
+    private String description;
+    /**
+     * The version.
+     */
+    private String version;
+    /**
      * Just a flag to indicate whether the application was success or not.
      */
     private boolean success;
+
+    /**
+     * Creates an object that holds the state of the application when it started
+     * Successfully.
+     * 
+     */
+    public ApplicationEmailNotification() {
+        this(true, null);
+    }
 
     /**
      * Creates an object that holds the state of the application.
@@ -33,6 +58,7 @@ public class ApplicationEmailNotification extends EmailNotification {
      */
     public ApplicationEmailNotification(boolean success, Throwable reason) {
         this.reason = reason;
+        this.success = success;
         if (success) {
             this.setSubject("Microservice Invoicing has started successfully!!!");
             this.reason = null;
@@ -55,6 +81,66 @@ public class ApplicationEmailNotification extends EmailNotification {
         return success;
     }
 
+    /**
+     * @return the artifact
+     */
+    public String getArtifact() {
+        return artifact;
+    }
+
+    /**
+     * @param artifact
+     *            the artifact to set
+     */
+    public void setArtifact(String artifact) {
+        this.artifact = artifact;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name
+     *            the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the version
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * @param version
+     *            the version to set
+     */
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -62,7 +148,7 @@ public class ApplicationEmailNotification extends EmailNotification {
      */
     @Override
     public String toString() {
-        return "ApplicationEmailNotification [reason=" + reason + ", success=" + success + "]";
+        return "ApplicationEmailNotification [reason=" + reason + ", artifact=" + artifact + ", name=" + name
+                + ", description=" + description + ", version=" + version + ", success=" + success + "]";
     }
-
 }
