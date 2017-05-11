@@ -18,7 +18,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version %I%, %G%
  * @since 2.0
  */
-@RepositoryRestResource(collectionResourceRel = "catalog:products", path = "products")
+@RepositoryRestResource(collectionResourceRel = "catalogProducts", path = "catalogProducts")
 public interface CatalogProductRepository extends JpaRepository<CatalogProduct, Long> {
 
 }
