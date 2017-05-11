@@ -93,6 +93,7 @@ public class ApplicationStateMailSender {
                 ctx.setVariable("artifact", email.getArtifact());
                 ctx.setVariable("name", email.getName());
                 ctx.setVariable("description", email.getDescription());
+                ctx.setVariable("url", email.getUrl());
 
                 templateName = "startup_success";
             } else {

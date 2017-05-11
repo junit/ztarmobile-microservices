@@ -147,4 +147,19 @@ public class CommonUtils {
         }
         return json;
     }
+
+    /**
+     * This method just returns the service URL of this application.
+     * 
+     * @param serverAddress
+     *            The server address.
+     * @param serverPort
+     *            The server port.
+     * @param basePath
+     *            The base path of the service.
+     * @return The URL of this service.
+     */
+    public static String createServiceUrl(String serverAddress, String serverPort, String basePath) {
+        return "http://" + serverAddress + ":" + serverPort + basePath;
+    }
 }

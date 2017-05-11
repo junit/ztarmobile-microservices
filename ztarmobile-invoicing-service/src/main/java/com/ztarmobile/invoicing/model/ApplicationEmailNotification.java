@@ -34,6 +34,10 @@ public class ApplicationEmailNotification extends EmailNotification {
      */
     private String version;
     /**
+     * The URL of the service.
+     */
+    private String url;
+    /**
      * Just a flag to indicate whether the application was success or not.
      */
     private boolean success;
@@ -139,6 +143,21 @@ public class ApplicationEmailNotification extends EmailNotification {
      */
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url
+     *            the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     /*

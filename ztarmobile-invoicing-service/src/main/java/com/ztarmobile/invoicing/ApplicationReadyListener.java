@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing;
 
+import static com.ztarmobile.invoicing.common.CommonUtils.createServiceUrl;
+
 import com.ztarmobile.invoicing.model.ApplicationEmailNotification;
 import com.ztarmobile.invoicing.notification.ApplicationStateMailSender;
 
@@ -70,6 +72,22 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     private boolean notify;
 
     /**
+     * Based path.
+     */
+    @Value("${spring.data.rest.base-path}")
+    private String basePath;
+    /**
+     * The server address, by default is: localhost.
+     */
+    @Value("${server.address:localhost}")
+    private String serverAddress;
+    /**
+     * The server port.
+     */
+    @Value("${server.port}")
+    private String serverPort;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -82,6 +100,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
             applicationNotif.setDescription(description);
             applicationNotif.setVersion(version);
             applicationNotif.setName(name);
+            applicationNotif.setUrl(createServiceUrl(serverAddress, serverPort, basePath));
 
             applicationStateMailSender.sendNotificationAtStartup(applicationNotif);
         } else {

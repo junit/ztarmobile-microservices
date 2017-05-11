@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.invoicing;
 
+import static com.ztarmobile.invoicing.common.CommonUtils.createServiceUrl;
+
 import javax.jms.ConnectionFactory;
 
 import org.slf4j.Logger;
@@ -72,6 +74,22 @@ public class Application {
     private String version;
 
     /**
+     * Based path.
+     */
+    @Value("${spring.data.rest.base-path}")
+    private String basePath;
+    /**
+     * The server address, by default is: localhost.
+     */
+    @Value("${server.address:localhost}")
+    private String serverAddress;
+    /**
+     * The server port.
+     */
+    @Value("${server.port}")
+    private String serverPort;
+
+    /**
      * We just print a reminder message to state that we are using a profile.
      * 
      * @return The spring bean.
@@ -79,12 +97,15 @@ public class Application {
     @Bean
     CommandLineRunner values() {
         return args -> {
+            String url = createServiceUrl(serverAddress, serverPort, basePath);
+
             log.debug("*** [" + applicationName + "] Running under profile: " + activeProfile + " ***");
             log.debug("Build Info:");
             log.debug("\tArtifact: " + artifact);
             log.debug("\tName: " + name);
             log.debug("\tDescription: " + description);
             log.debug("\tVersion: " + version);
+            log.debug("URL: " + url);
         };
     }
 
