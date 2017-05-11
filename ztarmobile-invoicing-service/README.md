@@ -13,4 +13,4 @@ Next, it’s time to install the Spring Boot CLI, which you do by executing this
 $ sdk install springboot
 $ spring --version
 
-spring init -d=web,thymeleaf,data-rest,actuator,jdbc,mail,activemq,mysql,data-rest-hal -g=com.ztarmobile -a=ztarmobile-invoicing-service -v=2.0.0.RELEASE --package-name=com.ztarmobile.invoicing -name="Ztar Invoicing MicroService V2" -description="Latest version of Ztar Invoicing MicroService" -x --force
+spring init -d=web,thymeleaf,data-rest,actuator,jdbc,mail,activemq,mysql,data-rest-hal,data-jpa -g=com.ztarmobile -a=ztarmobile-invoicing-service -v=2.0.0.RELEASE --package-name=com.ztarmobile.invoicing -name="Ztar Invoicing MicroService V2" -description="Latest version of Ztar Invoicing MicroService" -x --force
