@@ -8,13 +8,15 @@ package com.ztarmobile.invoicing.model;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.toJson;
 
+import org.springframework.hateoas.ResourceSupport;
+
 /**
  * Value object.
  *
  * @author armandorivas
  * @since 03/27/17
  */
-public class Response {
+public class Response extends ResourceSupport {
     public static final int SUCCESS = 0;
     public static final int ERROR = -1;
     private int status = SUCCESS;

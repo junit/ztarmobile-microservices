@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.invoicing;
 
+import static com.ztarmobile.invoicing.common.CommonUtils.evaluateHateoasLink;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.webmvc.RepositoryLinksResource;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceProcessor;
 import org.springframework.stereotype.Component;
 
@@ -47,39 +47,23 @@ public class ApplicationResourceProcessor implements ResourceProcessor<Repositor
         log.debug("Listing all initial resources.");
 
         // adds new links to the index resource.
-        resource.add(createFinalLink(
+        resource.add(evaluateHateoasLink(
                 linkTo(methodOn(InvoicingServiceController.class).processInvoicing(null, null, null, false))
-                        .withRel("invoicing:requests")));
-        resource.add(createFinalLink(linkTo(methodOn(InvoicingServiceController.class).getAllAvailableRequests())
-                .withRel("invoicing:logs")));
-        resource.add(createFinalLink(
+                        .withRel("invoicing:requests"),
+                basePath));
+        resource.add(evaluateHateoasLink(
+                linkTo(methodOn(InvoicingServiceController.class).getAllAvailableRequests()).withRel("invoicing:logs"),
+                basePath));
+        resource.add(evaluateHateoasLink(
                 linkTo(methodOn(InvoicingServiceController.class).getFileStreamingOutput(null, null, null, null))
-                        .withRel("invoicing:downloads")));
-        resource.add(createFinalLink(linkTo(methodOn(InvoicingServiceController.class).getAllAvailableProducts())
-                .withRel("invoicing:products")));
-        resource.add(
-                createFinalLink(linkTo(methodOn(InvoicingServiceController.class).echo()).withRel("invoicing:echo")));
+                        .withRel("invoicing:downloads"),
+                basePath));
+        resource.add(evaluateHateoasLink(linkTo(methodOn(InvoicingServiceController.class).getAllAvailableProducts())
+                .withRel("invoicing:products"), basePath));
+        resource.add(evaluateHateoasLink(
+                linkTo(methodOn(InvoicingServiceController.class).echo()).withRel("invoicing:echo"), basePath));
 
         return resource;
     }
 
-    /**
-     * Create a final link with the base path replacement.
-     * 
-     * @param link
-     *            The existing link.
-     * @return A new link with a replacement.
-     */
-    private Link createFinalLink(Link link) {
-        String tmpPath = basePath;
-        if (basePath.startsWith("/")) {
-            tmpPath = basePath.substring(1);
-        }
-
-        String rel = link.getRel();
-        String href = link.getHref();
-        href = href.replace("${spring.data.rest.base-path}", tmpPath);
-
-        return new Link(href, rel);
-    }
 }

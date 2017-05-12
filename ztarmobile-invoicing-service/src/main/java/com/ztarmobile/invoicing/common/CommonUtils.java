@@ -9,6 +9,8 @@ package com.ztarmobile.invoicing.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.hateoas.Link;
+
 /**
  * Utility to handle some common operations.
  *
@@ -161,5 +163,25 @@ public class CommonUtils {
      */
     public static String createServiceUrl(String serverAddress, String serverPort, String basePath) {
         return "http://" + serverAddress + ":" + serverPort + basePath;
+    }
+
+    /**
+     * Create a final link with the base path replacement.
+     * 
+     * @param link
+     *            The existing link.
+     * @return A new link with a replacement.
+     */
+    public static Link evaluateHateoasLink(Link link, String basePath) {
+        String tmpPath = basePath;
+        if (basePath.startsWith("/")) {
+            tmpPath = basePath.substring(1);
+        }
+
+        String rel = link.getRel();
+        String href = link.getHref();
+        href = href.replace("${spring.data.rest.base-path}", tmpPath);
+
+        return new Link(href, rel);
     }
 }
