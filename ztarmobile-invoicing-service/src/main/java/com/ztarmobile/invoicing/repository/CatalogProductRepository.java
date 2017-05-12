@@ -10,6 +10,7 @@ import com.ztarmobile.invoicing.model.CatalogProduct;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Defines a new repository for the products.
@@ -18,6 +19,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version %I%, %G%
  * @since 2.0
  */
+@Transactional
 @RepositoryRestResource(collectionResourceRel = "catalogProducts", path = "catalogProducts")
 public interface CatalogProductRepository extends JpaRepository<CatalogProduct, Long> {
 
