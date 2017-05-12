@@ -170,6 +170,8 @@ public class CommonUtils {
      * 
      * @param link
      *            The existing link.
+     * @param basePath
+     *            The base path of the service.
      * @return A new link with a replacement.
      */
     public static Link evaluateHateoasLink(Link link, String basePath) {

@@ -123,6 +123,7 @@ public class InvoicingServiceController {
      *            The report to.
      * @param product
      *            The product description.
+     * @return The empty response.
      */
     @RequestMapping(value = REPORT_DOWNLOAD_MAPPING, method = GET, produces = { "text/csv" })
     public Response getFileStreamingOutput(HttpServletResponse response,
