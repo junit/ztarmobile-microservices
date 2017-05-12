@@ -1,3 +1,9 @@
+/* 
+ * Copyright (C) Ztar Mobile, Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Armando Rivas <arivas@ztarmobile.com>, May 2017.
+ */
 package com.ztarmobile.invoicing.controllers;
 
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
@@ -19,13 +25,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The controller class.
+ *
+ * @author armandorivas
+ * @version %I%, %G%
+ * @since 2.0
+ */
 @RestController
+@RequestMapping(value = "${spring.data.rest.base-path}")
 public class InvoicingServiceController {
     /**
      * Logger for this class.
      */
     private static final Logger log = LoggerFactory.getLogger(InvoicingServiceController.class);
 
+    /**
+     * All the mappings.
+     */
     private static final String REPORT_REQUEST_MAPPING = "/report/request";
     private static final String REPORT_LOG_MAPPING = "/report/log";
     private static final String REPORT_DOWNLOAD_MAPPING = "/report/download";

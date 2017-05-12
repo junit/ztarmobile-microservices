@@ -37,7 +37,7 @@ spring:
 # DATA REST (RepositoryRestProperties)
   data:
     rest:
-      base-path: /api
+      base-path: /api/v1/invoice
 # PROJECT INFORMATION (ProjectInfoProperties)
   info:
     build:
