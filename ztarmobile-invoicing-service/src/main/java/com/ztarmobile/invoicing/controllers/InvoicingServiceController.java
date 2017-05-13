@@ -8,15 +8,24 @@ package com.ztarmobile.invoicing.controllers;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
+import static com.ztarmobile.invoicing.common.ReportHelper.createHeader;
+import static com.ztarmobile.invoicing.common.ReportHelper.createReportName;
+import static com.ztarmobile.invoicing.common.ReportHelper.createRow;
 import static com.ztarmobile.invoicing.jms.InvoicingReceiver.INVOICING_REQ_QUEUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import com.ztarmobile.invoicing.model.InvoicingRequest;
+import com.ztarmobile.invoicing.model.ReportDetails;
 import com.ztarmobile.invoicing.model.Response;
 import com.ztarmobile.invoicing.repository.CatalogProductRepository;
+import com.ztarmobile.invoicing.service.InvoicingService;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -60,6 +69,12 @@ public class InvoicingServiceController {
     private CatalogProductRepository catalogProductRepository;
 
     /**
+     * Dependency of the invoicing service.
+     */
+    @Autowired
+    private InvoicingService invoicingService;
+
+    /**
      * The JSM template.
      */
     @Autowired
@@ -94,7 +109,7 @@ public class InvoicingServiceController {
         log.debug("Requesting all the requests...");
 
         // we just send the response to the client.
-        return new Response();
+        return new Response(invoicingService.getAllAvailableRequests());
     }
 
     /**
@@ -115,6 +130,46 @@ public class InvoicingServiceController {
             @RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
             @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
             @RequestParam("product") String product) {
+
+        // validates the parameters...
+        validateCommonInput(reportFrom, reportTo, product);
+
+        Calendar calendarFrom = null;
+        Calendar calendarTo = null;
+
+        calendarFrom = Calendar.getInstance();
+        calendarFrom.setTime(reportFrom);
+
+        calendarTo = Calendar.getInstance();
+        calendarTo.setTime(reportTo);
+
+        List<ReportDetails> list = invoicingService.generateReport(calendarFrom, calendarTo, product);
+        OutputStream outputStream = null;
+        String fileName = createReportName(product, calendarFrom, calendarTo);
+        try {
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+            int totalDownloaded = 0;
+            outputStream = response.getOutputStream();
+            outputStream.write(createHeader().getBytes());
+            for (ReportDetails detail : list) {
+                outputStream.write(createRow(detail).getBytes());
+                totalDownloaded++;
+            }
+            outputStream.flush();
+            outputStream.close();
+            log.debug("Total records downloaded: " + totalDownloaded);
+        } catch (Exception e) {
+            log.debug("Error while downloading the report " + e.getMessage());
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    log.debug("Cannot close the connection...");
+                }
+            }
+        }
         return new Response();
     }
 
