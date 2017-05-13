@@ -14,9 +14,7 @@ invoicing:
   cron:
     notification: 0 0 9 3 * ?
     report: 0 0 8 3 * ?
-  rest:
-    base-path: /api
-
+    
 spring:
 # ACTIVEMQ (ActiveMQProperties)
   activemq:
