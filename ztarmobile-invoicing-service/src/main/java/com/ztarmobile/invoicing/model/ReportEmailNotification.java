@@ -16,7 +16,23 @@ import java.util.List;
  * @since 2.0
  */
 public class ReportEmailNotification extends EmailNotification {
+    private String receiptName;
     private List<EmailAttachment> content;
+
+    /**
+     * @return the receiptName
+     */
+    public String getReceiptName() {
+        return receiptName;
+    }
+
+    /**
+     * @param receiptName
+     *            the receiptName to set
+     */
+    public void setReceiptName(String receiptName) {
+        this.receiptName = receiptName;
+    }
 
     /**
      * @return the content
@@ -40,6 +56,6 @@ public class ReportEmailNotification extends EmailNotification {
      */
     @Override
     public String toString() {
-        return "ReportEmailNotification [content=" + content + "]";
+        return "ReportEmailNotification [receiptName=" + receiptName + ", content=" + content + "]";
     }
 }
