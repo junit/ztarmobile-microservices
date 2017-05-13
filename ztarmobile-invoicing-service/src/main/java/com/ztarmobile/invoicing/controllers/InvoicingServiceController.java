@@ -8,6 +8,7 @@ package com.ztarmobile.invoicing.controllers;
 
 import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
+import static com.ztarmobile.invoicing.jms.InvoicingReceiver.INVOICING_REQ_QUEUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,8 +53,17 @@ public class InvoicingServiceController {
     private static final String PRODUCTS_MAPPING = "/products";
     private static final String ECHO_MAPPING = "/echo";
 
+    /**
+     * The catalog product repository.
+     */
     @Autowired
     private CatalogProductRepository catalogProductRepository;
+
+    /**
+     * The JSM template.
+     */
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @RequestMapping(value = REPORT_REQUEST_MAPPING, method = POST)
     public Response processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
@@ -68,6 +79,8 @@ public class InvoicingServiceController {
         invoicingRequest.setProduct(product);
         invoicingRequest.setRerunInvoicing(rerunInvoicing);
 
+        // send the request to the queue
+        jmsTemplate.convertAndSend(INVOICING_REQ_QUEUE, invoicingRequest);
         return new Response();
     }
 
