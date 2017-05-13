@@ -6,10 +6,12 @@
  */
 package com.ztarmobile.invoicing.controllers;
 
+import static com.ztarmobile.invoicing.common.CommonUtils.validateInput;
 import static com.ztarmobile.invoicing.common.DateUtils.MMDDYYYY;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import com.ztarmobile.invoicing.model.InvoicingRequest;
 import com.ztarmobile.invoicing.model.Response;
 import com.ztarmobile.invoicing.repository.CatalogProductRepository;
 
@@ -52,49 +54,19 @@ public class InvoicingServiceController {
     @Autowired
     private CatalogProductRepository catalogProductRepository;
 
-    // @RequestMapping(value = "/report/request", method = RequestMethod.POST)
-    // public HttpEntity<Greeting> sample(@RequestParam("product") String
-    // product) {
-    // Greeting greeting = new Greeting(String.format("dd", "ddddccc"));
-    //
-    // return new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
-    // }
-    /*
-     * @RequestMapping(method = RequestMethod.GET, value =
-     * "/scanners/search/listProducer") public @ResponseBody ResponseEntity<?>
-     * getProducers() { List<String> producers = new ArrayList<>();
-     * producers.add("dsdsds"); producers.add("ssss");
-     * 
-     * // // do some intermediate processing, logging, etc. with the producers
-     * //
-     * 
-     * Resources<String> resources = new Resources<String>(producers);
-     * 
-     * // resources.add(ControllerLinkBuilder //
-     * .linkTo(ControllerLinkBuilder.methodOn(InvoicingServiceController.class).
-     * getProducers()).withSelfRel());
-     * 
-     * // add other links as needed
-     * 
-     * return ResponseEntity.ok(""); }
-     */
-    /*
-     * @RequestMapping(value = INVOICING_REQUEST_MAPPING, method = POST)
-     * public @ResponseBody ResponseEntity<?> processInvoicing(@RequestBody
-     * String product) { List<String> producers = new ArrayList<>();
-     * Resources<String> resources = new Resources<String>(producers);
-     * producers.add("dsdsds"); producers.add("ssss");
-     * 
-     * resources.add(ControllerLinkBuilder
-     * .linkTo(ControllerLinkBuilder.methodOn(InvoicingServiceController.class).
-     * processInvoicing(null)) .withSelfRel()); return
-     * ResponseEntity.ok(resources); }
-     */
-
     @RequestMapping(value = REPORT_REQUEST_MAPPING, method = POST)
     public Response processInvoicing(@RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
             @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
             @RequestParam("product") String product, @RequestParam("rerunInvoicing") boolean rerunInvoicing) {
+
+        // validates the parameters...
+        validateCommonInput(reportFrom, reportTo, product);
+
+        InvoicingRequest invoicingRequest = new InvoicingRequest();
+        invoicingRequest.setReportFrom(reportFrom);
+        invoicingRequest.setReportTo(reportTo);
+        invoicingRequest.setProduct(product);
+        invoicingRequest.setRerunInvoicing(rerunInvoicing);
 
         return new Response();
     }
@@ -157,5 +129,22 @@ public class InvoicingServiceController {
 
         // a simple message...
         return new Response("I'm alive :)");
+    }
+
+    /**
+     * Validate the common input parameters.
+     * 
+     * @param reportFrom
+     *            The report from.
+     * @param reportTo
+     *            The report to.
+     * @param product
+     *            The product.
+     */
+    private void validateCommonInput(Date reportFrom, Date reportTo, String product) {
+        // we validate some inputs before sending the request to the queue
+        validateInput(reportFrom, "Please provide a 'reportFrom' parameter using this format: " + MMDDYYYY);
+        validateInput(reportTo, "Please provide a 'reportTo' parameter using this format: " + MMDDYYYY);
+        validateInput(product, "The 'product' cannot be empty");
     }
 }
