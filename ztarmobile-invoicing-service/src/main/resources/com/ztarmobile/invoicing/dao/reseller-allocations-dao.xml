@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="resellerAllocationsDaoSql">
+        <prop key="select.insert.reseller_subs_usage">
+            <![CDATA[
+                INSERT INTO reseller_subs_usage( 
+                    row_id, product, call_date, rate_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
+                    actual_mou, actual_sms, actual_mms, actual_kbs, duration_start, duration_end,
+                    new_add_ind, renewal_ind, lst_upd_date)
+                SELECT  null, rpb.product, :call_dt as call_date, rpb.rate_plan, rpb.mdn,
+                        pln.dly_mou, pln.dly_sms, pln.dly_mms,
+                        pln.dly_mbs, 0,0,0,0, 
+                        (SELECT case when :duration_start < rpb.billing_start_date THEN rpb.billing_start_date ELSE :duration_start END) duration_start,
+                        (SELECT case when :duration_end > rpb.billing_end_date THEN rpb.billing_end_date ELSE :duration_end END) duration_end,
+                        0 new_add_ind, 0 renewal_ind,
+                        sysdate()
+                FROM    ztar.us_rate_plan_billing rpb,
+                        reseller_rate_plans pln
+                WHERE   rpb.product   = pln.reseller
+                AND     rpb.rate_plan = pln.rate_plan
+                AND     rpb.product   = :reseller
+                AND     pln.eff_date  <= date(:call_dt)
+                AND     pln.end_date  >= date(:call_dt)
+                AND     pln.status    = 'A'
+                AND     rpb.billing_status IN ('A', 'N') 
+                AND     rpb.mdn NOT IN (SELECT mdn FROM ztar.test_accounts) -- excluding testing accounts
+                AND     date(rpb.billing_start_date) <= date(:call_dt)
+                AND     (rpb.billing_end_date is null OR date(rpb.billing_end_date) >= date(:call_dt))
+                ON DUPLICATE KEY 
+                UPDATE    duration_end = (SELECT case when :duration_end > rpb.billing_end_date THEN rpb.billing_end_date ELSE :duration_end END);
+                
+                INSERT INTO reseller_subs_usage( 
+                    row_id, product, call_date, rate_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
+                    actual_mou, actual_sms, actual_mms, actual_kbs, duration_start, duration_end,
+                    new_add_ind, renewal_ind, lst_upd_date)
+                    
+                SELECT null, rpb.product, :call_dt as call_date, rpb.rate_plan, rpb.mdn, 
+                        pln.dly_mou, pln.dly_sms, pln.dly_mms, 
+                        pln.dly_mbs, 0,0,0,0, 
+                        (SELECT case when :duration_start < rpb.billing_start_date THEN rpb.billing_start_date ELSE :duration_start END) duration_start,
+                        (SELECT case when :duration_end > rpb.billing_end_date THEN rpb.billing_end_date ELSE :duration_end END) duration_end,
+                        0 new_add_ind,
+                        if (isnull(note.note_timestamp), 0, 1) renewal_ind,
+                        sysdate()
+                FROM    ztar.us_rate_plan_billing rpb,
+                        ztar.account_subscribers acs
+                        left outer join ztar.scythe_notes note
+                            on (  note.uan = acs.uan
+                                and note.note_title = 'Rate Plan Renewed'
+                                and date(note.note_timestamp) = date(:call_dt) ),
+                        reseller_rate_plans pln
+                WHERE rpb.product   = pln.reseller
+                AND   rpb.rate_plan = pln.rate_plan
+                AND   rpb.product   = :reseller
+                AND   pln.eff_date  <= date(:call_dt)
+                AND   pln.end_date  >= date(:call_dt)
+                AND   pln.status    = 'A'
+                AND   rpb.billing_status IN ('A', 'N')
+                AND   rpb.mdn NOT IN (SELECT mdn FROM ztar.test_accounts) -- excluding testing accounts
+                AND   acs.mdn       = rpb.mdn
+                AND   date(rpb.billing_start_date) <= date(:call_dt)
+                AND   (rpb.billing_end_date is null OR date(rpb.billing_end_date) >= date(:call_dt))
+                AND   note.note_timestamp is not null
+                ON DUPLICATE KEY 
+                UPDATE    renewal_ind = renewal_ind + if (isnull(note.note_timestamp), 0, 1);
+                
+                INSERT INTO reseller_subs_usage( 
+                    row_id, product, call_date, rate_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
+                    actual_mou, actual_sms, actual_mms, actual_kbs, duration_start, duration_end,
+                    new_add_ind, renewal_ind, lst_upd_date)
+                    
+                SELECT null, rpb.product, :call_dt as call_date, rpb.rate_plan, rpb.mdn, 
+                        pln.dly_mou, pln.dly_sms, pln.dly_mms, 
+                        pln.dly_mbs, 0,0,0,0, 
+                        (SELECT case when :duration_start < rpb.billing_start_date THEN rpb.billing_start_date ELSE :duration_start END) duration_start,
+                        (SELECT case when :duration_end > rpb.billing_end_date THEN rpb.billing_end_date ELSE :duration_end END) duration_end,
+                        if (isnull(newadds.billing_start_date), 0, 1) new_add_ind,
+                        0 renewal_ind,
+                        sysdate()
+                FROM    ztar.us_rate_plan_billing rpb
+                        left outer join ztar.us_rate_plan_billing newadds
+                            on (  newadds.mdn = rpb.mdn
+                                and newadds.rate_plan = rpb.rate_plan
+                                and newadds.product = rpb.product
+                                and date(newadds.billing_start_date) between date(:call_dt) and date(:call_dt) ),
+                        reseller_rate_plans pln
+                WHERE rpb.product   = pln.reseller
+                AND   rpb.rate_plan = pln.rate_plan
+                AND   rpb.product   = :reseller
+                AND   pln.eff_date  <= date(:call_dt)
+                AND   pln.end_date  >= date(:call_dt)
+                AND   pln.status    = 'A'
+                AND   rpb.billing_status IN ('A', 'N') 
+                AND   rpb.mdn NOT IN (SELECT mdn FROM ztar.test_accounts) -- excluding testing accounts
+                AND   date(rpb.billing_start_date) = date(:call_dt)
+                AND   (rpb.billing_end_date is null OR date(rpb.billing_end_date) >= date(:call_dt))
+                ON DUPLICATE KEY 
+                UPDATE    new_add_ind = new_add_ind + if (isnull(newadds.billing_start_date), 0, 1);
+            ]]>
+        </prop>
+        <prop key="update.reseller_subs_usage.indicators">
+            <![CDATA[
+                UPDATE    reseller_subs_usage
+                SET       renewal_ind = 1
+                WHERE     renewal_ind > 1;
+                
+                UPDATE    reseller_subs_usage
+                SET       new_add_ind = 1
+                WHERE     new_add_ind > 1;
+            ]]>
+        </prop>
+        <prop key="select.reseller_subs_usage">
+            <![CDATA[
+                SELECT usg.row_id, usg.call_date, usg.rate_plan, usg.mdn, usg.alloc_mou, usg.alloc_sms,
+                       usg.alloc_mms, usg.alloc_mbs, usg.actual_mou, usg.actual_sms, usg.actual_mms,
+                       usg.actual_kbs, usg.duration_start, usg.duration_end,
+                       usg.new_add_ind, usg.renewal_ind, usg.lst_upd_date
+                FROM   reseller_subs_usage usg,
+                       reseller_rate_plans rrp
+                WHERE  rrp.rate_plan = usg.rate_plan
+                AND    rrp.reseller = :reseller
+                AND    usg.call_date >= :start_dt
+                AND    usg.call_date <= :end_dt
+                ORDER BY usg.call_date, usg.mdn, usg.rate_plan
+            ]]>
+        </prop>
+        <prop key="update.reseller_subs_usage">
+            <![CDATA[
+                UPDATE reseller_subs_usage
+                SET    actual_mou = :actualMou,
+                       actual_sms = :actualSms,
+                       actual_mms = :actualMms,
+                       actual_kbs = :actualKbs,
+                       lst_upd_date = now()
+                WHERE  row_id = :rowId
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>

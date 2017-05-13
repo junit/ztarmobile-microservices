@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="loggerDaoSql">
+        <prop key="select.logger_cdr_file">
+            <![CDATA[
+                SELECT row_id, source_file_name, target_file_name, status
+                FROM   invoicing_logger_cdr_file
+                WHERE  source_file_name = :file_name
+            ]]>
+        </prop>
+        <prop key="insert.logger_cdr_file">
+            <![CDATA[
+                INSERT INTO invoicing_logger_cdr_file (source_file_name, target_file_name, file_type, status, error_description)
+                VALUES (:source_file_name, :target_file_name, :file_type, :status, :error_description)
+                ON DUPLICATE KEY 
+                UPDATE target_file_name = :target_file_name, file_type = :file_type, status = :status, error_description = :error_description, load_date = NOW() 
+            ]]>
+        </prop>
+        <prop key="select.logger_report_file">
+            <![CDATA[
+                SELECT row_id, status_allocations, status_usage
+                FROM   invoicing_logger_report_file
+                WHERE  product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
+                AND    report_date = :report_date
+            ]]>
+        </prop>
+        <prop key="insert.logger_report_file">
+            <![CDATA[
+                INSERT INTO invoicing_logger_report_file (product_id, report_date, status_allocations, status_usage, error_description)
+                VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date, :status_allocations, :status_usage, :error_description)
+                ON DUPLICATE KEY 
+                UPDATE status_allocations = :status_allocations, status_usage = :status_usage, error_description = :error_description, processed_date = NOW() 
+            ]]>
+        </prop>
+        <prop key="update.logger_report_file">
+            <![CDATA[
+                UPDATE invoicing_logger_report_file
+                SET status_allocations = :status_allocations, status_usage = :status_usage, error_description = :error_description, processed_date = NOW()
+                WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
+                AND YEAR(report_date) = :year_report_date
+                AND MONTH(report_date) = :month_report_date
+            ]]>
+        </prop>
+        <prop key="insert.logger_request.with.product">
+            <![CDATA[
+                INSERT INTO invoicing_logger_requests (product_id, report_date_from, report_date_to, total_time, status, error_description, friendly_error_description)
+                VALUES ((SELECT row_id FROM invoicing_catalog_product WHERE product = :product), :report_date_from, :report_date_to, :total_time, :status, :error_description, :friendly_error_description)    
+            ]]>
+        </prop>
+        <prop key="insert.logger_request.no.product">
+            <![CDATA[
+                INSERT INTO invoicing_logger_requests (report_date_from, report_date_to, total_time, status, error_description, friendly_error_description)
+                VALUES (:report_date_from, :report_date_to, :total_time, :status, :error_description, :friendly_error_description)    
+            ]]>
+        </prop>
+        <prop key="update.logger_request">
+            <![CDATA[
+                UPDATE invoicing_logger_requests SET total_time = :total_time, status = :status, error_description = :error_description, friendly_error_description = :friendly_error_description WHERE row_id = :row_id
+            ]]>
+        </prop>
+        <prop key="select.logger_request">
+            <![CDATA[
+                SELECT row_id, (SELECT icp.product FROM invoicing_catalog_product icp WHERE icp.row_id = product_id) AS product, report_date_from, report_date_to, total_time, status, friendly_error_description, request_date
+                  FROM invoicing_logger_requests
+                 ORDER BY request_date desc
+                 LIMIT :max_records
+            ]]>
+        </prop>
+        <prop key="count.logger_request">
+            <![CDATA[
+                SELECT COUNT(status)
+                  FROM invoicing_logger_requests
+                 WHERE status = :status
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>
