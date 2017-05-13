@@ -77,11 +77,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!-- To setup security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
         <!-- To have our unit testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
