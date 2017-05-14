@@ -54,10 +54,6 @@ public class ApplicationResourceProcessor implements ResourceProcessor<Repositor
         resource.add(evaluateHateoasLink(
                 linkTo(methodOn(InvoicingServiceController.class).getAllAvailableRequests()).withRel("invoicing:logs"),
                 basePath));
-        resource.add(evaluateHateoasLink(
-                linkTo(methodOn(InvoicingServiceController.class).getFileStreamingOutput(null, null, null, null))
-                        .withRel("invoicing:downloads"),
-                basePath));
         resource.add(evaluateHateoasLink(linkTo(methodOn(InvoicingServiceController.class).getAllAvailableProducts())
                 .withRel("invoicing:products"), basePath));
         resource.add(evaluateHateoasLink(

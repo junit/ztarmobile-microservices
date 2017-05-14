@@ -14,7 +14,11 @@ invoicing:
   cron:
     notification: 0 0 12 1 2 ?
     report: 0 0 12 1 1 ?
-    
+
+# HOST SERVER (where the service is running on)
+server:
+  address: solo.ztarmobile.local
+
 spring:
 # ACTIVEMQ (ActiveMQProperties)
   activemq:

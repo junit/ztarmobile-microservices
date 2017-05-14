@@ -20,6 +20,13 @@ public class ReportEmailNotification extends EmailNotification {
     private List<EmailAttachment> content;
 
     /**
+     * Creates a new object.
+     */
+    public ReportEmailNotification() {
+        this.setSubject("Here's your Invoicing Report");
+    }
+
+    /**
      * @return the receiptName
      */
     public String getReceiptName() {

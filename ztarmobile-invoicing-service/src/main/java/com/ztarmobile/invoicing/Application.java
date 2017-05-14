@@ -22,6 +22,9 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -81,9 +84,9 @@ public class Application {
     @Value("${spring.data.rest.base-path}")
     private String basePath;
     /**
-     * The server address, by default is: localhost.
+     * The server address.
      */
-    @Value("${server.address:localhost}")
+    @Value("${server.address}")
     private String serverAddress;
     /**
      * The server port.
@@ -120,6 +123,14 @@ public class Application {
         configurer.configure(factory, connectionFactory);
         // You could still override some of Boot's default if necessary.
         return factory;
+    }
+
+    @Bean // Serialize message content to json using TextMessage
+    public MessageConverter jacksonJmsMessageConverter() {
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        return converter;
     }
 
     /**

@@ -123,10 +123,9 @@ public class InvoicingServiceController {
      *            The report to.
      * @param product
      *            The product description.
-     * @return The empty response.
      */
     @RequestMapping(value = REPORT_DOWNLOAD_MAPPING, method = GET, produces = { "text/csv" })
-    public Response getFileStreamingOutput(HttpServletResponse response,
+    public void getFileStreamingOutput(HttpServletResponse response,
             @RequestParam("reportFrom") @DateTimeFormat(pattern = MMDDYYYY) Date reportFrom,
             @RequestParam("reportTo") @DateTimeFormat(pattern = MMDDYYYY) Date reportTo,
             @RequestParam("product") String product) {
@@ -170,7 +169,6 @@ public class InvoicingServiceController {
                 }
             }
         }
-        return new Response();
     }
 
     /**

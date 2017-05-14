@@ -14,7 +14,11 @@ invoicing:
   cron:
     notification: 0 0 9 3 * ?
     report: 0 0 8 3 * ?
-    
+
+# HOST SERVER (where the service is running on)
+server:
+  address: 10.0.0.127
+
 spring:
 # ACTIVEMQ (ActiveMQProperties)
   activemq:
