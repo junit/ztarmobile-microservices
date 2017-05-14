@@ -157,7 +157,7 @@ public class InvoicingServiceController {
             }
             outputStream.flush();
             outputStream.close();
-            log.debug("Total records downloaded: " + totalDownloaded);
+            log.debug("Total records downloaded: [" + product + "]  " + totalDownloaded);
         } catch (Exception e) {
             log.debug("Error while downloading the report " + e.getMessage());
         } finally {
