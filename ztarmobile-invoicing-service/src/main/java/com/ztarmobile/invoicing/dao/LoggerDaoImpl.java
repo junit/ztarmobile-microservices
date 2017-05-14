@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,7 +51,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(LoggerDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(LoggerDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -107,7 +108,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     @Override
     public void saveOrUpdateCdrFileProcessed(String sourceFileName, String targetFileName, char type,
             String errorDescription) {
-        LOG.debug("Saving record for this file: " + sourceFileName);
+        log.debug("Saving record for this file: " + sourceFileName);
         LoggerStatus status = errorDescription == null ? COMPLETED : ERROR;
         String sql = sqlStatements.getProperty("insert.logger_cdr_file");
 
@@ -172,7 +173,7 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     @Override
     public void saveOrUpdateReportFileProcessed(String product, Date reportDate, Phase phase, boolean byMonth,
             String errorDescription) {
-        LOG.debug("Saving record for this date: " + reportDate);
+        log.debug("Saving record for this date: " + reportDate);
         LoggerStatus status = errorDescription == null ? COMPLETED : ERROR;
         String sql = byMonth ? sqlStatements.getProperty("update.logger_report_file")
                 : sqlStatements.getProperty("insert.logger_report_file");
@@ -221,10 +222,10 @@ public class LoggerDaoImpl extends AbstractJdbc implements LoggerDao {
     @Override
     public long saveOrUpdateInvoiceProcessed(long rowId, String product, Date reportDateFrom, Date reportDateTo,
             long totalTime, LoggerStatus status, String errorDescription, String friendlyErrorDescription) {
-        LOG.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
+        log.debug("Saving or updating record between: " + reportDateFrom + " - " + reportDateTo);
 
         boolean isInsert = rowId == 0;
-        LOG.debug("isInsert: " + isInsert);
+        log.debug("isInsert: " + isInsert);
         String sql;
 
         Map<String, String> params = new HashMap<>();

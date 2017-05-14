@@ -33,7 +33,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -50,7 +51,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(AbstractResellerUsageService.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractResellerUsageService.class);
 
     /**
      * Service dependency.
@@ -139,7 +140,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
 
         setMinimumCalendarDay(calendarStart);
         setMaximumCalendarDay(calendarEnd);
-        LOG.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
+        log.debug("Calculating usage from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);
         String expectedFileName;
@@ -179,14 +180,14 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                         loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE,
                                 getFileFrecuency() == MONTH);
                     } else {
-                        LOG.info("==> Usage already processed... " + currentFile);
+                        log.info("==> Usage already processed... " + currentFile);
                         // 3. finally, we compress the file (close it out)
                         // this is necessary to finish the process.
                         zipIt(currentFile);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    LOG.error(ex);
+                    log.error(ex.toString());
                     // we save the error and continue with the next file.
                     loggerDao.saveOrUpdateReportFileProcessed(product, calendarNow.getTime(), USAGE,
                             getFileFrecuency() == MONTH, ex.toString());
@@ -216,7 +217,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
     }
 
     private void calculateUsagePerFile(File currentFile, Date startDate, Date endDate, List<ResellerSubsUsage> subs) {
-        LOG.debug("==> The following file will be read... " + currentFile);
+        log.debug("==> The following file will be read... " + currentFile);
 
         // resetting the list of subscribers
         for (ResellerSubsUsage vo : subs) {
@@ -296,7 +297,7 @@ public abstract class AbstractResellerUsageService extends AbstractDefaultServic
                 lastCallDate = callDate;
                 mdnUpdCnt++;
             }
-            LOG.info("Lines read #: " + linecnt + ", processed mdns #:" + mdnUpdCnt);
+            log.info("Lines read #: " + linecnt + ", processed mdns #:" + mdnUpdCnt);
         } catch (IOException ex) {
             invalidInput("There was a problem while reading: " + currentFile + " due to: " + ex);
         }

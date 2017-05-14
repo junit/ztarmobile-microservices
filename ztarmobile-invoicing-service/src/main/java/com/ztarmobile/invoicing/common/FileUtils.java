@@ -22,7 +22,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility to handle the file operations.
@@ -38,7 +39,7 @@ public class FileUtils {
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(FileUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
     /**
      * Private constructor.
@@ -93,10 +94,10 @@ public class FileUtils {
             }
             // we delete the original file after the process
             if (!file.delete()) {
-                LOG.warn("This file: " + file + " could not be deleted");
+                log.warn("This file: " + file + " could not be deleted");
             }
         } catch (IOException ex) {
-            LOG.error(ex);
+            log.error(ex.toString());
             invalidInput("Can't compress file due to: " + ex);
         } finally {
             close(gzipOS);
@@ -127,7 +128,7 @@ public class FileUtils {
                 out.write(buffer, 0, len);
             }
         } catch (IOException ex) {
-            LOG.error(ex);
+            log.error(ex.toString());
             invalidInput("Can't extract file due to: " + ex);
         } finally {
             // the resources are closed.
@@ -168,9 +169,9 @@ public class FileUtils {
             String line;
             while ((line = is.readLine()) != null) {
                 if (isError) {
-                    LOG.error(line);
+                    log.error(line);
                 } else {
-                    LOG.info(line);
+                    log.info(line);
                 }
             }
         } catch (IOException ex) {
@@ -189,7 +190,7 @@ public class FileUtils {
             try {
                 stream.close();
             } catch (IOException e) {
-                LOG.warn("Error while trying to close the input stream due to: " + e);
+                log.warn("Error while trying to close the input stream due to: " + e);
             }
         }
     }
@@ -205,7 +206,7 @@ public class FileUtils {
             try {
                 stream.close();
             } catch (IOException e) {
-                LOG.warn("Error while trying to close the output stream due to: " + e);
+                log.warn("Error while trying to close the output stream due to: " + e);
             }
         }
     }

@@ -13,9 +13,10 @@ import com.ztarmobile.invoicing.model.ReportDetails;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,16 +29,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class InvoicingServiceTest {
     /**
-     * Logger for this class
+     * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(InvoicingServiceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(InvoicingServiceTest.class);
 
     @Autowired
     private InvoicingService invoicingService;
 
     @Test
     public void performInvoicing() {
-        LOG.debug("Starting the test...");
+        log.debug("Starting the test...");
         String product1 = "GOOD2GOUS";
         String product2 = "GOOD2GOUS-CDMA";
         Calendar c1 = Calendar.getInstance();

@@ -12,7 +12,8 @@ import com.ztarmobile.invoicing.model.ReportEmailNotification;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -34,7 +35,7 @@ public class InvoicingMailSender {
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(InvoicingMailSender.class);
+    private static final Logger log = LoggerFactory.getLogger(InvoicingMailSender.class);
 
     /**
      * Dependency of the mail sender.
@@ -56,7 +57,7 @@ public class InvoicingMailSender {
      */
     @Async
     public void sendEmail(ReportEmailNotification email) {
-        LOG.debug("Sending email to: " + email.getTo());
+        log.debug("Sending email to: " + email.getTo());
 
         // create the message body...
         createMessageBody(email);
@@ -78,9 +79,9 @@ public class InvoicingMailSender {
             }
 
             mailSender.send(message);
-            LOG.debug("Email sent succesfully to: " + email.getTo() + ", with " + totalAttachments + " attachments");
+            log.debug("Email sent succesfully to: " + email.getTo() + ", with " + totalAttachments + " attachments");
         } catch (MessagingException e) {
-            LOG.warn("Unable to send email: " + e);
+            log.warn("Unable to send email: " + e);
         }
     }
 

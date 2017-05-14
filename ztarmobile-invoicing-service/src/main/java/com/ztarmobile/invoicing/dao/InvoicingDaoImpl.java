@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,7 +38,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(InvoicingDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(InvoicingDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -51,13 +52,13 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      */
     @Override
     public void cleanUpInvoicing(Date start, Date end, String product) {
-        LOG.debug("Cleaning up invoicing data from " + start + " - " + end);
+        log.debug("Cleaning up invoicing data from " + start + " - " + end);
 
         String sql = sqlStatements.getProperty("delete.invoicing_report_details");
 
         Map<String, String> params = createParameters(start, end, product);
         int rowAffected = this.getJdbc().update(sql, new MapSqlParameterSource(params));
-        LOG.debug("Rows deleted: " + rowAffected);
+        log.debug("Rows deleted: " + rowAffected);
     }
 
     /**
@@ -65,7 +66,7 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      */
     @Override
     public void saveInvoicing(Date start, Date end, String product) {
-        LOG.debug("Saving invoicing details from " + start + " to " + end);
+        log.debug("Saving invoicing details from " + start + " to " + end);
 
         String sql = sqlStatements.getProperty("select.insert.invoicing_report_details");
 

@@ -33,7 +33,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(ResellerAllocationsServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ResellerAllocationsServiceImpl.class);
 
     /**
      * DAO dependency.
@@ -124,7 +125,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
 
         List<ResellerSubsUsage> list;
         list = resellerAllocationsDao.getResellerSubsUsage(start.getTime(), end.getTime(), product);
-        LOG.debug("Reseller subsUsage found: " + list.size());
+        log.debug("Reseller subsUsage found: " + list.size());
         return list;
     }
 
@@ -167,7 +168,7 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
 
         Date durationStart;
         Date durationEnd;
-        LOG.debug("===> Starting Allocations... ===>");
+        log.debug("===> Starting Allocations... ===>");
         long startTime = System.currentTimeMillis();
         while (calendarCurr.compareTo(calendarEnd) <= 0) {
             durationStart = calendarCurr.getTime();
@@ -177,18 +178,18 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
                 // test whether the file is going to be processed or not.
                 boolean processed = isAllocationProcessed(product, calendarCurr.getTime());
                 if (!processed) {
-                    LOG.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
+                    log.debug("Creating allocations from: " + durationStart + " - " + durationEnd);
                     resellerAllocationsDao.createAllocations(calendarCurr.getTime(), durationStart, durationEnd,
                             product);
 
                     // saves the file processed
                     loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false);
                 } else {
-                    LOG.info("==> Allocation already processed... " + calendarCurr.getTime());
+                    log.info("==> Allocation already processed... " + calendarCurr.getTime());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                LOG.error(ex);
+                log.error(ex.toString());
                 // we save the error and continue with the next file.
                 loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false,
                         ex.toString());
@@ -200,19 +201,19 @@ public class ResellerAllocationsServiceImpl extends AbstractDefaultService imple
         } catch (Exception ex) {
             calendarCurr.add(DAY_OF_MONTH, -1);
             ex.printStackTrace();
-            LOG.error(ex);
+            log.error(ex.toString());
             // we save the error and continue the normal flow.
             loggerDao.saveOrUpdateReportFileProcessed(product, calendarCurr.getTime(), ALLOCATIONS, false,
                     ex.toString());
         }
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        LOG.debug("<=== Ending Allocations... <===");
+        log.debug("<=== Ending Allocations... <===");
 
         long min = MILLISECONDS.toMinutes(totalTime);
         long sec = MILLISECONDS.toSeconds(totalTime) - MINUTES.toSeconds(MILLISECONDS.toMinutes(totalTime));
         String timeMsg = String.format("%02d min, %02d sec", min, sec);
-        LOG.debug("Allocations executed in: " + timeMsg);
+        log.debug("Allocations executed in: " + timeMsg);
     }
 
     /**

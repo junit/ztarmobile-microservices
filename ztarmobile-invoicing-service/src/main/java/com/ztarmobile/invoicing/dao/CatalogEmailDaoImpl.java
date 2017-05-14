@@ -14,7 +14,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,7 +32,7 @@ public class CatalogEmailDaoImpl extends AbstractJdbc implements CatalogEmailDao
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(CatalogEmailDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(CatalogEmailDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -45,7 +46,7 @@ public class CatalogEmailDaoImpl extends AbstractJdbc implements CatalogEmailDao
      */
     @Override
     public List<CatalogEmail> getCatalogEmail() {
-        LOG.debug("Getting all the email catalogs");
+        log.debug("Getting all the email catalogs");
         String sql = sqlStatements.getProperty("select.catalog_emails");
 
         return this.getJdbc().query(sql, new CatalogEmailRowMapper());

@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -39,7 +40,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(ResellerAllocationsDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ResellerAllocationsDaoImpl.class);
 
     /**
      * The SQL statements.
@@ -69,7 +70,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public void updateAllocationIndicators() {
-        LOG.debug("Updating status...");
+        log.debug("Updating status...");
         String sql = sqlStatements.getProperty("update.reseller_subs_usage.indicators");
 
         Map<String, String> params = new HashMap<>();
@@ -81,7 +82,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public List<ResellerSubsUsage> getResellerSubsUsage(Date startDate, Date endDate, String product) {
-        LOG.debug("Getting reseller subsUsage...");
+        log.debug("Getting reseller subsUsage...");
         String sql = sqlStatements.getProperty("select.reseller_subs_usage");
 
         Map<String, String> params = new HashMap<>();
@@ -121,7 +122,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
      */
     @Override
     public int[] updateResellerSubsUsage(List<ResellerSubsUsage> subscribers) {
-        LOG.debug("Updating " + subscribers.size() + " subscriber usage...");
+        log.debug("Updating " + subscribers.size() + " subscriber usage...");
         String sql = sqlStatements.getProperty("update.reseller_subs_usage");
 
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(subscribers.toArray());

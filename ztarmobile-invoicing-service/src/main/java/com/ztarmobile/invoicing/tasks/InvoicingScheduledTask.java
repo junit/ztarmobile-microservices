@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -49,7 +50,7 @@ public class InvoicingScheduledTask {
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(InvoicingScheduledTask.class);
+    private static final Logger log = LoggerFactory.getLogger(InvoicingScheduledTask.class);
 
     /**
      * The JSM template.
@@ -74,10 +75,10 @@ public class InvoicingScheduledTask {
      */
     @Scheduled(cron = "${invoicing.cron.report}")
     public void scheduleMonthlyInvoice() {
-        LOG.debug("Requesting montly invoicing report...");
+        log.debug("Requesting montly invoicing report...");
 
         for (CatalogProduct catalogProduct : invoicingService.getAllAvailableProducts()) {
-            LOG.debug("Processing: " + catalogProduct);
+            log.debug("Processing: " + catalogProduct);
             InvoicingRequest invoicingRequest = new InvoicingRequest();
             invoicingRequest.setProduct(catalogProduct.getProduct());
             // we make sure the we run the previous month
@@ -93,7 +94,7 @@ public class InvoicingScheduledTask {
      */
     @Scheduled(cron = "${invoicing.cron.notification}")
     public void scheduleNotificationInvoice() {
-        LOG.debug("Sending invoicing notifications...");
+        log.debug("Sending invoicing notifications...");
 
         // calculates the previous month.
         int previousMonth = Calendar.getInstance().get(MONTH) - 1;
@@ -101,7 +102,7 @@ public class InvoicingScheduledTask {
         Calendar end = getMaximumDayOfMonth(previousMonth);
 
         for (CatalogEmail catalogEmail : invoicingService.getAllAvailableEmails()) {
-            LOG.debug("Sending notification: " + catalogEmail);
+            log.debug("Sending notification: " + catalogEmail);
 
             boolean sendEmail = false;
             String product = null;
@@ -136,7 +137,7 @@ public class InvoicingScheduledTask {
                 notification.setContent(attachments);
                 invoicingMailSender.sendEmail(notification);
             } else {
-                LOG.warn("No email was sent...");
+                log.warn("No email was sent...");
             }
         }
     }

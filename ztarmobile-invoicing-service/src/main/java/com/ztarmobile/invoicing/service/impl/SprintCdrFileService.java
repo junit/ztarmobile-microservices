@@ -14,7 +14,6 @@ import com.ztarmobile.invoicing.service.AbstractCdrFileService;
 import java.io.File;
 import java.util.Calendar;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +25,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SprintCdrFileService extends AbstractCdrFileService {
-    /**
-     * Logger for this class.
-     */
-    private static final Logger LOG = Logger.getLogger(SprintCdrFileService.class);
     /**
      * The file extension.
      */

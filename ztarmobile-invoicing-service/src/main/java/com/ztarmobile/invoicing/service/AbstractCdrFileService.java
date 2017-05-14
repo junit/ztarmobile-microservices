@@ -26,7 +26,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -43,7 +44,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(AbstractCdrFileService.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractCdrFileService.class);
 
     /**
      * DAO dependency for the logger process.
@@ -118,7 +119,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
 
         setMinimumCalendarDay(calendarStart);
         setMaximumCalendarDay(calendarEnd);
-        LOG.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
+        log.debug("Extracting files from: " + calendarStart.getTime() + " - " + calendarEnd.getTime());
 
         Calendar calendarNow = createCalendarFrom(calendarStart);
         String expectedFileName = null;
@@ -167,11 +168,11 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
         try {
             // test whether the file is going to be processed or not.
             if (isFileProcessed(currentFile)) {
-                LOG.info("==> File already processed... " + currentFile);
+                log.info("==> File already processed... " + currentFile);
                 return;
             }
 
-            LOG.info("==> The following file will be extracted... " + currentFile);
+            log.info("==> The following file will be extracted... " + currentFile);
             // copy the current file into the extracted directory
             File targetFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
             copy(currentFile, targetFile);
@@ -181,21 +182,21 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             }
             // targetFile is the name of the file after it has been uncompressed
             File processedFile = sortFile(targetFile);
-            LOG.debug("Extracted file: " + processedFile);
+            log.debug("Extracted file: " + processedFile);
 
             // we cleanup the files we don't need.
             if (isFileCompressed()) {
                 File compressedFile = new File(getTargetDirectoryCdrFile(), currentFile.getName());
                 if (compressedFile.exists()) {
                     if (!compressedFile.delete()) {
-                        LOG.warn("This file: " + targetFile + " could not be deleted");
+                        log.warn("This file: " + targetFile + " could not be deleted");
                     }
                 }
             }
             // we make sure the file gets deleted.
             if (targetFile.exists()) {
                 if (!targetFile.delete()) {
-                    LOG.warn("This file: " + targetFile + " could not be deleted");
+                    log.warn("This file: " + targetFile + " could not be deleted");
                 }
             }
 
@@ -207,9 +208,9 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
                     String finalFileName = processedFileName.substring(0, index + STANDARD_FILE_EXT.length());
                     File finalName = new File(processedFile.getParentFile(), finalFileName);
                     if (!processedFile.renameTo(finalName)) {
-                        LOG.warn("This file: " + processedFile + " could not be renamed");
+                        log.warn("This file: " + processedFile + " could not be renamed");
                     }
-                    LOG.debug("Final file: " + finalName);
+                    log.debug("Final file: " + finalName);
 
                     // saves the file processed
                     loggerDao.saveOrUpdateCdrFileProcessed(currentFile.getName(), finalName.getName() + GZIP_EXT,
@@ -218,7 +219,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            LOG.error(ex);
+            log.error(ex.toString());
             // we save the error and continue with the next file.
             loggerDao.saveOrUpdateCdrFileProcessed(currentFile.getName(), "unknown", getFileType(), ex.toString());
         }
@@ -252,7 +253,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
             if (processed) {
                 gunzipIt(file);
                 if (!file.delete()) {
-                    LOG.warn("This file: " + file + " could not be deleted");
+                    log.warn("This file: " + file + " could not be deleted");
                 }
             }
         }
@@ -276,7 +277,7 @@ public abstract class AbstractCdrFileService extends AbstractDefaultService impl
         sb.append(" ");
         sb.append(expectedFileName);
 
-        LOG.debug("Executing command: " + sb.toString());
+        log.debug("Executing command: " + sb.toString());
         // executes the shell expression to sort the file
         executeShellCommand(sb.toString());
         return expectedFileName;

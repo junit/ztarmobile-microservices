@@ -14,7 +14,8 @@ import com.ztarmobile.invoicing.service.AbstractResellerUsageService;
 
 import java.util.Calendar;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(EricssonResellerUsageService.class);
+    private static final Logger log = LoggerFactory.getLogger(EricssonResellerUsageService.class);
 
     /**
      * The file starts with...
@@ -54,7 +55,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
         sb.append(SUFIX_FILE_NAME);
         sb.append(EXTRACTED_FILE_EXT);
 
-        LOG.debug("Expected file name: " + sb);
+        log.debug("Expected file name: " + sb);
         return sb.toString();
     }
 

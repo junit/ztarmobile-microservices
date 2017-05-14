@@ -7,6 +7,7 @@
 package com.ztarmobile.invoicing.dao;
 
 import com.ztarmobile.invoicing.common.AbstractJdbc;
+import com.ztarmobile.invoicing.controllers.InvoicingServiceController;
 import com.ztarmobile.invoicing.model.CatalogEmail;
 import com.ztarmobile.invoicing.model.CatalogProduct;
 import com.ztarmobile.invoicing.model.EmailProductNotification;
@@ -18,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -36,7 +38,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
     /**
      * Logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(CatalogProductDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(InvoicingServiceController.class);
 
     /**
      * The SQL statements.
@@ -50,7 +52,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      */
     @Override
     public CatalogProduct getCatalogProduct(String product) {
-        LOG.debug("Getting product by [" + product + "]");
+        log.debug("Getting product by [" + product + "]");
         String sql = sqlStatements.getProperty("select.catalog_product");
 
         Map<String, String> params = new HashMap<>();
@@ -70,7 +72,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      */
     @Override
     public List<CatalogProduct> getCatalogProduct() {
-        LOG.debug("Getting all the products");
+        log.debug("Getting all the products");
         String sql = sqlStatements.getProperty("select.catalog_products");
 
         return this.getJdbc().query(sql, new CatalogProductRowMapper());
@@ -81,7 +83,7 @@ public class CatalogProductDaoImpl extends AbstractJdbc implements CatalogProduc
      */
     @Override
     public List<EmailProductNotification> getProductsByEmail(CatalogEmail email) {
-        LOG.debug("Getting all the products by email");
+        log.debug("Getting all the products by email");
         String sql = sqlStatements.getProperty("select.products_by_email");
 
         Map<String, String> params = new HashMap<>();
