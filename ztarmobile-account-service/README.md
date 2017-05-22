@@ -13,4 +13,4 @@ Next, it’s time to install the Spring Boot CLI, which you do by executing this
 $ sdk install springboot
 $ spring --version
 
-spring init -d=web,thymeleaf,data-rest,actuator,jdbc,mail,mysql,data-rest-hal,data-jpa -g=com.ztarmobile -a=ztarmobile-account-service -v=3.0.0.RELEASE --package-name=com.ztarmobile.account -name="Ztar Account Managment MicroService V3" -description="Account Managment" -x --force
+spring init -d=web,thymeleaf,data-rest,actuator,jdbc,mail,mysql,data-rest-hal,data-jpa -g=com.ztarmobile -a=ztarmobile-account-service -v=3.0.0.RELEASE --package-name=com.ztarmobile.account -name="Ztar Account Management MicroService V3" -description="Account Management" -x --force
