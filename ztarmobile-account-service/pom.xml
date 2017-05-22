@@ -31,9 +31,15 @@
 		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
 		<findbugs-maven-plugin.version>3.0.4</findbugs-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
+		<openid-connect-client.version>1.0.0.RELEASE</openid-connect-client.version>
 	</properties>
 
 	<dependencies>
+	    <dependency>
+	        <groupId>com.ztarmobile</groupId>
+	        <artifactId>ztarmobile-openid-connect-client</artifactId>
+	        <version>${openid-connect-client.version}</version>
+	    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
