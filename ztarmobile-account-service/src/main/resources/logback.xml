@@ -11,7 +11,7 @@
     </appender>
 	
     <appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${DEV_HOME}/ztarmobile-invoicing-service.log</file>
+        <file>${DEV_HOME}/ztarmobile-account-service.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss.SSS/zzz} %-5p %c{1}:%L - %m%n
@@ -28,7 +28,7 @@
     </appender>
 	
     <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${DEV_HOME}/ztarmobile-invoicing-error.log</file>
+        <file>${DEV_HOME}/ztarmobile-account-error.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss.SSS/zzz} %-5p %c{1}:%L - %m%n
@@ -45,7 +45,7 @@
     </appender>
 	
     <!-- Send logs to both console and file audit -->
-    <logger name="com.ztarmobile.invoicing" level="debug" additivity="false">
+    <logger name="com.ztarmobile.account" level="debug" additivity="false">
         <appender-ref ref="FILE-AUDIT" />
         <appender-ref ref="STDOUT" />
     </logger>
