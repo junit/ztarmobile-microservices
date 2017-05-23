@@ -7,6 +7,8 @@
 package com.ztarmobile.exception;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 import javax.ws.rs.core.Response;
 
@@ -19,21 +21,25 @@ import javax.ws.rs.core.Response;
  */
 public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
 
-    NO_ACCESS_TOKEN_FOUND(80000, "Access token was not found in the header or payload of the request", BAD_REQUEST);
+    // Generic message
+    AUTHORIZATION_ERROR(80000, "Authorization Error", INTERNAL_SERVER_ERROR), 
+    NO_ACCESS_TOKEN_FOUND(80001, "Access token was not found in the header or payload of the request", BAD_REQUEST),
+    UNAUTHORIZED_ACCESS(80002, "Full authentication is required to access this resource", UNAUTHORIZED),
+    NO_ACCESS_EXTERNAL_RESOURCE(80003, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR);
 
     private int code;
     private String message;
     private int httpCode;
 
     /**
-     * Creates a header message error with code, message and http status.
+     * Creates a header message error with code, message and HTTP status.
      *
      * @param code
      *            The code.
      * @param message
      *            The message.
      * @param httpStatus
-     *            The http status.
+     *            The HTTP status.
      */
     AuthorizationMessageErrorCode(int code, String message, Response.Status httpStatus) {
         this.code = code;
@@ -62,9 +68,20 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     }
 
     /**
-     * Returns the http status code.
+     * Updates the message.
+     * 
+     * @param message
+     *            The new message.
+     */
+    @Override
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * Returns the HTTP status code.
      *
-     * @return The http status code.
+     * @return The HTTP status code.
      */
     @Override
     public int getHttpCode() {
@@ -80,4 +97,5 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     public String toString() {
         return "[" + this.code + "] " + message;
     }
+
 }

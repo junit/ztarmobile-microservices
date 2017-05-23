@@ -15,9 +15,17 @@ package com.ztarmobile.exception;
  */
 public interface MessageErrorCode extends ErrorCode {
     /**
-     * Gets the message of the exception.
+     * Gets the message description.
      *
      * @return The message.
      */
     String getMessage();
+
+    /**
+     * Sets the message description.
+     * 
+     * @param message
+     *            The message description.
+     */
+    void setMessage(String message);
 }

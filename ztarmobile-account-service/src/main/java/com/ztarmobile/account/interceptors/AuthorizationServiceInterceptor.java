@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.account.interceptors;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztarmobile.exception.ErrorResponse;
 import com.ztarmobile.exception.HttpMessageErrorCode;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -50,23 +53,30 @@ public class AuthorizationServiceInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         log.debug("Validating Request...");
+        int responseStatus = 0;
+        ErrorResponse errorResponse = null;
+
         try {
             authenticationToken.handleAuthorizationRequest(request);
-            log.debug("authorization successful");
+            log.debug("The authorization was successful!!!");
+            return true;
         } catch (AuthorizationServiceException e) {
             HttpMessageErrorCode msg = e.getHttpMessageErrorCode();
 
-            ErrorResponse errorResponse = new ErrorResponse(msg.getMessage(), msg.getNumber());
+            errorResponse = new ErrorResponse(msg.getMessage(), msg.getNumber());
             errorResponse.setError("Unauthorized");
-
-            response.reset();
-            response.setContentType(MediaType.APPLICATION_JSON);
-            response.setStatus(msg.getHttpCode());
-
-            ObjectMapper mapper = new ObjectMapper();
-            response.getOutputStream().println(mapper.writeValueAsString(errorResponse));
-            return false;
+            responseStatus = msg.getHttpCode();
+        } catch (RuntimeException e) {
+            errorResponse = new ErrorResponse(e.getMessage());
+            responseStatus = Integer.parseInt(HttpStatus.INTERNAL_SERVER_ERROR.toString());
         }
-        return true;
+        response.reset();
+        response.setContentType(MediaType.APPLICATION_JSON);
+        response.setStatus(responseStatus);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(NON_NULL);
+        response.getOutputStream().println(mapper.writeValueAsString(errorResponse));
+        return false;
     }
 }

@@ -8,6 +8,8 @@ package com.ztarmobile.exception;
 
 import java.util.Date;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * Contains all the possible properties to be returned when there's an failure
  * while executing a REST service.
@@ -25,6 +27,18 @@ public class ErrorResponse {
     String error;
     // the actual and mandatory error message.
     String message;
+
+    /**
+     * Creates a response with a predefined properties.
+     * 
+     * @param message
+     *            The message.
+     * @param status
+     *            The status.
+     */
+    public ErrorResponse(String message) {
+        this(message, Integer.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString()));
+    }
 
     /**
      * Creates a response with a predefined properties.

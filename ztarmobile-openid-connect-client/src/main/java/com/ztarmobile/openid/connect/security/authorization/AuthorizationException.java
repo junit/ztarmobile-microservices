@@ -1,19 +1,24 @@
+/* 
+ * Copyright (C) Ztar Mobile, Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Armando Rivas <arivas@ztarmobile.com>, May 2017.
+ */
 package com.ztarmobile.openid.connect.security.authorization;
 
 /**
  * Abstract superclass for all exceptions related to Authentication being
  * invalid for whatever reason.
  *
- * @author Ben Alex
+ * @author armandorivas
+ * @version %I%, %G%
+ * @since 3.0
  */
 public abstract class AuthorizationException extends RuntimeException {
-    // ~ Instance fields
-    // ================================================================================================
-
-    private transient Object extraInformation;
-
-    // ~ Constructors
-    // ===================================================================================================
+    /**
+     * The serial number.
+     */
+    private static final long serialVersionUID = -3056264215973397357L;
 
     /**
      * Constructs an {@code AuthorizationException} with the specified message

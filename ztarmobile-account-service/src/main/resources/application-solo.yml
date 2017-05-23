@@ -1,3 +1,9 @@
+# ACCOUNT configuration stuff
+account:
+  openid:
+    issuer:
+    token_introspection: http://localhost:8080/auth/realms/demo/protocol/openid-connect/token/introspect
+
 # HOST SERVER (where the service is running on)
 server:
   address: solo.ztarmobile.local

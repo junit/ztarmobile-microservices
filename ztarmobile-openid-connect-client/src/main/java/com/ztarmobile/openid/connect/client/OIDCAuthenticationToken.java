@@ -7,6 +7,8 @@
 package com.ztarmobile.openid.connect.client;
 
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACCESS_TOKEN_FOUND;
+import static com.ztarmobile.openid.connect.HttpHeaders.AUTHORIZATION;
+import static com.ztarmobile.openid.connect.client.OpenIdConnectUtil.requestTokenIntrospection;
 
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,6 +36,10 @@ public class OIDCAuthenticationToken {
      */
     private static final Logger log = LoggerFactory.getLogger(OIDCAuthenticationToken.class);
 
+    // gets the issuer url so that the relying party can authorize the request
+    @Value("${account.openid.token_introspection}")
+    private String tokenIntrospectionUrl;
+
     /**
      * Check whether the request is valid based on the access token. It should
      * be desirable to catch this exception
@@ -45,7 +52,7 @@ public class OIDCAuthenticationToken {
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(String)
      */
     public void handleAuthorizationRequest(HttpServletRequest request) {
-        String accessToken = seachForAccessToken(request);
+        this.handleAuthorizationRequest(seachForAccessToken(request));
     }
 
     /**
@@ -59,6 +66,8 @@ public class OIDCAuthenticationToken {
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(HttpServletRequest)
      */
     public void handleAuthorizationRequest(String accessToken) {
+        String response = requestTokenIntrospection(accessToken, "dsds", "ddsds", tokenIntrospectionUrl);
+        log.debug("Token Introspection Response: " + response);
     }
 
     /**
@@ -79,7 +88,7 @@ public class OIDCAuthenticationToken {
         // > As a URL-encoded query parameter
 
         // check the authorization header first
-        String auth = request.getHeader("Authorization");
+        String auth = request.getHeader(AUTHORIZATION);
         if (auth != null && !auth.trim().isEmpty() && (auth.toLowerCase().startsWith("bearer"))) {
             token = auth.substring(6).trim();
         } else {
