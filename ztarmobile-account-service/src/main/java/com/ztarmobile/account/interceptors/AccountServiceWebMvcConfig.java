@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  *
  * @author armandorivas
  * @version %I%, %G%
- * @since 2.0
+ * @since 3.0
  */
 @Configuration
 public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {

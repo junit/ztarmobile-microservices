@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author armandorivas
  * @version %I%, %G%
- * @since 2.0
+ * @since 3.0
  */
 @RestController
 @RequestMapping(value = "${spring.data.rest.base-path}")

@@ -11,7 +11,7 @@ package com.ztarmobile.account.model;
  *
  * @author armandorivas
  * @version %I%, %G%
- * @since 2.0
+ * @since 3.0
  */
 public abstract class EmailNotification {
     /**

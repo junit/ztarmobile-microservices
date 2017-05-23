@@ -21,7 +21,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  *
  * @author armandorivas
  * @version %I%, %G%
- * @since 2.0
+ * @since 3.0
  */
 @Component
 public class LoggerServiceInterceptor extends HandlerInterceptorAdapter {
