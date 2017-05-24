@@ -35,8 +35,8 @@ public class AuthorizationServiceException extends AuthorizationException {
      * Constructs an <code>AuthorizationServiceException</code> with the
      * specified message.
      *
-     * @param msg
-     *            the detail message
+     * @param resolver
+     *            The HTTP message error code resolver.
      */
     public AuthorizationServiceException(HttpMessageErrorCodeResolver resolver) {
         super(resolveMessage(resolver));
@@ -48,8 +48,8 @@ public class AuthorizationServiceException extends AuthorizationException {
      * Constructs an <code>AuthorizationServiceException</code> with the
      * specified message.
      *
-     * @param msg
-     *            the detail message
+     * @param httpMessageErrorCode
+     *            The HTTP message error code.
      */
     public AuthorizationServiceException(HttpMessageErrorCode httpMessageErrorCode) {
         super(httpMessageErrorCode.getMessage());

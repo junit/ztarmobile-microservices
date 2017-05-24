@@ -33,8 +33,6 @@ public class ErrorResponse {
      * 
      * @param message
      *            The message.
-     * @param status
-     *            The status.
      */
     public ErrorResponse(String message) {
         this(message, Integer.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.toString()));

@@ -66,7 +66,7 @@ public class OIDCAuthenticationToken {
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(HttpServletRequest)
      */
     public void handleAuthorizationRequest(String accessToken) {
-        String response = requestTokenIntrospection(accessToken, "dsds", "ddsds", tokenIntrospectionUrl);
+        String response = requestTokenIntrospection(accessToken, "client", "secret", tokenIntrospectionUrl);
         log.debug("Token Introspection Response: " + response);
     }
 
