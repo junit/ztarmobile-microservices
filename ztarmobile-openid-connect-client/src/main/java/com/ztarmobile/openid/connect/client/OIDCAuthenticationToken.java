@@ -7,9 +7,16 @@
 package com.ztarmobile.openid.connect.client;
 
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACCESS_TOKEN_FOUND;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_AVAILABLE;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_TOKEN;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_VALID_JSON;
 import static com.ztarmobile.openid.connect.HttpHeaders.AUTHORIZATION;
 import static com.ztarmobile.openid.connect.client.OpenIdConnectUtil.requestTokenIntrospection;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 import java.io.BufferedReader;
@@ -36,7 +43,7 @@ public class OIDCAuthenticationToken {
      */
     private static final Logger log = LoggerFactory.getLogger(OIDCAuthenticationToken.class);
 
-    // gets the issuer url so that the relying party can authorize the request
+    // gets the issuer URL so that the relying party can authorize the request
     @Value("${account.openid.token_introspection}")
     private String tokenIntrospectionUrl;
 
@@ -66,8 +73,25 @@ public class OIDCAuthenticationToken {
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(HttpServletRequest)
      */
     public void handleAuthorizationRequest(String accessToken) {
-        String response = requestTokenIntrospection(accessToken, "client", "secret", tokenIntrospectionUrl);
-        log.debug("Token Introspection Response: " + response);
+        String jsonString = requestTokenIntrospection(accessToken, "2da894db-34d1-41cd-9a89-d32f0fbe0580",
+                "493c75fb-88fd-488a-b7c6-7e6a7b903307", tokenIntrospectionUrl);
+        log.debug("Token Introspection Response: " + jsonString);
+        // we assume we have a valid response
+        JsonElement jsonRoot = new JsonParser().parse(jsonString);
+        if (!jsonRoot.isJsonObject()) {
+            throw new AuthorizationServiceException(new HttpMessageErrorCodeResolver(NO_VALID_JSON, jsonRoot));
+        }
+        boolean active = false;
+        JsonObject tokenResponse = jsonRoot.getAsJsonObject();
+        if (tokenResponse.has("active")) {
+            active = tokenResponse.get("active").getAsBoolean();
+        } else {
+            throw new AuthorizationServiceException(new HttpMessageErrorCodeResolver(NO_ACTIVE_AVAILABLE, jsonRoot));
+        }
+        // we check whether the token is active or not.
+        if (!active) {
+            throw new AuthorizationServiceException(new HttpMessageErrorCodeResolver(NO_ACTIVE_TOKEN, jsonRoot));
+        }
     }
 
     /**

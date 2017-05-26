@@ -8,8 +8,15 @@ package com.ztarmobile.account.controllers;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import com.ztarmobile.account.model.Echo;
+import com.ztarmobile.account.repository.UserAccountRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +35,8 @@ public class AccountServiceController {
      */
     private static final Logger log = LoggerFactory.getLogger(AccountServiceController.class);
 
+    @Autowired
+    private UserAccountRepository userAccountRepository;
     /**
      * All the mappings.
      */
@@ -36,13 +45,14 @@ public class AccountServiceController {
     /**
      * This is just a ping endPoint.
      * 
-     * @return Just a 'ok' message to indicate that the service is alive.
+     * @return Just a 'OK' message to indicate that the service is alive.
      */
     @RequestMapping(value = ECHO_MAPPING, method = GET)
-    public String echo() {
+    public HttpEntity<Echo> echo() {
         log.debug("Requesting echo...");
 
         // a simple message...
-        return "I'm alive :)";
+        return new ResponseEntity<Echo>(new Echo(), HttpStatus.OK);
     }
+
 }

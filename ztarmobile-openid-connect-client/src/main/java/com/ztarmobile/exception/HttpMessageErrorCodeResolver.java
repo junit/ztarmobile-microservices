@@ -19,6 +19,12 @@ public class HttpMessageErrorCodeResolver {
     private HttpMessageErrorCode httpMessageErrorCode;
     private String[] params;
 
+    public HttpMessageErrorCodeResolver(HttpMessageErrorCode httpMessageErrorCode, Object param) {
+        this.httpMessageErrorCode = httpMessageErrorCode;
+        this.params = new String[1];
+        this.params[0] = param.toString();
+    }
+
     public HttpMessageErrorCodeResolver(HttpMessageErrorCode httpMessageErrorCode, String... params) {
         this.httpMessageErrorCode = httpMessageErrorCode;
         this.params = params;
