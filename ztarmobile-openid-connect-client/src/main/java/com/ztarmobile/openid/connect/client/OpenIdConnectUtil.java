@@ -7,7 +7,7 @@
 package com.ztarmobile.openid.connect.client;
 
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.UNAUTHORIZED_ACCESS;
-import static com.ztarmobile.openid.connect.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.nimbusds.jose.util.Base64;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
