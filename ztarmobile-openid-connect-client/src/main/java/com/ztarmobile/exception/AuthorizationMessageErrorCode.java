@@ -6,7 +6,7 @@
  */
 package com.ztarmobile.exception;
 
-import static com.ztarmobile.openid.connect.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
@@ -24,7 +24,7 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
 
     // Generic message
     AUTHORIZATION_ERROR (80000, "Authorization Error", INTERNAL_SERVER_ERROR), 
-    NO_ACCESS_TOKEN_FOUND (80001, "Access token was not found in the header or payload of the request. " + AUTHORIZATION + ": bearer yourtoken..", BAD_REQUEST), 
+    NO_ACCESS_TOKEN_FOUND (80001, "Missing access token in the header or payload of the request. " + AUTHORIZATION + ": bearer yourtoken..", BAD_REQUEST), 
     UNAUTHORIZED_ACCESS (80002, "Full authentication is required to access this resource", UNAUTHORIZED), 
     NO_ACCESS_EXTERNAL_RESOURCE (80003, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
     NO_VALID_JSON (80004, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
