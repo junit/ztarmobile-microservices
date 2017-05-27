@@ -10,8 +10,8 @@ import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACCESS_T
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_AVAILABLE;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_TOKEN;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_VALID_JSON;
-import static com.ztarmobile.openid.connect.HttpHeaders.AUTHORIZATION;
 import static com.ztarmobile.openid.connect.client.OpenIdConnectUtil.requestTokenIntrospection;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,8 +43,11 @@ public class OIDCAuthenticationToken {
     private static final Logger log = LoggerFactory.getLogger(OIDCAuthenticationToken.class);
 
     // gets the issuer URL so that the relying party can authorize the request
-    @Value("${account.openid.token_introspection}")
-    private String tokenIntrospectionUrl;
+    private String introspectionEndpointUri;
+    // the client id of the resource server.
+    private String clientId;
+    // the client secret of the resource server.
+    private String clientSecret;
 
     /**
      * Check whether the request is valid based on the access token. It should
@@ -73,8 +75,7 @@ public class OIDCAuthenticationToken {
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(HttpServletRequest)
      */
     public void handleAuthorizationRequest(String accessToken) {
-        String jsonString = requestTokenIntrospection(accessToken, "2da894db-34d1-41cd-9a89-d32f0fbe0580",
-                "493c75fb-88fd-488a-b7c6-7e6a7b903307", tokenIntrospectionUrl);
+        String jsonString = requestTokenIntrospection(accessToken, clientId, clientSecret, introspectionEndpointUri);
         log.debug("Token Introspection Response: " + jsonString);
         // we assume we have a valid response
         JsonElement jsonRoot = new JsonParser().parse(jsonString);
@@ -150,5 +151,29 @@ public class OIDCAuthenticationToken {
             throw new AuthorizationServiceException(NO_ACCESS_TOKEN_FOUND);
         }
         return token;
+    }
+
+    /**
+     * @param introspectionEndpointUri
+     *            the introspectionEndpointUri to set
+     */
+    public void setIntrospectionEndpointUri(String introspectionEndpointUri) {
+        this.introspectionEndpointUri = introspectionEndpointUri;
+    }
+
+    /**
+     * @param clientId
+     *            the clientId to set
+     */
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    /**
+     * @param clientSecret
+     *            the clientSecret to set
+     */
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }
