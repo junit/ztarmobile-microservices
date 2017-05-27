@@ -1,8 +1,10 @@
 # ACCOUNT configuration stuff
 account:
   openid:
-    issuer:
-    token_introspection: http://localhost:8080/auth/realms/demo/protocol/openid-connect/token/introspect
+    client:
+      config: /tmp/swa-clients.json
+      name: Resource Server (Denali)
+    issuer: http://localhost:8080/auth/realms/demo
 
 # HOST SERVER (where the service is running on)
 server:

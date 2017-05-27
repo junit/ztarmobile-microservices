@@ -26,11 +26,11 @@ import org.springframework.stereotype.Component;
  * @since 05/05/17
  */
 @Component
-public class ApplicationReadyListener implements ApplicationListener<ApplicationReadyEvent> {
+public class ApplicationReadyNotificationListener implements ApplicationListener<ApplicationReadyEvent> {
     /**
      * Logger for this class.
      */
-    private static final Logger log = LoggerFactory.getLogger(ApplicationReadyListener.class);
+    private static final Logger log = LoggerFactory.getLogger(ApplicationReadyNotificationListener.class);
 
     /**
      * Dependency for the application email sender.
