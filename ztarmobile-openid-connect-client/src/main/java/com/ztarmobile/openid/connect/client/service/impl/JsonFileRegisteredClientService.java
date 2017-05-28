@@ -112,7 +112,7 @@ public class JsonFileRegisteredClientService implements RegisteredClientService 
 
             out.close();
         } catch (IOException e) {
-            log.error("Could not write to output file", e);
+            log.error("Could not write to output file " + file, e);
         }
     }
 

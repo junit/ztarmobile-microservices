@@ -77,6 +77,11 @@ public class ApplicationReadyClientListener implements ApplicationListener<Appli
         }
 
         RegisteredClient clientConfig = clients.getClientConfiguration(serverConfig);
+        if (clientConfig == null) {
+            // for some reason the client could not be registered.
+            throw new IllegalStateException(
+                    "There was a problem while trying to register this client with the server.");
+        }
         String clientId = clientConfig.getClient().getClientId();
         String clientSecret = clientConfig.getClient().getClientSecret();
         String introspectionEndpointUri = serverConfig.getIntrospectionEndpointUri();
