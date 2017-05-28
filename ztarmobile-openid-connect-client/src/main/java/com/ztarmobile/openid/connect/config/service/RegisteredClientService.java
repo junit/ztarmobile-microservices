@@ -23,7 +23,8 @@ public interface RegisteredClientService {
      * contains the information needed to fetch it.
      *
      * @param issuer
-     * @return
+     *            The issuer.
+     * @return The registered client.
      */
     RegisteredClient getByIssuer(String issuer);
 
@@ -31,8 +32,11 @@ public interface RegisteredClientService {
      * Save this client's information for talking to the given issuer. This will
      * save only enough information to fetch the client's full configuration
      * from the server.
-     *
+     * 
+     * @param issuer
+     *            The issuer.
      * @param client
+     *            The registered client.
      */
     void save(String issuer, RegisteredClient client);
 }

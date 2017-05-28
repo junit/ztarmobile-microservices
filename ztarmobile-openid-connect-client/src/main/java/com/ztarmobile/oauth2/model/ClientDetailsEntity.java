@@ -321,9 +321,10 @@ public class ClientDetailsEntity {
     }
 
     /**
-     *
+     * Is secret required.
+     * 
+     * @return Is the secret required.
      */
-
     public boolean isSecretRequired() {
         if (getTokenEndpointAuthMethod() != null && (getTokenEndpointAuthMethod().equals(AuthMethod.SECRET_BASIC)
                 || getTokenEndpointAuthMethod().equals(AuthMethod.SECRET_POST)
@@ -337,8 +338,9 @@ public class ClientDetailsEntity {
 
     /**
      * If the scope list is not null or empty, then this client has been scoped.
+     * 
+     * @return Is scoped.
      */
-
     public boolean isScoped() {
         return getScope() != null && !getScope().isEmpty();
     }
@@ -346,7 +348,6 @@ public class ClientDetailsEntity {
     /**
      * @return the clientId
      */
-
     public String getClientId() {
         return clientId;
     }
@@ -400,7 +401,7 @@ public class ClientDetailsEntity {
     }
 
     /**
-     * @param authorizedGrantTypes
+     * @param grantTypes
      *            the OAuth2 grant types that this client is allowed to use
      */
     public void setGrantTypes(Set<String> grantTypes) {
@@ -409,8 +410,9 @@ public class ClientDetailsEntity {
 
     /**
      * passthrough for SECOAUTH api.
+     * 
+     * @return The grant types.
      */
-
     public Set<String> getAuthorizedGrantTypes() {
         return getGrantTypes();
     }
@@ -436,19 +438,24 @@ public class ClientDetailsEntity {
     }
 
     /**
-     * @param accessTokenTimeout
+     * @param accessTokenValiditySeconds
      *            the accessTokenTimeout to set
      */
     public void setAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
         this.accessTokenValiditySeconds = accessTokenValiditySeconds;
     }
 
+    /**
+     * The accessTokenTimeout.
+     * 
+     * @return The accessTokenTimeout to get.
+     */
     public Integer getRefreshTokenValiditySeconds() {
         return refreshTokenValiditySeconds;
     }
 
     /**
-     * @param refreshTokenTimeout
+     * @param refreshTokenValiditySeconds
      *            Lifetime of refresh tokens, in seconds (optional - leave null
      *            for no timeout)
      */
@@ -465,7 +472,7 @@ public class ClientDetailsEntity {
     }
 
     /**
-     * @param registeredRedirectUri
+     * @param redirectUris
      *            the registeredRedirectUri to set
      */
     public void setRedirectUris(Set<String> redirectUris) {
@@ -475,8 +482,9 @@ public class ClientDetailsEntity {
     /**
      * Pass-through method to fulfill the ClientDetails interface with a bad
      * name.
+     * 
+     * @return The registered redirect uri.
      */
-
     public Set<String> getRegisteredRedirectUri() {
         return getRedirectUris();
     }
@@ -484,7 +492,6 @@ public class ClientDetailsEntity {
     /**
      * @return the resourceIds
      */
-
     public Set<String> getResourceIds() {
         return resourceIds;
     }
@@ -575,8 +582,8 @@ public class ClientDetailsEntity {
     }
 
     /**
-     * @param clientUrl
-     *            the clientUrl to set
+     * @param clientUri
+     *            the clientUri to set
      */
     public void setClientUri(String clientUri) {
         this.clientUri = clientUri;
@@ -591,8 +598,9 @@ public class ClientDetailsEntity {
     }
 
     /**
-     * @param tosUrl
-     *            the tosUrl to set
+     * 
+     * @param tosUri
+     *            the tosUri to set
      */
     public void setTosUri(String tosUri) {
         this.tosUri = tosUri;
@@ -809,8 +817,11 @@ public class ClientDetailsEntity {
     /**
      * Our framework doesn't use this construct, we use WhitelistedSites and
      * ApprovedSites instead.
+     * 
+     * @param scope
+     *            The scope.
+     * @return was auto approved.
      */
-
     public boolean isAutoApprove(String scope) {
         return false;
     }

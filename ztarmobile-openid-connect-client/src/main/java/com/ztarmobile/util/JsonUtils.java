@@ -56,7 +56,8 @@ public class JsonUtils {
      * Translate a set of strings to a JSON array, empty array returned as null.
      * 
      * @param value
-     * @return
+     *            The value.
+     * @return The json element.
      */
     public static JsonElement getAsArray(Set<String> value) {
         return getAsArray(value, false);
@@ -67,8 +68,10 @@ public class JsonUtils {
      * empty array. Otherwise (default) empty array is returned as null.
      * 
      * @param value
+     *            The value.
      * @param preserveEmpty
-     * @return
+     *            The boolean flag.
+     * @return The json element.
      */
     public static JsonElement getAsArray(Set<String> value, boolean preserveEmpty) {
         if (!preserveEmpty && value != null && value.isEmpty()) {
@@ -83,7 +86,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member (expressed as integer seconds since
-     * epoch) as a Date
+     * epoch) as a Date.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The date.
      */
     public static Date getAsDate(JsonObject o, String member) {
         if (o.has(member)) {
@@ -100,7 +109,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a JWE Algorithm, null if it doesn't
-     * exist
+     * exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The JWEAlgorithm.
      */
     public static JWEAlgorithm getAsJweAlgorithm(JsonObject o, String member) {
         String s = getAsString(o, member);
@@ -113,7 +128,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a JWE Encryption Method, null if it
-     * doesn't exist
+     * doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The EncryptionMethod.
      */
     public static EncryptionMethod getAsJweEncryptionMethod(JsonObject o, String member) {
         String s = getAsString(o, member);
@@ -126,7 +147,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a JWS Algorithm, null if it doesn't
-     * exist
+     * exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The JWSAlgorithm.
      */
     public static JWSAlgorithm getAsJwsAlgorithm(JsonObject o, String member) {
         String s = getAsString(o, member);
@@ -139,11 +166,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a PKCE Algorithm, null if it
-     * doesn't exist
+     * doesn't exist.
      * 
      * @param o
+     *            The json object.
      * @param member
-     * @return
+     *            The member.
+     * @return The PKCEAlgorithm.
      */
     public static PKCEAlgorithm getAsPkceAlgorithm(JsonObject o, String member) {
         String s = getAsString(o, member);
@@ -155,7 +184,13 @@ public class JsonUtils {
     }
 
     /**
-     * Gets the value of the given member as a string, null if it doesn't exist
+     * Gets the value of the given member as a string, null if it doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The string.
      */
     public static String getAsString(JsonObject o, String member) {
         if (o.has(member)) {
@@ -171,7 +206,14 @@ public class JsonUtils {
     }
 
     /**
-     * Gets the value of the given member as a boolean, null if it doesn't exist
+     * Gets the value of the given member as a boolean, null if it doesn't
+     * exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return a boolean value.
      */
     public static Boolean getAsBoolean(JsonObject o, String member) {
         if (o.has(member)) {
@@ -187,7 +229,13 @@ public class JsonUtils {
     }
 
     /**
-     * Gets the value of the given member as a Long, null if it doesn't exist
+     * Gets the value of the given member as a Long, null if it doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return A long number.
      */
     public static Long getAsLong(JsonObject o, String member) {
         if (o.has(member)) {
@@ -204,7 +252,15 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given given member as a set of strings, null if it
-     * doesn't exist
+     * doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The list of member.
+     * @throws JsonSyntaxException
+     *             If there's an error in the json syntax.
      */
     public static Set<String> getAsStringSet(JsonObject o, String member) throws JsonSyntaxException {
         if (o.has(member)) {
@@ -221,7 +277,15 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given given member as a set of strings, null if it
-     * doesn't exist
+     * doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return List of tokens.
+     * @throws JsonSyntaxException
+     *             If there's an error.
      */
     public static List<String> getAsStringList(JsonObject o, String member) throws JsonSyntaxException {
         if (o.has(member)) {
@@ -238,7 +302,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a list of JWS Algorithms, null if
-     * it doesn't exist
+     * it doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The list of algorithms.
      */
     public static List<JWSAlgorithm> getAsJwsAlgorithmList(JsonObject o, String member) {
         List<String> strings = getAsStringList(o, member);
@@ -255,7 +325,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a list of JWS Algorithms, null if
-     * it doesn't exist
+     * it doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The member.
+     * @return The JWEAlgorithm.
      */
     public static List<JWEAlgorithm> getAsJweAlgorithmList(JsonObject o, String member) {
         List<String> strings = getAsStringList(o, member);
@@ -272,7 +348,13 @@ public class JsonUtils {
 
     /**
      * Gets the value of the given member as a list of JWS Algorithms, null if
-     * it doesn't exist
+     * it doesn't exist.
+     * 
+     * @param o
+     *            The json object.
+     * @param member
+     *            The string member.
+     * @return The encryption method.
      */
     public static List<EncryptionMethod> getAsEncryptionMethodList(JsonObject o, String member) {
         List<String> strings = getAsStringList(o, member);

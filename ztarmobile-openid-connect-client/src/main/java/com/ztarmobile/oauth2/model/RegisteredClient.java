@@ -48,6 +48,7 @@ public class RegisteredClient {
 
     /**
      * @param client
+     *            The client details entity.
      */
     public RegisteredClient(ClientDetailsEntity client) {
         this.client = client;
@@ -55,8 +56,11 @@ public class RegisteredClient {
 
     /**
      * @param client
+     *            The client details entity.
      * @param registrationAccessToken
+     *            The registration access token.
      * @param registrationClientUri
+     *            The registration client uri.
      */
     public RegisteredClient(ClientDetailsEntity client, String registrationAccessToken, String registrationClientUri) {
         this.client = client;
@@ -72,16 +76,18 @@ public class RegisteredClient {
     }
 
     /**
+     * The client.
+     * 
      * @param client
-     *            the client to set
+     *            The client entity.
      */
     public void setClient(ClientDetailsEntity client) {
         this.client = client;
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientDescription()
+     * @return The client description.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientDescription()
      */
     public String getClientDescription() {
         return client.getClientDescription();
@@ -89,6 +95,7 @@ public class RegisteredClient {
 
     /**
      * @param clientDescription
+     *            The client description.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setClientDescription(java.lang.String)
      */
     public void setClientDescription(String clientDescription) {
@@ -96,16 +103,16 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#isAllowRefresh()
+     * @return The refresh token is allowed.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isAllowRefresh()
      */
     public boolean isAllowRefresh() {
         return client.isAllowRefresh();
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#isReuseRefreshToken()
+     * @return The refresh token can be used.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isReuseRefreshToken()
      */
     public boolean isReuseRefreshToken() {
         return client.isReuseRefreshToken();
@@ -113,6 +120,7 @@ public class RegisteredClient {
 
     /**
      * @param reuseRefreshToken
+     *            The refresh token can be used.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setReuseRefreshToken(boolean)
      */
     public void setReuseRefreshToken(boolean reuseRefreshToken) {
@@ -120,8 +128,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenValiditySeconds()
+     * @return The token in seconds.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenValiditySeconds()
      */
     public Integer getIdTokenValiditySeconds() {
         return client.getIdTokenValiditySeconds();
@@ -129,6 +137,7 @@ public class RegisteredClient {
 
     /**
      * @param idTokenValiditySeconds
+     *            The token in seconds.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setIdTokenValiditySeconds(java.lang.Integer)
      */
     public void setIdTokenValiditySeconds(Integer idTokenValiditySeconds) {
@@ -136,8 +145,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#isDynamicallyRegistered()
+     * @return Is dynamically registered.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isDynamicallyRegistered()
      */
     public boolean isDynamicallyRegistered() {
         return client.isDynamicallyRegistered();
@@ -145,6 +154,7 @@ public class RegisteredClient {
 
     /**
      * @param dynamicallyRegistered
+     *            The client is dynamically registered.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setDynamicallyRegistered(boolean)
      */
     public void setDynamicallyRegistered(boolean dynamicallyRegistered) {
@@ -152,8 +162,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#isAllowIntrospection()
+     * @return Allows introspection.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isAllowIntrospection()
      */
     public boolean isAllowIntrospection() {
         return client.isAllowIntrospection();
@@ -161,6 +171,7 @@ public class RegisteredClient {
 
     /**
      * @param allowIntrospection
+     *            Allow introspection.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setAllowIntrospection(boolean)
      */
     public void setAllowIntrospection(boolean allowIntrospection) {
@@ -168,23 +179,24 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#isSecretRequired()
+     * @return Is secret required.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isSecretRequired()
      */
     public boolean isSecretRequired() {
         return client.isSecretRequired();
     }
 
     /**
-     * @return @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isScoped()
+     * @return Is scoped.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#isScoped()
      */
     public boolean isScoped() {
         return client.isScoped();
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientId()
+     * @return The client id.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientId()
      */
     public String getClientId() {
         return client.getClientId();
@@ -192,6 +204,7 @@ public class RegisteredClient {
 
     /**
      * @param clientId
+     *            Sets the client id.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setClientId(java.lang.String)
      */
     public void setClientId(String clientId) {
@@ -199,8 +212,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientSecret()
+     * @return The client secret.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientSecret()
      */
     public String getClientSecret() {
         return client.getClientSecret();
@@ -208,6 +221,7 @@ public class RegisteredClient {
 
     /**
      * @param clientSecret
+     *            The client secret.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setClientSecret(java.lang.String)
      */
     public void setClientSecret(String clientSecret) {
@@ -215,7 +229,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getScope()
+     * @return The scope.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getScope()
      */
     public Set<String> getScope() {
         return client.getScope();
@@ -223,6 +238,7 @@ public class RegisteredClient {
 
     /**
      * @param scope
+     *            The set of scopes.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setScope(java.util.Set)
      */
     public void setScope(Set<String> scope) {
@@ -230,8 +246,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getGrantTypes()
+     * @return The set of grand type.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getGrantTypes()
      */
     public Set<String> getGrantTypes() {
         return client.getGrantTypes();
@@ -239,6 +255,7 @@ public class RegisteredClient {
 
     /**
      * @param grantTypes
+     *            The grand types.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setGrantTypes(java.util.Set)
      */
     public void setGrantTypes(Set<String> grantTypes) {
@@ -246,16 +263,16 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getAuthorizedGrantTypes()
+     * @return The grand types.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getAuthorizedGrantTypes()
      */
     public Set<String> getAuthorizedGrantTypes() {
         return client.getAuthorizedGrantTypes();
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getAuthorities()
+     * @return The set of authorities.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getAuthorities()
      */
     public Set<GrantedAuthority> getAuthorities() {
         return client.getAuthorities();
@@ -263,6 +280,7 @@ public class RegisteredClient {
 
     /**
      * @param authorities
+     *            The set of authorities.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setAuthorities(java.util.Set)
      */
     public void setAuthorities(Set<GrantedAuthority> authorities) {
@@ -270,8 +288,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getAccessTokenValiditySeconds()
+     * @return The token in seconds.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getAccessTokenValiditySeconds()
      */
     public Integer getAccessTokenValiditySeconds() {
         return client.getAccessTokenValiditySeconds();
@@ -279,6 +297,7 @@ public class RegisteredClient {
 
     /**
      * @param accessTokenValiditySeconds
+     *            The token in seconds.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setAccessTokenValiditySeconds(java.lang.Integer)
      */
     public void setAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
@@ -286,8 +305,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getRefreshTokenValiditySeconds()
+     * @return The token in secords.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getRefreshTokenValiditySeconds()
      */
     public Integer getRefreshTokenValiditySeconds() {
         return client.getRefreshTokenValiditySeconds();
@@ -295,6 +314,7 @@ public class RegisteredClient {
 
     /**
      * @param refreshTokenValiditySeconds
+     *            The token in seconds.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setRefreshTokenValiditySeconds(java.lang.Integer)
      */
     public void setRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
@@ -302,8 +322,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getRedirectUris()
+     * @return The redirected uris.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getRedirectUris()
      */
     public Set<String> getRedirectUris() {
         return client.getRedirectUris();
@@ -311,6 +331,7 @@ public class RegisteredClient {
 
     /**
      * @param redirectUris
+     *            The redirect uris.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setRedirectUris(java.util.Set)
      */
     public void setRedirectUris(Set<String> redirectUris) {
@@ -318,16 +339,16 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getRegisteredRedirectUri()
+     * @return The registered redirected uri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getRegisteredRedirectUri()
      */
     public Set<String> getRegisteredRedirectUri() {
         return client.getRegisteredRedirectUri();
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getResourceIds()
+     * @return The resource ids.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getResourceIds()
      */
     public Set<String> getResourceIds() {
         return client.getResourceIds();
@@ -335,6 +356,7 @@ public class RegisteredClient {
 
     /**
      * @param resourceIds
+     *            The resource ids.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setResourceIds(java.util.Set)
      */
     public void setResourceIds(Set<String> resourceIds) {
@@ -342,16 +364,16 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getAdditionalInformation()
+     * @return The additional information.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getAdditionalInformation()
      */
     public Map<String, Object> getAdditionalInformation() {
         return client.getAdditionalInformation();
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getApplicationType()
+     * @return The applicationType.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getApplicationType()
      */
     public AppType getApplicationType() {
         return client.getApplicationType();
@@ -359,6 +381,7 @@ public class RegisteredClient {
 
     /**
      * @param applicationType
+     *            The application type.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setApplicationType(com.ztarmobile.oauth2.model.ClientDetailsEntity.AppType)
      */
     public void setApplicationType(AppType applicationType) {
@@ -366,8 +389,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientName()
+     * @return The client name.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientName()
      */
     public String getClientName() {
         return client.getClientName();
@@ -375,6 +398,7 @@ public class RegisteredClient {
 
     /**
      * @param clientName
+     *            The client name.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setClientName(java.lang.String)
      */
     public void setClientName(String clientName) {
@@ -382,8 +406,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getTokenEndpointAuthMethod()
+     * @return The AuthMethod.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getTokenEndpointAuthMethod()
      */
     public AuthMethod getTokenEndpointAuthMethod() {
         return client.getTokenEndpointAuthMethod();
@@ -391,6 +415,7 @@ public class RegisteredClient {
 
     /**
      * @param tokenEndpointAuthMethod
+     *            The token auth method.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setTokenEndpointAuthMethod(com.ztarmobile.oauth2.model.ClientDetailsEntity.AuthMethod)
      */
     public void setTokenEndpointAuthMethod(AuthMethod tokenEndpointAuthMethod) {
@@ -398,8 +423,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getSubjectType()
+     * @return The subject type.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getSubjectType()
      */
     public SubjectType getSubjectType() {
         return client.getSubjectType();
@@ -407,6 +432,7 @@ public class RegisteredClient {
 
     /**
      * @param subjectType
+     *            The subject type.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setSubjectType(com.ztarmobile.oauth2.model.ClientDetailsEntity.SubjectType)
      */
     public void setSubjectType(SubjectType subjectType) {
@@ -414,8 +440,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getContacts()
+     * @return The list of contacts.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getContacts()
      */
     public Set<String> getContacts() {
         return client.getContacts();
@@ -423,6 +449,7 @@ public class RegisteredClient {
 
     /**
      * @param contacts
+     *            The list of contacts.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setContacts(java.util.Set)
      */
     public void setContacts(Set<String> contacts) {
@@ -430,7 +457,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getLogoUri()
+     * @return The logoIri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getLogoUri()
      */
     public String getLogoUri() {
         return client.getLogoUri();
@@ -438,6 +466,7 @@ public class RegisteredClient {
 
     /**
      * @param logoUri
+     *            The logoUri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setLogoUri(java.lang.String)
      */
     public void setLogoUri(String logoUri) {
@@ -445,8 +474,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getPolicyUri()
+     * @return The policyUri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getPolicyUri()
      */
     public String getPolicyUri() {
         return client.getPolicyUri();
@@ -454,6 +483,7 @@ public class RegisteredClient {
 
     /**
      * @param policyUri
+     *            The policyUri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setPolicyUri(java.lang.String)
      */
     public void setPolicyUri(String policyUri) {
@@ -461,8 +491,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientUri()
+     * @return The client uri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getClientUri()
      */
     public String getClientUri() {
         return client.getClientUri();
@@ -470,6 +500,7 @@ public class RegisteredClient {
 
     /**
      * @param clientUri
+     *            The client uri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setClientUri(java.lang.String)
      */
     public void setClientUri(String clientUri) {
@@ -477,7 +508,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getTosUri()
+     * @return The tosIri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getTosUri()
      */
     public String getTosUri() {
         return client.getTosUri();
@@ -485,6 +517,7 @@ public class RegisteredClient {
 
     /**
      * @param tosUri
+     *            The tosUri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setTosUri(java.lang.String)
      */
     public void setTosUri(String tosUri) {
@@ -492,7 +525,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getJwksUri()
+     * @return The jwksUri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getJwksUri()
      */
     public String getJwksUri() {
         return client.getJwksUri();
@@ -500,6 +534,7 @@ public class RegisteredClient {
 
     /**
      * @param jwksUri
+     *            The jwksUri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setJwksUri(java.lang.String)
      */
     public void setJwksUri(String jwksUri) {
@@ -507,7 +542,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getJwks()
+     * @return The JWKSet.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getJwks()
      */
     public JWKSet getJwks() {
         return client.getJwks();
@@ -515,6 +551,7 @@ public class RegisteredClient {
 
     /**
      * @param jwks
+     *            The JWKSet.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setJwks(com.nimbusds.jose.jwk.JWKSet)
      */
     public void setJwks(JWKSet jwks) {
@@ -522,8 +559,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getSectorIdentifierUri()
+     * @return The sector identifier uri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getSectorIdentifierUri()
      */
     public String getSectorIdentifierUri() {
         return client.getSectorIdentifierUri();
@@ -531,6 +568,7 @@ public class RegisteredClient {
 
     /**
      * @param sectorIdentifierUri
+     *            The sector identifier uri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setSectorIdentifierUri(java.lang.String)
      */
     public void setSectorIdentifierUri(String sectorIdentifierUri) {
@@ -538,8 +576,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getDefaultMaxAge()
+     * @return The default max age.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getDefaultMaxAge()
      */
     public Integer getDefaultMaxAge() {
         return client.getDefaultMaxAge();
@@ -547,6 +585,7 @@ public class RegisteredClient {
 
     /**
      * @param defaultMaxAge
+     *            The default max age.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setDefaultMaxAge(java.lang.Integer)
      */
     public void setDefaultMaxAge(Integer defaultMaxAge) {
@@ -554,8 +593,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getRequireAuthTime()
+     * @return The flag.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getRequireAuthTime()
      */
     public Boolean getRequireAuthTime() {
         return client.getRequireAuthTime();
@@ -563,6 +602,7 @@ public class RegisteredClient {
 
     /**
      * @param requireAuthTime
+     *            The flag.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setRequireAuthTime(java.lang.Boolean)
      */
     public void setRequireAuthTime(Boolean requireAuthTime) {
@@ -570,8 +610,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getResponseTypes()
+     * @return The set of response types.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getResponseTypes()
      */
     public Set<String> getResponseTypes() {
         return client.getResponseTypes();
@@ -579,6 +619,7 @@ public class RegisteredClient {
 
     /**
      * @param responseTypes
+     *            The response types.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setResponseTypes(java.util.Set)
      */
     public void setResponseTypes(Set<String> responseTypes) {
@@ -586,8 +627,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getDefaultACRvalues()
+     * @return The default CR values.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getDefaultACRvalues()
      */
     public Set<String> getDefaultACRvalues() {
         return client.getDefaultACRvalues();
@@ -595,6 +636,7 @@ public class RegisteredClient {
 
     /**
      * @param defaultACRvalues
+     *            The default CR values.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setDefaultACRvalues(java.util.Set)
      */
     public void setDefaultACRvalues(Set<String> defaultACRvalues) {
@@ -602,8 +644,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getInitiateLoginUri()
+     * @return The initiate login uri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getInitiateLoginUri()
      */
     public String getInitiateLoginUri() {
         return client.getInitiateLoginUri();
@@ -611,6 +653,7 @@ public class RegisteredClient {
 
     /**
      * @param initiateLoginUri
+     *            The initiate login uri.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setInitiateLoginUri(java.lang.String)
      */
     public void setInitiateLoginUri(String initiateLoginUri) {
@@ -618,8 +661,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getPostLogoutRedirectUris()
+     * @return The postLogoutRedirectUris.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getPostLogoutRedirectUris()
      */
     public Set<String> getPostLogoutRedirectUris() {
         return client.getPostLogoutRedirectUris();
@@ -627,15 +670,16 @@ public class RegisteredClient {
 
     /**
      * @param postLogoutRedirectUri
-     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setPostLogoutRedirectUris(java.lang.String)
+     *            The postLogoutRedirectUri.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setPostLogoutRedirectUris(Set)
      */
     public void setPostLogoutRedirectUris(Set<String> postLogoutRedirectUri) {
         client.setPostLogoutRedirectUris(postLogoutRedirectUri);
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getRequestUris()
+     * @return The requested uris.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getRequestUris()
      */
     public Set<String> getRequestUris() {
         return client.getRequestUris();
@@ -643,6 +687,7 @@ public class RegisteredClient {
 
     /**
      * @param requestUris
+     *            The requested uris.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setRequestUris(java.util.Set)
      */
     public void setRequestUris(Set<String> requestUris) {
@@ -650,8 +695,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getRequestObjectSigningAlg()
+     * @return The JWSAlgorithm.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getRequestObjectSigningAlg()
      */
     public JWSAlgorithm getRequestObjectSigningAlg() {
         return client.getRequestObjectSigningAlg();
@@ -659,6 +704,7 @@ public class RegisteredClient {
 
     /**
      * @param requestObjectSigningAlg
+     *            The signing algorithm.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setRequestObjectSigningAlg(com.nimbusds.jose.JWSAlgorithm)
      */
     public void setRequestObjectSigningAlg(JWSAlgorithm requestObjectSigningAlg) {
@@ -666,8 +712,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getUserInfoSignedResponseAlg()
+     * @return The signed response.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getUserInfoSignedResponseAlg()
      */
     public JWSAlgorithm getUserInfoSignedResponseAlg() {
         return client.getUserInfoSignedResponseAlg();
@@ -675,6 +721,7 @@ public class RegisteredClient {
 
     /**
      * @param userInfoSignedResponseAlg
+     *            The signed response.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setUserInfoSignedResponseAlg(com.nimbusds.jose.JWSAlgorithm)
      */
     public void setUserInfoSignedResponseAlg(JWSAlgorithm userInfoSignedResponseAlg) {
@@ -682,8 +729,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getUserInfoEncryptedResponseAlg()
+     * @return The encrypted response.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getUserInfoEncryptedResponseAlg()
      */
     public JWEAlgorithm getUserInfoEncryptedResponseAlg() {
         return client.getUserInfoEncryptedResponseAlg();
@@ -691,6 +738,7 @@ public class RegisteredClient {
 
     /**
      * @param userInfoEncryptedResponseAlg
+     *            The encrypted response.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setUserInfoEncryptedResponseAlg(com.nimbusds.jose.JWEAlgorithm)
      */
     public void setUserInfoEncryptedResponseAlg(JWEAlgorithm userInfoEncryptedResponseAlg) {
@@ -698,8 +746,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getUserInfoEncryptedResponseEnc()
+     * @return The user info.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getUserInfoEncryptedResponseEnc()
      */
     public EncryptionMethod getUserInfoEncryptedResponseEnc() {
         return client.getUserInfoEncryptedResponseEnc();
@@ -707,6 +755,7 @@ public class RegisteredClient {
 
     /**
      * @param userInfoEncryptedResponseEnc
+     *            The user info.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setUserInfoEncryptedResponseEnc(com.nimbusds.jose.EncryptionMethod)
      */
     public void setUserInfoEncryptedResponseEnc(EncryptionMethod userInfoEncryptedResponseEnc) {
@@ -714,8 +763,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenSignedResponseAlg()
+     * @return The signed response.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenSignedResponseAlg()
      */
     public JWSAlgorithm getIdTokenSignedResponseAlg() {
         return client.getIdTokenSignedResponseAlg();
@@ -723,6 +772,7 @@ public class RegisteredClient {
 
     /**
      * @param idTokenSignedResponseAlg
+     *            The signed response.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setIdTokenSignedResponseAlg(com.nimbusds.jose.JWSAlgorithm)
      */
     public void setIdTokenSignedResponseAlg(JWSAlgorithm idTokenSignedResponseAlg) {
@@ -730,8 +780,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenEncryptedResponseAlg()
+     * @return The encrypted algorithm.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenEncryptedResponseAlg()
      */
     public JWEAlgorithm getIdTokenEncryptedResponseAlg() {
         return client.getIdTokenEncryptedResponseAlg();
@@ -739,6 +789,7 @@ public class RegisteredClient {
 
     /**
      * @param idTokenEncryptedResponseAlg
+     *            The encrypted algorithm.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setIdTokenEncryptedResponseAlg(com.nimbusds.jose.JWEAlgorithm)
      */
     public void setIdTokenEncryptedResponseAlg(JWEAlgorithm idTokenEncryptedResponseAlg) {
@@ -746,7 +797,7 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
+     * @return The encrypted response. @see
      *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getIdTokenEncryptedResponseEnc()
      */
     public EncryptionMethod getIdTokenEncryptedResponseEnc() {
@@ -755,6 +806,7 @@ public class RegisteredClient {
 
     /**
      * @param idTokenEncryptedResponseEnc
+     *            The encrypted response.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setIdTokenEncryptedResponseEnc(com.nimbusds.jose.EncryptionMethod)
      */
     public void setIdTokenEncryptedResponseEnc(EncryptionMethod idTokenEncryptedResponseEnc) {
@@ -762,8 +814,10 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getTokenEndpointAuthSigningAlg()
+     * The token endPoint auth.
+     * 
+     * @return The JWSAlgorithm
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getTokenEndpointAuthSigningAlg()
      */
     public JWSAlgorithm getTokenEndpointAuthSigningAlg() {
         return client.getTokenEndpointAuthSigningAlg();
@@ -771,6 +825,7 @@ public class RegisteredClient {
 
     /**
      * @param tokenEndpointAuthSigningAlg
+     *            The actual token.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setTokenEndpointAuthSigningAlg(com.nimbusds.jose.JWSAlgorithm)
      */
     public void setTokenEndpointAuthSigningAlg(JWSAlgorithm tokenEndpointAuthSigningAlg) {
@@ -778,8 +833,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getCreatedAt()
+     * @return The date when the client was created.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getCreatedAt()
      */
     public Date getCreatedAt() {
         return client.getCreatedAt();
@@ -787,6 +842,7 @@ public class RegisteredClient {
 
     /**
      * @param createdAt
+     *            The date when the client was created.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setCreatedAt(java.util.Date)
      */
     public void setCreatedAt(Date createdAt) {
@@ -854,8 +910,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getClaimsRedirectUris()
+     * @return List of claims.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getClaimsRedirectUris()
      */
     public Set<String> getClaimsRedirectUris() {
         return client.getClaimsRedirectUris();
@@ -863,6 +919,7 @@ public class RegisteredClient {
 
     /**
      * @param claimsRedirectUris
+     *            The list of claims.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setClaimsRedirectUris(java.util.Set)
      */
     public void setClaimsRedirectUris(Set<String> claimsRedirectUris) {
@@ -870,8 +927,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getSoftwareStatement()
+     * @return The JWT.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getSoftwareStatement()
      */
     public JWT getSoftwareStatement() {
         return client.getSoftwareStatement();
@@ -879,6 +936,7 @@ public class RegisteredClient {
 
     /**
      * @param softwareStatement
+     *            The software statement.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setSoftwareStatement(com.nimbusds.jwt.JWT)
      */
     public void setSoftwareStatement(JWT softwareStatement) {
@@ -886,8 +944,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getCodeChallengeMethod()
+     * @return The PKCEAlgorithm.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getCodeChallengeMethod()
      */
     public PKCEAlgorithm getCodeChallengeMethod() {
         return client.getCodeChallengeMethod();
@@ -895,6 +953,7 @@ public class RegisteredClient {
 
     /**
      * @param codeChallengeMethod
+     *            The code challenge method.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setCodeChallengeMethod(com.ztarmobile.oauth2.model.PKCEAlgorithm)
      */
     public void setCodeChallengeMethod(PKCEAlgorithm codeChallengeMethod) {
@@ -917,8 +976,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getDeviceCodeValiditySeconds()
+     * @return The number of seconds.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getDeviceCodeValiditySeconds()
      */
     public Integer getDeviceCodeValiditySeconds() {
         return client.getDeviceCodeValiditySeconds();
@@ -926,6 +985,7 @@ public class RegisteredClient {
 
     /**
      * @param deviceCodeValiditySeconds
+     *            The number of seconds.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setDeviceCodeValiditySeconds(java.lang.Integer)
      */
     public void setDeviceCodeValiditySeconds(Integer deviceCodeValiditySeconds) {
@@ -933,8 +993,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getSoftwareId()
+     * @return The software id.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getSoftwareId()
      */
     public String getSoftwareId() {
         return client.getSoftwareId();
@@ -942,6 +1002,7 @@ public class RegisteredClient {
 
     /**
      * @param softwareId
+     *            The software id.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setSoftwareId(java.lang.String)
      */
     public void setSoftwareId(String softwareId) {
@@ -949,8 +1010,8 @@ public class RegisteredClient {
     }
 
     /**
-     * @return @see
-     *         com.ztarmobile.oauth2.model.ClientDetailsEntity#getSoftwareVersion()
+     * @return The software version.
+     * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#getSoftwareVersion()
      */
     public String getSoftwareVersion() {
         return client.getSoftwareVersion();
@@ -958,6 +1019,7 @@ public class RegisteredClient {
 
     /**
      * @param softwareVersion
+     *            The software version.
      * @see com.ztarmobile.oauth2.model.ClientDetailsEntity#setSoftwareVersion(java.lang.String)
      */
     public void setSoftwareVersion(String softwareVersion) {

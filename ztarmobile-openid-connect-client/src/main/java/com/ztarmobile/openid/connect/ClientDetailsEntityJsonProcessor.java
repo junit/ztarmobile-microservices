@@ -99,6 +99,7 @@ public class ClientDetailsEntityJsonProcessor {
      * Create an unbound ClientDetailsEntity from the given JSON string.
      *
      * @param jsonString
+     *            The json string.
      * @return the entity if successful, null otherwise
      */
     public static ClientDetailsEntity parse(String jsonString) {
@@ -106,6 +107,13 @@ public class ClientDetailsEntityJsonProcessor {
         return parse(jsonEl);
     }
 
+    /**
+     * Returns the client details entity.
+     * 
+     * @param jsonEl
+     *            The json element.
+     * @return The client details entity.
+     */
     public static ClientDetailsEntity parse(JsonElement jsonEl) {
         if (jsonEl.isJsonObject()) {
 
@@ -228,6 +236,10 @@ public class ClientDetailsEntityJsonProcessor {
     /**
      * Parse the JSON as a RegisteredClient (useful in the dynamic client
      * filter).
+     * 
+     * @param jsonString
+     *            The json string.
+     * @return The registered client.
      */
     public static RegisteredClient parseRegistered(String jsonString) {
 
@@ -257,10 +269,11 @@ public class ClientDetailsEntityJsonProcessor {
     }
 
     /**
+     * Serialize a registered client.
+     * 
      * @param c
-     * @param token
-     * @param registrationUri
-     * @return
+     *            The registered client.
+     * @return The JSON object.
      */
     public static JsonObject serialize(RegisteredClient c) {
 
