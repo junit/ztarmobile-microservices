@@ -91,7 +91,7 @@ public class OIDCAuthenticationToken {
         }
         // we check whether the token is active or not.
         if (!active) {
-            throw new AuthorizationServiceException(new HttpMessageErrorCodeResolver(NO_ACTIVE_TOKEN, jsonRoot));
+            throw new AuthorizationServiceException(NO_ACTIVE_TOKEN);
         }
     }
 

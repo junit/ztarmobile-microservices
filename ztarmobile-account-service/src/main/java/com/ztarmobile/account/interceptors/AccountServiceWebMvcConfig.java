@@ -46,6 +46,7 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         log.debug("Setting up interceptors for this service...");
 
+        // add all the interceptors here.
         registry.addInterceptor(loggerServiceInterceptor);
         registry.addInterceptor(authorizationServiceInterceptor);
         // add more interceptors here when needed

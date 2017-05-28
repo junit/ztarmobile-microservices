@@ -29,7 +29,7 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     NO_ACCESS_EXTERNAL_RESOURCE (80003, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
     NO_VALID_JSON (80004, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
     NO_ACTIVE_AVAILABLE (80005, "Retrospection Endpoint did not return an active: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_TOKEN (80006, "Token is not active: ?", UNAUTHORIZED);
+    NO_ACTIVE_TOKEN (80006, "Access token is no longer active or valid", UNAUTHORIZED);
 
     private int code;
     private String message;
