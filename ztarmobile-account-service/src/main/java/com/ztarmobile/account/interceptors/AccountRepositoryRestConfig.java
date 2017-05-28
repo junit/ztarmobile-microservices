@@ -45,7 +45,7 @@ public class AccountRepositoryRestConfig {
      * Authorize the request against the OpenId Provider (Authorization Server).
      */
     @Autowired
-    private AuthorizationServiceInterceptor authorizationServiceInterceptor;
+    private AuthTokenServiceInterceptor authTokenServiceInterceptor;
 
     /**
      * @return The map interceptor.
@@ -62,7 +62,7 @@ public class AccountRepositoryRestConfig {
         // the order of the interceptors MUST be the same as class:
         // AccountServiceWebMvcConfig
         repositoryInterceptor.addInterceptor(loggerServiceInterceptor);
-        repositoryInterceptor.addInterceptor(authorizationServiceInterceptor);
+        repositoryInterceptor.addInterceptor(authTokenServiceInterceptor);
         return new MappedInterceptor(includePatterns, repositoryInterceptor);
     }
 }

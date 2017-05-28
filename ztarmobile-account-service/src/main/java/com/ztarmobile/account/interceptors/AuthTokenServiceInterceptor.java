@@ -34,11 +34,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @since 3.0
  */
 @Component
-public class AuthorizationServiceInterceptor extends HandlerInterceptorAdapter {
+public class AuthTokenServiceInterceptor extends HandlerInterceptorAdapter {
     /**
      * Logger for this class.
      */
-    private static final Logger log = LoggerFactory.getLogger(AuthorizationServiceInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthTokenServiceInterceptor.class);
 
     /**
      * Utility to handle the interaction with the server provider.

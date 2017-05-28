@@ -37,7 +37,7 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
      * Authorize the request against the OpenId Provider (Authorization Server).
      */
     @Autowired
-    private AuthorizationServiceInterceptor authorizationServiceInterceptor;
+    private AuthTokenServiceInterceptor authTokenServiceInterceptor;
 
     /**
      * {@inheritDoc}
@@ -48,7 +48,7 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
 
         // add all the interceptors here.
         registry.addInterceptor(loggerServiceInterceptor);
-        registry.addInterceptor(authorizationServiceInterceptor);
+        registry.addInterceptor(authTokenServiceInterceptor);
         // add more interceptors here when needed
     }
 }
