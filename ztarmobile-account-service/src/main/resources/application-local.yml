@@ -2,8 +2,9 @@
 account:
   openid:
     client:
-      config: /Users/armandorivas/Desktop/swa-clients.json
+      config: /Users/armandorivas/Desktop/trusted-local-clients.json
       name: Resource Server (Local)
+      redirect-uri: http://localhost:1010/dummy-not-used
     issuer: http://localhost:8080/auth/realms/demo
 
 # HOST SERVER (where the service is running on)
