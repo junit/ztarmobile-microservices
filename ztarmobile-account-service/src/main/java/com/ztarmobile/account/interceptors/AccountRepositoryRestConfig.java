@@ -48,6 +48,12 @@ public class AccountRepositoryRestConfig {
     private AuthTokenServiceInterceptor authTokenServiceInterceptor;
 
     /**
+     * Check whether the request has the right scope.
+     */
+    @Autowired
+    private AuthScopeServiceInterceptor authScopeServiceInterceptor;
+
+    /**
      * @return The map interceptor.
      * @see com.ztarmobile.account.interceptors.AccountServiceWebMvcConfig#addInterceptors(org.springframework.web.servlet.config.annotation.InterceptorRegistry)
      */
@@ -63,6 +69,7 @@ public class AccountRepositoryRestConfig {
         // AccountServiceWebMvcConfig
         repositoryInterceptor.addInterceptor(loggerServiceInterceptor);
         repositoryInterceptor.addInterceptor(authTokenServiceInterceptor);
+        repositoryInterceptor.addInterceptor(authScopeServiceInterceptor);
         return new MappedInterceptor(includePatterns, repositoryInterceptor);
     }
 }

@@ -6,12 +6,8 @@
  */
 package com.ztarmobile.account;
 
-import com.ztarmobile.oauth2.model.RegisteredClient;
-import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
-import com.ztarmobile.openid.connect.client.service.impl.DynamicRegistrationClientConfigurationService;
-import com.ztarmobile.openid.connect.config.service.ClientConfigurationService;
-import com.ztarmobile.openid.connect.config.service.ServerConfiguration;
-import com.ztarmobile.openid.connect.config.service.ServerConfigurationService;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +16,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+
+import com.ztarmobile.oauth2.model.RegisteredClient;
+import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
+import com.ztarmobile.openid.connect.client.service.impl.DynamicRegistrationClientConfigurationService;
+import com.ztarmobile.openid.connect.config.service.ClientConfigurationService;
+import com.ztarmobile.openid.connect.config.service.ServerConfiguration;
+import com.ztarmobile.openid.connect.config.service.ServerConfigurationService;
 
 /**
  * Application ready listener.
@@ -47,6 +50,12 @@ public class ApplicationReadyClientListener implements ApplicationListener<Appli
     @Value("${account.openid.client.name}")
     private String clientName;
 
+    /**
+     * The redirect URI, this will be used only for registration purposes.
+     */
+    @Value("${account.openid.client.redirect-uri}")
+    private String redirectUri;
+
     // holds server information (auth URI, token URI, etc.), indexed by issuer
     @Autowired
     private ServerConfigurationService servers;
@@ -66,8 +75,12 @@ public class ApplicationReadyClientListener implements ApplicationListener<Appli
 
         DynamicRegistrationClientConfigurationService dynamicClient = null;
         if (clients instanceof DynamicRegistrationClientConfigurationService) {
+            Set<String> redirectUris = new HashSet<>();
+            redirectUris.add(redirectUri);
+
             RegisteredClient registeredClient = new RegisteredClient();
             registeredClient.setClientName(clientName);
+            registeredClient.setRedirectUris(redirectUris);
 
             dynamicClient = (DynamicRegistrationClientConfigurationService) clients;
             dynamicClient.setTemplate(registeredClient);
@@ -85,6 +98,10 @@ public class ApplicationReadyClientListener implements ApplicationListener<Appli
         String clientId = clientConfig.getClient().getClientId();
         String clientSecret = clientConfig.getClient().getClientSecret();
         String introspectionEndpointUri = serverConfig.getIntrospectionEndpointUri();
+        if (introspectionEndpointUri == null) {
+            // for some reason the introspection URI could not be found.
+            throw new IllegalStateException("There was a problem while trying to discover the introspection endpoint.");
+        }
 
         // we set these properties into the actual bean (manually injected)
         OIDCAuthenticationToken authToken = event.getApplicationContext().getBean(OIDCAuthenticationToken.class);

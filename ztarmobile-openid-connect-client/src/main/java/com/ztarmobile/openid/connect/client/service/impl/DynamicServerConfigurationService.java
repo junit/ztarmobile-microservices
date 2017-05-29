@@ -120,7 +120,19 @@ public class DynamicServerConfigurationService implements ServerConfigurationSer
                 conf.setJwksUri(getAsString(o, "jwks_uri"));
                 conf.setUserInfoUri(getAsString(o, "userinfo_endpoint"));
                 conf.setRegistrationEndpointUri(getAsString(o, "registration_endpoint"));
-                conf.setIntrospectionEndpointUri(getAsString(o, "token_introspection_endpoint"));
+                // *** SPECIFICATION_NOTE, keycloak uses: introspection_endpoint
+                // property but MITRE (openid specification)
+                // project uses standard introspection name:
+                // introspection_endpoint
+                // We have to check in both, first the standard, then the
+                // keycloak location...
+                String introspectionUri = getAsString(o, "introspection_endpoint");
+                if (introspectionUri == null) {
+                    // opps, now we check the non-standard one.
+                    introspectionUri = getAsString(o, "token_introspection_endpoint");
+                }
+
+                conf.setIntrospectionEndpointUri(introspectionUri);
                 conf.setAcrValuesSupported(getAsStringList(o, "acr_values_supported"));
                 conf.setCheckSessionIframe(getAsString(o, "check_session_iframe"));
                 conf.setClaimsLocalesSupported(getAsStringList(o, "claims_locales_supported"));

@@ -28,8 +28,11 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     UNAUTHORIZED_ACCESS (80002, "Full authentication is required to access this resource", UNAUTHORIZED), 
     NO_ACCESS_EXTERNAL_RESOURCE (80003, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
     NO_VALID_JSON (80004, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_AVAILABLE (80005, "Retrospection Endpoint did not return an active: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_TOKEN (80006, "Access token is no longer active or valid", UNAUTHORIZED);
+    NO_ACTIVE_AVAILABLE (80005, "Retrospection Endpoint did not return an active element: ?", INTERNAL_SERVER_ERROR),
+    NO_SCOPE_AVAILABLE (80006, "Retrospection Endpoint did not return an scope element: ?", INTERNAL_SERVER_ERROR),
+    NO_SCOPE_FOUND (80007, "Retrospection Endpoint returned an empty scope element", INTERNAL_SERVER_ERROR),
+    NO_ROLE_AVAILABLE (80008, "Retrospection Endpoint did not return a 'realm_access' element with a valid role element: ?", INTERNAL_SERVER_ERROR),
+    NO_ACTIVE_TOKEN (80009, "Access token is no longer active or valid", UNAUTHORIZED);
 
     private int code;
     private String message;

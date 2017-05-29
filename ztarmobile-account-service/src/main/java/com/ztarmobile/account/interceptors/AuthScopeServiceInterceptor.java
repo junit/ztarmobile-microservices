@@ -9,6 +9,8 @@ package com.ztarmobile.account.interceptors;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.INTROSPECTED_TOKEN;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
@@ -28,46 +30,44 @@ import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 /**
- * Spring bean to authorize incoming requests against the OpenId provider
- * (Authorization Server).
+ * Spring bean to check whether the client has the right scope to access the
+ * protected resource.
  *
  * @author armandorivas
  * @version %I%, %G%
  * @since 3.0
  */
 @Component
-public class AuthTokenServiceInterceptor extends HandlerInterceptorAdapter {
+public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
     /**
      * Logger for this class.
      */
-    private static final Logger log = LoggerFactory.getLogger(AuthTokenServiceInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthScopeServiceInterceptor.class);
 
     /**
      * Utility to handle the interaction with the server provider.
      */
     @Autowired
     private OIDCAuthenticationToken authenticationToken;
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.debug("Validating Request...");
+        log.debug("Validating Scopes Accesses...");
         int responseStatus = 0;
         ErrorResponse errorResponse = null;
 
         try {
-            JsonElement introspectedToken = authenticationToken.handleAuthorizationRequest(request);
-            log.debug("Token was found active");
-            // we continue with the next interceptor, but before doing that, we
-            // save the json object.
-            request.setAttribute(INTROSPECTED_TOKEN, introspectedToken);
+            JsonElement introspectedToken = (JsonElement) request.getAttribute(INTROSPECTED_TOKEN);
+            Set<String> scopes = authenticationToken.handleScopeRequest(introspectedToken);
+            System.out.println(scopes);
+
+            log.debug("The scope was successful!!!");
             return true;
         } catch (AuthorizationServiceException e) {
-            // there was an error while introspecting the access token, was not
-            // active?
             HttpMessageErrorCode msg = e.getHttpMessageErrorCode();
 
             errorResponse = new ErrorResponse(msg.getMessage(), msg.getNumber());

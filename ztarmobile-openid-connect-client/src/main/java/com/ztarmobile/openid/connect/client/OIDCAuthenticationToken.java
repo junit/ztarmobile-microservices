@@ -9,10 +9,14 @@ package com.ztarmobile.openid.connect.client;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACCESS_TOKEN_FOUND;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_AVAILABLE;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_TOKEN;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ROLE_AVAILABLE;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_SCOPE_AVAILABLE;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_SCOPE_FOUND;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_VALID_JSON;
 import static com.ztarmobile.openid.connect.client.OpenIdConnectUtil.requestTokenIntrospection;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -21,6 +25,9 @@ import com.ztarmobile.openid.connect.security.authorization.AuthorizationService
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,10 +65,11 @@ public class OIDCAuthenticationToken {
      * @param request
      *            The standard request, the access token should be in the header
      *            or the body of the request.
+     * @return The introspected active token.
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(String)
      */
-    public void handleAuthorizationRequest(HttpServletRequest request) {
-        this.handleAuthorizationRequest(seachForAccessToken(request));
+    public JsonElement handleAuthorizationRequest(HttpServletRequest request) {
+        return this.handleAuthorizationRequest(seachForAccessToken(request));
     }
 
     /**
@@ -72,27 +80,96 @@ public class OIDCAuthenticationToken {
      * 
      * @param accessToken
      *            The access token.
+     * @return The actual introspected token payload.
      * @see OIDCAuthenticationToken#handleAuthorizationRequest(HttpServletRequest)
      */
-    public void handleAuthorizationRequest(String accessToken) {
+    public JsonElement handleAuthorizationRequest(String accessToken) {
         String jsonString = requestTokenIntrospection(accessToken, clientId, clientSecret, introspectionEndpointUri);
         log.debug("Token Introspection Response: " + jsonString);
         // we assume we have a valid response
-        JsonElement jsonRoot = new JsonParser().parse(jsonString);
-        if (!jsonRoot.isJsonObject()) {
-            throw new AuthorizationServiceException(new HttpMessageErrorCodeResolver(NO_VALID_JSON, jsonRoot));
+        JsonElement jsonTokenIntrospected = new JsonParser().parse(jsonString);
+        if (!jsonTokenIntrospected.isJsonObject()) {
+            throw new AuthorizationServiceException(
+                    new HttpMessageErrorCodeResolver(NO_VALID_JSON, jsonTokenIntrospected));
         }
         boolean active = false;
-        JsonObject tokenResponse = jsonRoot.getAsJsonObject();
+        JsonObject tokenResponse = jsonTokenIntrospected.getAsJsonObject();
         if (tokenResponse.has("active")) {
             active = tokenResponse.get("active").getAsBoolean();
         } else {
-            throw new AuthorizationServiceException(new HttpMessageErrorCodeResolver(NO_ACTIVE_AVAILABLE, jsonRoot));
+            throw new AuthorizationServiceException(
+                    new HttpMessageErrorCodeResolver(NO_ACTIVE_AVAILABLE, jsonTokenIntrospected));
         }
         // we check whether the token is active or not.
         if (!active) {
             throw new AuthorizationServiceException(NO_ACTIVE_TOKEN);
         }
+        // we know the token is active, we simply return it so that it can be
+        // used somewhere else.
+        return jsonTokenIntrospected;
+    }
+
+    /**
+     * Check whether the JSON object has defined the scopes to handle the
+     * protected resource being requested. If the scopes are found, then it
+     * returns a list of elements with the corresponding values. If for some
+     * reason the scopes are not present in the JSON object, this exception
+     * <code>AuthorizationServiceException</code> is thrown, meaning the client
+     * is not authorized or does not have the right permission to access the
+     * protected resource.
+     * 
+     * *** SPECIFICATION_NOTE: Something important here is that, keycloak does
+     * not return the scope element as part of the introspection endpoint, hence
+     * we need to check in another location too. We check the standard location
+     * MITRE (openid specification), if it's not found, we check the
+     * 'realm_access' property.
+     * 
+     * @param jsonElement
+     *            The introspected JSON element.
+     * @return List of scopes available for this JSON token.
+     */
+    public Set<String> handleScopeRequest(JsonElement jsonElement) {
+        JsonObject tokenResponse = jsonElement.getAsJsonObject();
+        String scopesFound = null;
+        if (tokenResponse.has("scope")) {
+            scopesFound = tokenResponse.get("scope").getAsString();
+        } else {
+            // non standard openid element
+            if (tokenResponse.has("realm_access")) {
+                JsonElement jsonRealmElement = tokenResponse.get("realm_access");
+                boolean hasRoles = jsonRealmElement.getAsJsonObject().has("roles");
+                if (hasRoles) {
+                    if (jsonRealmElement.getAsJsonObject().get("roles").isJsonArray()) {
+                        StringBuilder sb = new StringBuilder();
+                        JsonArray jsonArray = jsonRealmElement.getAsJsonObject().get("roles").getAsJsonArray();
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            sb.append(jsonArray.get(i));
+                            sb.append(" ");
+                        }
+                        scopesFound = sb.toString().trim();
+                    }
+                } else {
+                    // no roles were found.
+                    throw new AuthorizationServiceException(
+                            new HttpMessageErrorCodeResolver(NO_ROLE_AVAILABLE, jsonRealmElement));
+                }
+            } else {
+                // no scopes were found.
+                throw new AuthorizationServiceException(
+                        new HttpMessageErrorCodeResolver(NO_SCOPE_AVAILABLE, jsonElement));
+            }
+            if (scopesFound == null || scopesFound.trim().isEmpty()) {
+                // empty scopes.
+                throw new AuthorizationServiceException(NO_SCOPE_FOUND);
+            }
+        }
+        // assuming that the scopes are found and separated by spaces.
+        StringTokenizer st = new StringTokenizer(scopesFound);
+        Set<String> scopes = new HashSet<>();
+        while (st.hasMoreElements()) {
+            scopes.add(st.nextToken());
+        }
+        return scopes;
     }
 
     /**
@@ -176,4 +253,5 @@ public class OIDCAuthenticationToken {
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
     }
+
 }

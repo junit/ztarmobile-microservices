@@ -40,6 +40,12 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
     private AuthTokenServiceInterceptor authTokenServiceInterceptor;
 
     /**
+     * Check whether the request has the right scope.
+     */
+    @Autowired
+    private AuthScopeServiceInterceptor authScopeServiceInterceptor;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -49,6 +55,7 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
         // add all the interceptors here.
         registry.addInterceptor(loggerServiceInterceptor);
         registry.addInterceptor(authTokenServiceInterceptor);
+        registry.addInterceptor(authScopeServiceInterceptor);
         // add more interceptors here when needed
     }
 }
