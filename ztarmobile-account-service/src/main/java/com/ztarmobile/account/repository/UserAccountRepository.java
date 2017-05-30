@@ -8,14 +8,14 @@ package com.ztarmobile.account.repository;
 
 import static com.ztarmobile.account.repository.CustomRepositoryPath.USER_ACCOUNT_MAPPING;
 
+import com.ztarmobile.account.model.UserAccount;
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.ztarmobile.account.model.UserAccount;
 
 /**
  * The UserAccount repository that exposes the CRUD operations for the user

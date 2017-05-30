@@ -34,13 +34,13 @@ public class AccountServiceController {
      * Logger for this class.
      */
     private static final Logger log = LoggerFactory.getLogger(AccountServiceController.class);
-
-    @Autowired
-    private UserAccountRepository userAccountRepository;
     /**
      * All the mappings.
      */
     private static final String ECHO_MAPPING = "/echo";
+
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     /**
      * This is just a ping endPoint.

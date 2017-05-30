@@ -9,6 +9,13 @@ package com.ztarmobile.account.interceptors;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.INTROSPECTED_TOKEN;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.ztarmobile.exception.ErrorResponse;
+import com.ztarmobile.exception.HttpMessageErrorCode;
+import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
+import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
@@ -19,13 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.ztarmobile.exception.ErrorResponse;
-import com.ztarmobile.exception.HttpMessageErrorCode;
-import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
-import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 /**
  * Spring bean to authorize incoming requests against the OpenId provider
@@ -61,6 +61,7 @@ public class AuthTokenServiceInterceptor extends HandlerInterceptorAdapter {
         try {
             JsonElement introspectedToken = authenticationToken.handleAuthorizationRequest(request);
             log.debug("Token was found active");
+            log.debug("Token payload: " + introspectedToken);
             // we continue with the next interceptor, but before doing that, we
             // save the json object.
             request.setAttribute(INTROSPECTED_TOKEN, introspectedToken);

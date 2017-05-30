@@ -49,6 +49,15 @@ public class OIDCAuthenticationToken {
      */
     private static final Logger log = LoggerFactory.getLogger(OIDCAuthenticationToken.class);
 
+    /**
+     * Common JSON properties.
+     */
+    private static final String SCOPE = "scope";
+    private static final String REALM_ACCESS = "realm_access";
+    private static final String ROLES = "roles";
+    private static final String ACTIVE = "active";
+    private static final String TOKEN_NAME = "access_token";
+
     // gets the issuer URL so that the relying party can authorize the request
     private String introspectionEndpointUri;
     // the client id of the resource server.
@@ -94,8 +103,8 @@ public class OIDCAuthenticationToken {
         }
         boolean active = false;
         JsonObject tokenResponse = jsonTokenIntrospected.getAsJsonObject();
-        if (tokenResponse.has("active")) {
-            active = tokenResponse.get("active").getAsBoolean();
+        if (tokenResponse.has(ACTIVE)) {
+            active = tokenResponse.get(ACTIVE).getAsBoolean();
         } else {
             throw new AuthorizationServiceException(
                     new HttpMessageErrorCodeResolver(NO_ACTIVE_AVAILABLE, jsonTokenIntrospected));
@@ -129,19 +138,23 @@ public class OIDCAuthenticationToken {
      * @return List of scopes available for this JSON token.
      */
     public Set<String> handleScopeRequest(JsonElement jsonElement) {
+        if (jsonElement == null) {
+            throw new IllegalArgumentException("JSON element with the token is null");
+        }
+
         JsonObject tokenResponse = jsonElement.getAsJsonObject();
         String scopesFound = null;
-        if (tokenResponse.has("scope")) {
-            scopesFound = tokenResponse.get("scope").getAsString();
+        if (tokenResponse.has(SCOPE)) {
+            scopesFound = tokenResponse.get(SCOPE).getAsString();
         } else {
             // non standard openid element
-            if (tokenResponse.has("realm_access")) {
-                JsonElement jsonRealmElement = tokenResponse.get("realm_access");
-                boolean hasRoles = jsonRealmElement.getAsJsonObject().has("roles");
+            if (tokenResponse.has(REALM_ACCESS)) {
+                JsonElement jsonRealmElement = tokenResponse.get(REALM_ACCESS);
+                boolean hasRoles = jsonRealmElement.getAsJsonObject().has(ROLES);
                 if (hasRoles) {
-                    if (jsonRealmElement.getAsJsonObject().get("roles").isJsonArray()) {
+                    if (jsonRealmElement.getAsJsonObject().get(ROLES).isJsonArray()) {
                         StringBuilder sb = new StringBuilder();
-                        JsonArray jsonArray = jsonRealmElement.getAsJsonObject().get("roles").getAsJsonArray();
+                        JsonArray jsonArray = jsonRealmElement.getAsJsonObject().get(ROLES).getAsJsonArray();
                         for (int i = 0; i < jsonArray.size(); i++) {
                             sb.append(jsonArray.get(i));
                             sb.append(" ");
@@ -183,8 +196,6 @@ public class OIDCAuthenticationToken {
      */
     private String seachForAccessToken(HttpServletRequest request) {
         String token = null;
-        final String TOKEN_NAME = "access_token";
-
         // > As an HTTP Authorization header
         // > As a form-encoded request body parameter
         // > As a URL-encoded query parameter

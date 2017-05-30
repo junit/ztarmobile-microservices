@@ -6,10 +6,11 @@
  */
 package com.ztarmobile.exception;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import javax.ws.rs.core.Response;
 
@@ -32,7 +33,8 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     NO_SCOPE_AVAILABLE (80006, "Retrospection Endpoint did not return an scope element: ?", INTERNAL_SERVER_ERROR),
     NO_SCOPE_FOUND (80007, "Retrospection Endpoint returned an empty scope element", INTERNAL_SERVER_ERROR),
     NO_ROLE_AVAILABLE (80008, "Retrospection Endpoint did not return a 'realm_access' element with a valid role element: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_TOKEN (80009, "Access token is no longer active or valid", UNAUTHORIZED);
+    NO_ACTIVE_TOKEN (80009, "Access token is no longer active or valid", UNAUTHORIZED),
+    INSUFFICIENT_SCOPE (80010, "Insufficient Scope to access this resource: ?", FORBIDDEN); 
 
     private int code;
     private String message;

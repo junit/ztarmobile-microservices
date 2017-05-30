@@ -8,6 +8,16 @@ package com.ztarmobile.account.interceptors;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.INTROSPECTED_TOKEN;
+import static com.ztarmobile.account.controllers.ConstantControllerAttribute.REQUESTED_RESOURCE;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.ztarmobile.account.model.ProtectedResource;
+import com.ztarmobile.account.service.ResourceSetScopeService;
+import com.ztarmobile.exception.ErrorResponse;
+import com.ztarmobile.exception.HttpMessageErrorCode;
+import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
+import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 import java.util.Set;
 
@@ -21,13 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.ztarmobile.exception.ErrorResponse;
-import com.ztarmobile.exception.HttpMessageErrorCode;
-import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
-import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 /**
  * Spring bean to check whether the client has the right scope to access the
@@ -49,7 +52,13 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
      */
     @Autowired
     private OIDCAuthenticationToken authenticationToken;
-    
+
+    /**
+     * Handles the authorization of the scopes.
+     */
+    @Autowired
+    private ResourceSetScopeService resourceSetScopeService;
+
     /**
      * {@inheritDoc}
      */
@@ -61,9 +70,13 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
         ErrorResponse errorResponse = null;
 
         try {
+            // gets the introspected token.
             JsonElement introspectedToken = (JsonElement) request.getAttribute(INTROSPECTED_TOKEN);
             Set<String> scopes = authenticationToken.handleScopeRequest(introspectedToken);
-            System.out.println(scopes);
+
+            // gets the requested resource.
+            ProtectedResource protectedResource = (ProtectedResource) request.getAttribute(REQUESTED_RESOURCE);
+            resourceSetScopeService.validateScope(scopes, protectedResource);
 
             log.debug("The scope was successful!!!");
             return true;
@@ -71,7 +84,7 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
             HttpMessageErrorCode msg = e.getHttpMessageErrorCode();
 
             errorResponse = new ErrorResponse(msg.getMessage(), msg.getNumber());
-            errorResponse.setError("Unauthorized");
+            errorResponse.setError("forbidden");
             responseStatus = msg.getHttpCode();
         } catch (RuntimeException e) {
             errorResponse = new ErrorResponse(e.getMessage());

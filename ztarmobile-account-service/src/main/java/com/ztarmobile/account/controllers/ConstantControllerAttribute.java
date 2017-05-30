@@ -19,4 +19,8 @@ public interface ConstantControllerAttribute {
      * Attribute name for the introspected token.
      */
     String INTROSPECTED_TOKEN = "introspectedToken";
+    /**
+     * Attribute name for the requested resource.
+     */
+    String REQUESTED_RESOURCE = "requestedResource";
 }

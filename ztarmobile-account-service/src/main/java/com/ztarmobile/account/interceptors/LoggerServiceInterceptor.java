@@ -6,6 +6,18 @@
  */
 package com.ztarmobile.account.interceptors;
 
+import static com.ztarmobile.account.controllers.ConstantControllerAttribute.REQUESTED_RESOURCE;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
+
+import com.ztarmobile.account.model.ProtectedResource;
+
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
@@ -40,9 +53,47 @@ public class LoggerServiceInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.debug("[Logging requests...][" + request + "]" + "[" + request.getMethod() + "]" + request.getRequestURI()
-                + getParameters(request));
+
+        ProtectedResource protectedResource = new ProtectedResource();
+        protectedResource.setMethod(getRequestedMethod(request.getMethod()));
+        protectedResource.setPath(request.getRequestURI());
+
+        log.debug("Request... [" + request.getMethod() + "] " + request.getRequestURI() + getParameters(request));
+
+        // sets the object into the request scope.
+        request.setAttribute(REQUESTED_RESOURCE, protectedResource);
+
         return true;
+    }
+
+    /**
+     * Gets the requested method.
+     * 
+     * @param method
+     *            The HTTP method.
+     * @return The requested method.
+     */
+    private RequestMethod getRequestedMethod(String method) {
+        switch (method) {
+        case "GET":
+            return GET;
+        case "HEAD":
+            return HEAD;
+        case "POST":
+            return POST;
+        case "PUT":
+            return PUT;
+        case "PATCH":
+            return PATCH;
+        case "DELETE":
+            return DELETE;
+        case "OPTIONS":
+            return OPTIONS;
+        case "TRACE":
+            return TRACE;
+        default:
+            throw new IllegalStateException("No valid method was found: " + method);
+        }
     }
 
     private String getParameters(HttpServletRequest request) {
