@@ -35,4 +35,7 @@ public interface ResourceSetScopeRepository extends CrudRepository<ResourceSetSc
     @Query("select r from ResourceSetScope r where r.scope = :scope and r.verb = :verb and r.resource = :resource")
     List<ResourceSetScope> findByScopeVerbAndResource(@Param("scope") String scope, @Param("verb") String method,
             @Param("resource") String path);
+
+    @Query("select r from ResourceSetScope r where r.verb = :verb and r.resource = :resource")
+    List<ResourceSetScope> findByVerbAndResource(@Param("verb") String method, @Param("resource") String path);
 }

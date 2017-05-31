@@ -9,6 +9,7 @@ package com.ztarmobile.account.interceptors;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.INTROSPECTED_TOKEN;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.REQUESTED_RESOURCE;
+import static org.springframework.http.HttpHeaders.WWW_AUTHENTICATE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
@@ -19,6 +20,7 @@ import com.ztarmobile.exception.HttpMessageErrorCode;
 import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +70,7 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
         log.debug("Validating Scopes Accesses...");
         int responseStatus = 0;
         ErrorResponse errorResponse = null;
+        ProtectedResource protectedResource = null;
 
         try {
             // gets the introspected token.
@@ -75,7 +78,7 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
             Set<String> scopes = authenticationToken.handleScopeRequest(introspectedToken);
 
             // gets the requested resource.
-            ProtectedResource protectedResource = (ProtectedResource) request.getAttribute(REQUESTED_RESOURCE);
+            protectedResource = (ProtectedResource) request.getAttribute(REQUESTED_RESOURCE);
             resourceSetScopeService.validateScope(scopes, protectedResource);
 
             log.debug("The scope was successful!!!");
@@ -83,7 +86,7 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
         } catch (AuthorizationServiceException e) {
             HttpMessageErrorCode msg = e.getHttpMessageErrorCode();
 
-            errorResponse = new ErrorResponse(msg.getMessage(), msg.getNumber());
+            errorResponse = new ErrorResponse(msg.getEvaluatedMessage(), msg.getNumber());
             errorResponse.setError("forbidden");
             responseStatus = msg.getHttpCode();
         } catch (RuntimeException e) {
@@ -92,11 +95,36 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
         }
         response.reset();
         response.setContentType(MediaType.APPLICATION_JSON);
+        response.setHeader(WWW_AUTHENTICATE, createHeaderResponse(protectedResource, request));
         response.setStatus(responseStatus);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(NON_NULL);
         response.getOutputStream().println(mapper.writeValueAsString(errorResponse));
         return false;
+    }
+
+    private String createHeaderResponse(ProtectedResource protectedResource, HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        if (protectedResource != null) {
+            sb.append("Bearer realm=");
+            sb.append(request.getRemoteHost());
+            sb.append(":");
+            sb.append(request.getServerPort());
+            sb.append(", ");
+            sb.append("error=\"insufficient_scope\"");
+            sb.append(", ");
+            sb.append("scope=");
+
+            List<String> scopesRequired = resourceSetScopeService.getScopesByResource(protectedResource);
+            if (scopesRequired.isEmpty()) {
+                sb.append("\"No scopes found\"");
+            } else {
+                sb.append("\"" + scopesRequired + "\"");
+            }
+        } else {
+            sb.append("Not available");
+        }
+        return sb.toString();
     }
 }

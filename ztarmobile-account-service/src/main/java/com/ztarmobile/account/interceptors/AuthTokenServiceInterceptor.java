@@ -71,7 +71,7 @@ public class AuthTokenServiceInterceptor extends HandlerInterceptorAdapter {
             // active?
             HttpMessageErrorCode msg = e.getHttpMessageErrorCode();
 
-            errorResponse = new ErrorResponse(msg.getMessage(), msg.getNumber());
+            errorResponse = new ErrorResponse(msg.getEvaluatedMessage(), msg.getNumber());
             errorResponse.setError("Unauthorized");
             responseStatus = msg.getHttpCode();
         } catch (RuntimeException e) {

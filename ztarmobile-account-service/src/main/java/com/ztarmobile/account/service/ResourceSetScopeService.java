@@ -8,6 +8,7 @@ package com.ztarmobile.account.service;
 
 import com.ztarmobile.account.model.ProtectedResource;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,4 +28,13 @@ public interface ResourceSetScopeService {
      *            The protected resource.
      */
     void validateScope(Set<String> scopes, ProtectedResource protectedResource);
+
+    /**
+     * Gets the scopes associated to this protected resource.
+     * 
+     * @param protectedResource
+     *            The protected resource.
+     * @return List of scopes.
+     */
+    List<String> getScopesByResource(ProtectedResource protectedResource);
 }

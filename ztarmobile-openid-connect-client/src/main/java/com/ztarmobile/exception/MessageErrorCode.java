@@ -22,6 +22,13 @@ public interface MessageErrorCode extends ErrorCode {
     String getMessage();
 
     /**
+     * Gets the evaluated message.
+     * 
+     * @return The evaluated message.
+     */
+    String getEvaluatedMessage();
+
+    /**
      * Sets the evaluated message description.
      * 
      * @param evaluatedMessage

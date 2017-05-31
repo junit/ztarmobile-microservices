@@ -79,6 +79,17 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     public String getMessage() {
         return this.message;
     }
+    
+    
+    /**
+     * Returns the evaluated message.
+     *
+     * @return The evaluated message description.
+     */
+    @Override
+    public String getEvaluatedMessage() {
+        return this.evaluatedMessage;
+    }
 
     /**
      * Sets the evaluated message.

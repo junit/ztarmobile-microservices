@@ -7,6 +7,8 @@
 package com.ztarmobile.account.controllers;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import com.ztarmobile.account.model.Echo;
 import com.ztarmobile.account.repository.UserAccountRepository;
@@ -61,11 +63,25 @@ public class AccountServiceController {
      * 
      * @return Just a 'OK' message to indicate that the service is alive.
      */
-    /*
-     * @RequestMapping(value = ECHO_MAPPING, method = POST) public
-     * HttpEntity<Echo> echoPost() { log.debug("Requesting POST echo...");
+    @RequestMapping(value = ECHO_MAPPING, method = POST)
+    public HttpEntity<Echo> echoPost() {
+        log.debug("Requesting POST echo...");
+
+        // a simple message...
+        return new ResponseEntity<Echo>(new Echo(), HttpStatus.OK);
+    }
+
+    /**
+     * This is just a ping endPoint.
      * 
-     * // a simple message... return new ResponseEntity<Echo>(new Echo(),
-     * HttpStatus.OK); }
+     * @return Just a 'OK' message to indicate that the service is alive.
      */
+    @RequestMapping(value = ECHO_MAPPING, method = PUT)
+    public HttpEntity<Echo> echoPut() {
+        log.debug("Requesting PUT echo...");
+
+        // a simple message...
+        return new ResponseEntity<Echo>(new Echo(), HttpStatus.OK);
+    }
+
 }

@@ -15,6 +15,7 @@ import com.ztarmobile.account.service.ResourceSetScopeService;
 import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +64,9 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
                 access = resourceSetScopeRepository.findByScopeVerbAndResource(scope, method, path);
                 if (access.isEmpty()) {
                     continue;
+                } else {
+                    // we found the scope
+                    break;
                 }
             }
         }
@@ -70,5 +74,23 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
             throw new AuthorizationServiceException(
                     new HttpMessageErrorCodeResolver(INSUFFICIENT_SCOPE, "[" + method + "] " + path));
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getScopesByResource(ProtectedResource protectedResource) {
+        log.debug("Finding scopes for requested resource...");
+
+        String method = protectedResource.getMethod().toString();
+        String path = protectedResource.getPath();
+
+        List<ResourceSetScope> access = resourceSetScopeRepository.findByVerbAndResource(method, path);
+        List<String> scopes = new ArrayList<>();
+        for (ResourceSetScope scope : access) {
+            scopes.add(scope.getScope());
+        }
+        return scopes;
     }
 }

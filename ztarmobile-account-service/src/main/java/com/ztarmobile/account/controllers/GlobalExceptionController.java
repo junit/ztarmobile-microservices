@@ -29,8 +29,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * This interface contains all the path definitions for all the repositories.
- * This can be interpreted as the custom paths.
+ * This class would contains all the custom exceptions handlers.
  *
  * @author armandorivas
  * @version %I%, %G%
@@ -80,7 +79,6 @@ public class GlobalExceptionController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(NON_NULL);
-        System.out.println(errorResponse);
         response.getOutputStream().println(mapper.writeValueAsString(errorResponse));
         return new ModelAndView();
     }
