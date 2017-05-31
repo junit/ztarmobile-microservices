@@ -41,8 +41,10 @@ public interface InvoicingDao {
      *            The end date.
      * @param product
      *            The product.
+     * @param isCdma
+     *            Is the report CDMA? true=sprint, false=ericsson.
      */
-    void saveInvoicing(Date start, Date end, String product);
+    void saveInvoicing(Date start, Date end, String product, boolean isCdma);
 
     /**
      * Return a list of objects for the invoicing report.

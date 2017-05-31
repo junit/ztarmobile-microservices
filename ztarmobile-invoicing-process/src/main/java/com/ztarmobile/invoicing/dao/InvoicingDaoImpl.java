@@ -64,12 +64,20 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
      * {@inheritDoc}
      */
     @Override
-    public void saveInvoicing(Date start, Date end, String product) {
+    public void saveInvoicing(Date start, Date end, String product, boolean isCdma) {
         LOG.debug("Saving invoicing details from " + start + " to " + end);
 
         String sql = sqlStatements.getProperty("select.insert.invoicing_report_details");
 
         Map<String, String> params = createParameters(start, end, product);
+        // the cdma file (sprint), the mou are already in minutes, that's why we
+        // set the value as 1, but the ericsson files are expressed in seconds,
+        // that's why we need to set it as 60, so that we can calculate the
+        // minutes.
+        // reseller_subs_usage table has the original value from the CDR files
+        // (minutes or seconds), the real distinction between them is in
+        // invoicing_report_details.
+        params.put("seconds", isCdma ? String.valueOf(1) : String.valueOf(60));
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }
 

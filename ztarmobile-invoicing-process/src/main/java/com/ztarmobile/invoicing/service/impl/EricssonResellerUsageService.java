@@ -108,6 +108,7 @@ public class EricssonResellerUsageService extends AbstractResellerUsageService {
             if (sln.length == 29 && sln[10].equals("Forwarding") && sln[28].equals("VM_DEP")) {
                 usage.setMou(0);
             } else {
+                // mou are expressed in seconds
                 usage.setMou(Float.parseFloat(sln[14]));
             }
             break;

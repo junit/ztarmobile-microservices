@@ -283,7 +283,7 @@ public class InvoicingServiceImpl implements InvoicingService {
 
                 LOG.debug("==================> 3. [" + product + "] create_invoicing_details <======================");
                 // finally, create the data so that we can use later
-                this.createInvoicingDetails(start, end, product);
+                this.createInvoicingDetails(start, end, product, catalogProduct.isCdma());
                 long endTime = System.currentTimeMillis();
                 long totalTime = endTime - startTime;
 
@@ -291,7 +291,7 @@ public class InvoicingServiceImpl implements InvoicingService {
                 loggerDao.saveOrUpdateInvoiceProcessed(id, product, start.getTime(), end.getTime(), totalTime,
                         COMPLETED);
             } else {
-                LOG.warn("There's one or more invocie requests in " + PROGRESS + " status...");
+                LOG.warn("There's one or more invoice requests in " + PROGRESS + " status...");
             }
         } catch (Throwable ex) {
             // we handle the error...
@@ -341,8 +341,10 @@ public class InvoicingServiceImpl implements InvoicingService {
      *            The end date.
      * @param product
      *            The product.
+     * @param isCdma
+     *            Is the report CDMA? true=sprint, false=ericsson.
      */
-    private void createInvoicingDetails(Calendar start, Calendar end, String product) {
+    private void createInvoicingDetails(Calendar start, Calendar end, String product, boolean isCdma) {
         // we remove old data so that we can override with new info.
         invoicingDao.cleanUpInvoicing(start.getTime(), end.getTime(), product);
         // by default, if more than one month is requested, the information is
@@ -355,13 +357,14 @@ public class InvoicingServiceImpl implements InvoicingService {
             if (intervals != null) {
                 for (MontlyTime montlyTime : intervals) {
                     // month by month
-                    invoicingDao.saveInvoicing(montlyTime.getStart().getTime(), montlyTime.getEnd().getTime(), product);
+                    invoicingDao.saveInvoicing(montlyTime.getStart().getTime(), montlyTime.getEnd().getTime(), product,
+                            isCdma);
                 }
             } else {
                 LOG.warn("There's no invoicing to be processed");
             }
         } else {
-            invoicingDao.saveInvoicing(start.getTime(), end.getTime(), product);
+            invoicingDao.saveInvoicing(start.getTime(), end.getTime(), product, isCdma);
         }
     }
 }

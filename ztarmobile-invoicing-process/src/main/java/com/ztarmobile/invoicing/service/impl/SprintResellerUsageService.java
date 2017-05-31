@@ -101,6 +101,7 @@ public class SprintResellerUsageService extends AbstractResellerUsageService {
             usage.setSms(Float.parseFloat(sln[10]));
             usage.setMou(Float.parseFloat(sln[8]));
         }
+        // mou are expressed in minutes
         return usage;
     }
 
