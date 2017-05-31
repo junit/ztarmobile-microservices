@@ -6,8 +6,6 @@
  */
 package com.ztarmobile.exception;
 
-import java.util.Arrays;
-
 /**
  * This class creates an error message with dynamic values.
  *
@@ -16,18 +14,42 @@ import java.util.Arrays;
  * @since 3.0
  */
 public class HttpMessageErrorCodeResolver {
+    /**
+     * The message error code.
+     */
     private HttpMessageErrorCode httpMessageErrorCode;
-    private String[] params;
+    /**
+     * The resolved message.
+     */
+    private String resolvedMessage;
 
+    /**
+     * Creates a message error code resolver with one parameter.
+     * 
+     * @param httpMessageErrorCode
+     *            The message error code.
+     * @param param
+     *            The parameter.
+     * @see HttpMessageErrorCodeResolver#HttpMessageErrorCodeResolver(HttpMessageErrorCode,
+     *      String...)
+     */
     public HttpMessageErrorCodeResolver(HttpMessageErrorCode httpMessageErrorCode, Object param) {
-        this.httpMessageErrorCode = httpMessageErrorCode;
-        this.params = new String[1];
-        this.params[0] = param.toString();
+        this(httpMessageErrorCode, new String[] { param.toString() });
     }
 
+    /**
+     * Creates a message error code resolver with parameters.
+     * 
+     * @param httpMessageErrorCode
+     *            The message error code.
+     * @param params
+     *            The parameters.
+     * @see HttpMessageErrorCodeResolver#HttpMessageErrorCodeResolver(HttpMessageErrorCode,
+     *      Object)
+     */
     public HttpMessageErrorCodeResolver(HttpMessageErrorCode httpMessageErrorCode, String... params) {
+        this.resolvedMessage = resolveMessage(httpMessageErrorCode, params);
         this.httpMessageErrorCode = httpMessageErrorCode;
-        this.params = params;
     }
 
     /**
@@ -38,26 +60,33 @@ public class HttpMessageErrorCodeResolver {
     }
 
     /**
+     * @return the resolvedMessage
+     */
+    public String getResolvedMessage() {
+        return resolvedMessage;
+    }
+
+    /**
+     * Resolves the message with parameters.
+     * 
      * @param httpMessageErrorCode
-     *            the httpMessageErrorCode to set
+     *            The httpMessageErrorCode.
+     * @return The final message.
      */
-    public void setHttpMessageErrorCode(HttpMessageErrorCode httpMessageErrorCode) {
-        this.httpMessageErrorCode = httpMessageErrorCode;
-    }
+    private static String resolveMessage(HttpMessageErrorCode httpMessageErrorCode, String... params) {
+        String originalMessage = httpMessageErrorCode.getMessage();
+        StringBuilder finalMessage = new StringBuilder(originalMessage);
 
-    /**
-     * @return the params
-     */
-    public String[] getParams() {
-        return params;
-    }
-
-    /**
-     * @param params
-     *            the params to set
-     */
-    public void setParams(String[] params) {
-        this.params = params;
+        int index = -1;
+        for (String param : params) {
+            index = finalMessage.indexOf("?");
+            if (index == -1) {
+                // no question marks were found
+                break;
+            }
+            finalMessage.replace(index, index + 1, param);
+        }
+        return finalMessage.toString();
     }
 
     /*
@@ -67,7 +96,7 @@ public class HttpMessageErrorCodeResolver {
      */
     @Override
     public String toString() {
-        return "HttpMessageErrorCodeResolver [httpMessageErrorCode=" + httpMessageErrorCode + ", params="
-                + Arrays.toString(params) + "]";
+        return "HttpMessageErrorCodeResolver [httpMessageErrorCode=" + httpMessageErrorCode + ", resolvedMessage="
+                + resolvedMessage + "]";
     }
 }

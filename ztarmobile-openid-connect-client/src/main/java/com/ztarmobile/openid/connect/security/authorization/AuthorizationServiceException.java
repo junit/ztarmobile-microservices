@@ -39,9 +39,10 @@ public class AuthorizationServiceException extends AuthorizationException {
      *            The HTTP message error code resolver.
      */
     public AuthorizationServiceException(HttpMessageErrorCodeResolver resolver) {
-        super(resolveMessage(resolver));
+        super(resolver.getResolvedMessage());
         this.httpMessageErrorCode = resolver.getHttpMessageErrorCode();
-        this.httpMessageErrorCode.setMessage(resolveMessage(resolver));
+        // the original message is replaced.
+        this.httpMessageErrorCode.setEvaluatedMessage(super.getMsg());
     }
 
     /**
@@ -66,7 +67,7 @@ public class AuthorizationServiceException extends AuthorizationException {
     public AuthorizationServiceException(String msg) {
         super(msg);
         this.httpMessageErrorCode = AUTHORIZATION_ERROR;
-        this.httpMessageErrorCode.setMessage(msg);
+        this.httpMessageErrorCode.setEvaluatedMessage(msg);
     }
 
     /**
@@ -108,28 +109,5 @@ public class AuthorizationServiceException extends AuthorizationException {
      */
     public HttpMessageErrorCode getHttpMessageErrorCode() {
         return httpMessageErrorCode;
-    }
-
-    /**
-     * Resolves the message with parameters.
-     * 
-     * @param httpMessageErrorCode
-     *            The httpMessageErrorCode.
-     * @return The final message.
-     */
-    private static String resolveMessage(HttpMessageErrorCodeResolver httpMessageErrorCode) {
-        String originalMessage = httpMessageErrorCode.getHttpMessageErrorCode().getMessage();
-        StringBuilder finalMessage = new StringBuilder(originalMessage);
-
-        int index = -1;
-        for (String param : httpMessageErrorCode.getParams()) {
-            index = finalMessage.indexOf("?");
-            if (index == -1) {
-                // no question marks were found
-                break;
-            }
-            finalMessage.replace(index, index + 1, param);
-        }
-        return finalMessage.toString();
     }
 }

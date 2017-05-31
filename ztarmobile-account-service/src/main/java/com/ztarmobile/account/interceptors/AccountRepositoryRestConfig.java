@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.account.interceptors;
 
+import static com.ztarmobile.account.repository.CustomRepositoryPath.RESOURCE_SET_SCOPE_MAPPING;
 import static com.ztarmobile.account.repository.CustomRepositoryPath.USER_ACCOUNT_MAPPING;
 
 import org.slf4j.Logger;
@@ -60,7 +61,13 @@ public class AccountRepositoryRestConfig {
     @Bean
     public MappedInterceptor mappedInterceptor() {
         log.debug("Setting up interceptors for the rest repositories...");
-        String[] includePatterns = new String[] { basePath + "/" + USER_ACCOUNT_MAPPING + "/**" };
+
+        final String SLASH = "/";
+        final String SLASH_ALL = "/**";
+
+        String[] includePatterns = new String[2];
+        includePatterns[0] = basePath + SLASH + USER_ACCOUNT_MAPPING + SLASH_ALL;
+        includePatterns[1] = basePath + SLASH + RESOURCE_SET_SCOPE_MAPPING + SLASH_ALL;
 
         // add interceptors into this one, in the same order as
         // AccountServiceWebMvcConfig.

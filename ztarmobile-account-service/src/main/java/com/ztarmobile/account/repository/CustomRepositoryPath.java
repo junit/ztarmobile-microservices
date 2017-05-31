@@ -16,7 +16,8 @@ package com.ztarmobile.account.repository;
  */
 public interface CustomRepositoryPath {
     /**
-     * Mapping for the user account repository.
+     * Mapping for the repositories.
      */
     String USER_ACCOUNT_MAPPING = "userAccounts";
+    String RESOURCE_SET_SCOPE_MAPPING = "resourceSetScope";
 }

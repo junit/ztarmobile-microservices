@@ -22,10 +22,10 @@ public interface MessageErrorCode extends ErrorCode {
     String getMessage();
 
     /**
-     * Sets the message description.
+     * Sets the evaluated message description.
      * 
-     * @param message
-     *            The message description.
+     * @param evaluatedMessage
+     *            The evaluated message description.
      */
-    void setMessage(String message);
+    void setEvaluatedMessage(String evaluatedMessage);
 }

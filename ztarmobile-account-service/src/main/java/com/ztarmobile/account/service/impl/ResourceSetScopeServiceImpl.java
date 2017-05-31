@@ -37,6 +37,11 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
     private static final Logger log = Logger.getLogger(ResourceSetScopeServiceImpl.class);
 
     /**
+     * Prefix for the scopes.
+     */
+    private static final String ZTAR_PREFIX = "ztar_";
+
+    /**
      * ResourceSetScopeRepository to access.
      */
     @Autowired
@@ -49,13 +54,13 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
     public void validateScope(Set<String> scopes, ProtectedResource protectedResource) {
         log.debug("Filtering effective scopes...");
 
-        String verb = protectedResource.getMethod().toString();
-        String resource = protectedResource.getPath();
+        String method = protectedResource.getMethod().toString();
+        String path = protectedResource.getPath();
 
         List<ResourceSetScope> access = null;
         for (String scope : scopes) {
-            if (scope.startsWith("ztar:")) {
-                access = resourceSetScopeRepository.findByScopeVerbAndResource(scope, verb, resource);
+            if (scope.startsWith(ZTAR_PREFIX)) {
+                access = resourceSetScopeRepository.findByScopeVerbAndResource(scope, method, path);
                 if (access.isEmpty()) {
                     continue;
                 }
@@ -63,7 +68,7 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
         }
         if (access == null || access.isEmpty()) {
             throw new AuthorizationServiceException(
-                    new HttpMessageErrorCodeResolver(INSUFFICIENT_SCOPE, "[" + verb + "] " + resource));
+                    new HttpMessageErrorCodeResolver(INSUFFICIENT_SCOPE, "[" + method + "] " + path));
         }
     }
 }

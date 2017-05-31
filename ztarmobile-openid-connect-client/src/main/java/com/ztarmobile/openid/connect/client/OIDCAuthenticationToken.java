@@ -156,7 +156,7 @@ public class OIDCAuthenticationToken {
                         StringBuilder sb = new StringBuilder();
                         JsonArray jsonArray = jsonRealmElement.getAsJsonObject().get(ROLES).getAsJsonArray();
                         for (int i = 0; i < jsonArray.size(); i++) {
-                            sb.append(jsonArray.get(i));
+                            sb.append(jsonArray.get(i).getAsString());
                             sb.append(" ");
                         }
                         scopesFound = sb.toString().trim();
@@ -168,8 +168,7 @@ public class OIDCAuthenticationToken {
                 }
             } else {
                 // no scopes were found.
-                throw new AuthorizationServiceException(
-                        new HttpMessageErrorCodeResolver(NO_SCOPE_AVAILABLE, jsonElement));
+                throw new AuthorizationServiceException(NO_SCOPE_AVAILABLE);
             }
             if (scopesFound == null || scopesFound.trim().isEmpty()) {
                 // empty scopes.

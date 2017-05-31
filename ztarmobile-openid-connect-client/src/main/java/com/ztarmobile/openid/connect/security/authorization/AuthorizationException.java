@@ -19,6 +19,10 @@ public abstract class AuthorizationException extends RuntimeException {
      * The serial number.
      */
     private static final long serialVersionUID = -3056264215973397357L;
+    /**
+     * The message description.
+     */
+    protected String msg;
 
     /**
      * Constructs an {@code AuthorizationException} with the specified message
@@ -42,5 +46,13 @@ public abstract class AuthorizationException extends RuntimeException {
      */
     public AuthorizationException(String msg) {
         super(msg);
+        this.msg = msg;
+    }
+
+    /**
+     * @return the msg
+     */
+    public String getMsg() {
+        return msg;
     }
 }

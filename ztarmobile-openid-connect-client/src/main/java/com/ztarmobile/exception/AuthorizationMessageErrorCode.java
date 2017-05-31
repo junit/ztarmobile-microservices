@@ -9,6 +9,7 @@ package com.ztarmobile.exception;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -24,20 +25,22 @@ import javax.ws.rs.core.Response;
 public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
 
     // Generic message
-    AUTHORIZATION_ERROR (80000, "Authorization Error", INTERNAL_SERVER_ERROR), 
-    NO_ACCESS_TOKEN_FOUND (80001, "Missing access token in the header or payload of the request. " + AUTHORIZATION + ": bearer yourtoken..", BAD_REQUEST), 
-    UNAUTHORIZED_ACCESS (80002, "Full authentication is required to access this resource", UNAUTHORIZED), 
-    NO_ACCESS_EXTERNAL_RESOURCE (80003, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
-    NO_VALID_JSON (80004, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_AVAILABLE (80005, "Retrospection Endpoint did not return an active element: ?", INTERNAL_SERVER_ERROR),
-    NO_SCOPE_AVAILABLE (80006, "Retrospection Endpoint did not return an scope element: ?", INTERNAL_SERVER_ERROR),
-    NO_SCOPE_FOUND (80007, "Retrospection Endpoint returned an empty scope element", INTERNAL_SERVER_ERROR),
-    NO_ROLE_AVAILABLE (80008, "Retrospection Endpoint did not return a 'realm_access' element with a valid role element: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_TOKEN (80009, "Access token is no longer active or valid", UNAUTHORIZED),
-    INSUFFICIENT_SCOPE (80010, "Insufficient Scope to access this resource: ?", FORBIDDEN); 
+    METHOD_NOT_SUPPORTED (80000, "Request method '?' not allowed for this resource: ?", METHOD_NOT_ALLOWED),
+    AUTHORIZATION_ERROR (80001, "Authorization Error", INTERNAL_SERVER_ERROR),
+    NO_ACCESS_TOKEN_FOUND (80002, "Missing access token in the header or payload of the request. " + AUTHORIZATION + ": bearer yourtoken..", BAD_REQUEST),
+    UNAUTHORIZED_ACCESS (80003, "Full authentication is required to access this resource", UNAUTHORIZED),
+    NO_ACCESS_EXTERNAL_RESOURCE (80004, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
+    NO_VALID_JSON (80005, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
+    NO_ACTIVE_AVAILABLE (80006, "Retrospection Endpoint did not return an active element: ?", INTERNAL_SERVER_ERROR),
+    NO_SCOPE_AVAILABLE (80007, "No scope available for the access token provided", INTERNAL_SERVER_ERROR),
+    NO_SCOPE_FOUND (80008, "Retrospection Endpoint returned an empty scope element", INTERNAL_SERVER_ERROR),
+    NO_ROLE_AVAILABLE (80009, "Retrospection Endpoint did not return a 'realm_access' element with a valid role element: ?", INTERNAL_SERVER_ERROR),
+    NO_ACTIVE_TOKEN (80010, "Access token is no longer active or valid", UNAUTHORIZED),
+    INSUFFICIENT_SCOPE (80011, "Insufficient Scope to access this resource: ?", FORBIDDEN);
 
     private int code;
     private String message;
+    private String evaluatedMessage;
     private int httpCode;
 
     /**
@@ -53,6 +56,7 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     AuthorizationMessageErrorCode(int code, String message, Response.Status httpStatus) {
         this.code = code;
         this.message = message;
+        this.evaluatedMessage = this.message;
         this.httpCode = httpStatus.getStatusCode();
     }
 
@@ -77,14 +81,14 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     }
 
     /**
-     * Updates the message.
+     * Sets the evaluated message.
      * 
-     * @param message
+     * @param evaluatedMessage
      *            The new message.
      */
     @Override
-    public void setMessage(String message) {
-        this.message = message;
+    public void setEvaluatedMessage(String evaluatedMessage) {
+        this.evaluatedMessage = evaluatedMessage;
     }
 
     /**
@@ -104,7 +108,7 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
      */
     @Override
     public String toString() {
-        return "[" + this.code + "] " + message;
+        return "[" + this.code + "] " + evaluatedMessage;
     }
 
 }

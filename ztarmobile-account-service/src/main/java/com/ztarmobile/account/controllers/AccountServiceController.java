@@ -47,12 +47,25 @@ public class AccountServiceController {
      * 
      * @return Just a 'OK' message to indicate that the service is alive.
      */
+
     @RequestMapping(value = ECHO_MAPPING, method = GET)
     public HttpEntity<Echo> echo() {
-        log.debug("Requesting echo...");
+        log.debug("Requesting GET echo...");
 
         // a simple message...
         return new ResponseEntity<Echo>(new Echo(), HttpStatus.OK);
     }
 
+    /**
+     * This is just a ping endPoint.
+     * 
+     * @return Just a 'OK' message to indicate that the service is alive.
+     */
+    /*
+     * @RequestMapping(value = ECHO_MAPPING, method = POST) public
+     * HttpEntity<Echo> echoPost() { log.debug("Requesting POST echo...");
+     * 
+     * // a simple message... return new ResponseEntity<Echo>(new Echo(),
+     * HttpStatus.OK); }
+     */
 }

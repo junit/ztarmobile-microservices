@@ -9,6 +9,7 @@ package com.ztarmobile.account.interceptors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -26,6 +27,12 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
      * Logger for this class.
      */
     private static final Logger log = LoggerFactory.getLogger(AccountServiceWebMvcConfig.class);
+
+    /**
+     * Based path.
+     */
+    @Value("${spring.data.rest.base-path}")
+    private String basePath;
 
     /**
      * Logs all the incoming request and responses.
@@ -51,11 +58,12 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.debug("Setting up interceptors for this service...");
+        String[] includePatterns = new String[] { basePath + "/**" };
 
         // add all the interceptors here.
-        registry.addInterceptor(loggerServiceInterceptor);
-        registry.addInterceptor(authTokenServiceInterceptor);
-        registry.addInterceptor(authScopeServiceInterceptor);
+        registry.addInterceptor(loggerServiceInterceptor).addPathPatterns(includePatterns);
+        registry.addInterceptor(authTokenServiceInterceptor).addPathPatterns(includePatterns);
+        registry.addInterceptor(authScopeServiceInterceptor).addPathPatterns(includePatterns);
         // add more interceptors here when needed
     }
 }
