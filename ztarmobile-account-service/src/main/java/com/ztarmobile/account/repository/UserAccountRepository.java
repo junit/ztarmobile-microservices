@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 3.0
  */
 @Transactional
-@RepositoryRestResource(collectionResourceRel = "users", path = USER_ACCOUNT_MAPPING)
+@RepositoryRestResource(collectionResourceRel = "userAccount", path = USER_ACCOUNT_MAPPING)
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 
     List<UserAccount> findByFirstNameContaining(@Param("word") String word);

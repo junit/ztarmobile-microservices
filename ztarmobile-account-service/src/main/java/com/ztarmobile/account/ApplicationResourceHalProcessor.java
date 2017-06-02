@@ -10,14 +10,14 @@ import static com.ztarmobile.account.common.CommonUtils.evaluateHateoasLink;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import com.ztarmobile.account.controllers.AccountServiceController;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.webmvc.RepositoryLinksResource;
 import org.springframework.hateoas.ResourceProcessor;
 import org.springframework.stereotype.Component;
+
+import com.ztarmobile.account.controllers.AccountServiceController;
 
 /**
  * Adds custom controller links to the index resource.
@@ -27,11 +27,11 @@ import org.springframework.stereotype.Component;
  * @since 3.0
  */
 @Component
-public class ApplicationResourceProcessor implements ResourceProcessor<RepositoryLinksResource> {
+public class ApplicationResourceHalProcessor implements ResourceProcessor<RepositoryLinksResource> {
     /**
      * Logger for this class.
      */
-    private static final Logger log = LoggerFactory.getLogger(ApplicationResourceProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(ApplicationResourceHalProcessor.class);
 
     /**
      * Based path.
@@ -48,6 +48,8 @@ public class ApplicationResourceProcessor implements ResourceProcessor<Repositor
 
         // adds new links to the index resource.
 
+        resource.add(evaluateHateoasLink(
+                linkTo(methodOn(AccountServiceController.class).createNewAccount(null)).withRel("user"), basePath));
         resource.add(
                 evaluateHateoasLink(linkTo(methodOn(AccountServiceController.class).echo()).withRel("echo"), basePath));
         return resource;

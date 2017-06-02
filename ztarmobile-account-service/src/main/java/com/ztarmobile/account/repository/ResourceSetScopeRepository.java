@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 3.0
  */
 @Transactional
-@RepositoryRestResource(collectionResourceRel = "scopes", path = RESOURCE_SET_SCOPE_MAPPING)
+@RepositoryRestResource(collectionResourceRel = "scope", path = RESOURCE_SET_SCOPE_MAPPING)
 public interface ResourceSetScopeRepository extends CrudRepository<ResourceSetScope, Long> {
 
     List<ResourceSetScope> findByScope(String scope);
