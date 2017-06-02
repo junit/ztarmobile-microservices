@@ -5,7 +5,11 @@ account:
       config: /Users/armandorivas/Desktop/trusted-local-clients.json
       name: Resource Server (Local)
       redirect-uri: http://localhost:1010/dummy-not-used
-    issuer: http://localhost:8080/auth/realms/demo
+    context: http://localhost:8080/auth
+    issuer: ${account.openid.context}/realms/${account.openid.keycloak.realm}
+    keycloak:
+      users-uri: ${account.openid.context}/admin/realms/${account.openid.keycloak.realm}/users
+      realm: demo
 
 # HOST SERVER (where the service is running on)
 server:
