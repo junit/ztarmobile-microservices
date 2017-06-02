@@ -2,44 +2,40 @@
  * Copyright (C) Ztar Mobile, Inc - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Armando Rivas <arivas@ztarmobile.com>, May 2017.
+ * Written by Armando Rivas <arivas@ztarmobile.com>, Jun 2017.
  */
-package com.ztarmobile.openid.connect.security.authorization;
+package com.ztarmobile.account.exception;
 
-import static com.ztarmobile.exception.AuthorizationMessageErrorCode.AUTHORIZATION_ERROR;
+import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.USER_ACCOUNT_ERROR;
 
 import com.ztarmobile.exception.HttpMessageErrorCode;
 import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 import com.ztarmobile.exception.ServiceException;
 
 /**
- * Thrown if an authorization request could not be processed due to a system
- * problem.
- * <p>
- * This might be thrown if a backend authentication repository is unavailable,
- * for example.
+ * Thrown if there's any validation or error that needs to be reported in the
+ * final response.
  *
  * @author armandorivas
  * @version %I%, %G%
  * @since 3.0
  */
-public class AuthorizationServiceException extends ServiceException {
+public class AccountServiceException extends ServiceException {
     /**
      * The serial number.
      */
     private static final long serialVersionUID = -2668956652376062805L;
 
-    private int responseStatus = 401;
     private HttpMessageErrorCode httpMessageErrorCode;
 
     /**
-     * Constructs an <code>AuthorizationServiceException</code> with the
+     * Constructs an <code>AccountServiceException</code> with the
      * specified message.
      *
      * @param resolver
      *            The HTTP message error code resolver.
      */
-    public AuthorizationServiceException(HttpMessageErrorCodeResolver resolver) {
+    public AccountServiceException(HttpMessageErrorCodeResolver resolver) {
         super(resolver.getResolvedMessage());
         this.httpMessageErrorCode = resolver.getHttpMessageErrorCode();
         // the original message is replaced.
@@ -47,46 +43,32 @@ public class AuthorizationServiceException extends ServiceException {
     }
 
     /**
-     * Constructs an <code>AuthorizationServiceException</code> with the
+     * Constructs an <code>AccountServiceException</code> with the
      * specified message.
      *
      * @param httpMessageErrorCode
      *            The HTTP message error code.
      */
-    public AuthorizationServiceException(HttpMessageErrorCode httpMessageErrorCode) {
+    public AccountServiceException(HttpMessageErrorCode httpMessageErrorCode) {
         super(httpMessageErrorCode.getMessage());
         this.httpMessageErrorCode = httpMessageErrorCode;
     }
 
     /**
-     * Constructs an <code>AuthorizationServiceException</code> with the
+     * Constructs an <code>AccountServiceException</code> with the
      * specified message.
      *
      * @param msg
      *            the detail message
      */
-    public AuthorizationServiceException(String msg) {
+    public AccountServiceException(String msg) {
         super(msg);
-        this.httpMessageErrorCode = AUTHORIZATION_ERROR;
+        this.httpMessageErrorCode = USER_ACCOUNT_ERROR;
         this.httpMessageErrorCode.setEvaluatedMessage(msg);
     }
 
     /**
-     * Constructs an <code>AuthorizationServiceException</code> with the
-     * specified message.
-     *
-     * @param msg
-     *            the detail message
-     * @param responseStatus
-     *            The response status.
-     */
-    public AuthorizationServiceException(String msg, int responseStatus) {
-        super(msg);
-        this.responseStatus = responseStatus;
-    }
-
-    /**
-     * Constructs an <code>AuthorizationServiceException</code> with the
+     * Constructs an <code>AccountServiceException</code> with the
      * specified message and root cause.
      *
      * @param msg
@@ -94,15 +76,8 @@ public class AuthorizationServiceException extends ServiceException {
      * @param t
      *            root cause
      */
-    public AuthorizationServiceException(String msg, Throwable t) {
+    public AccountServiceException(String msg, Throwable t) {
         super(msg, t);
-    }
-
-    /**
-     * @return the responseStatus
-     */
-    public int getResponseStatus() {
-        return responseStatus;
     }
 
     /**

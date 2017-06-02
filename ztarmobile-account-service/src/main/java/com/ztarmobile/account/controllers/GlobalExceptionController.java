@@ -8,8 +8,10 @@ package com.ztarmobile.account.controllers;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.METHOD_NOT_SUPPORTED;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ztarmobile.account.exception.AccountServiceException;
 import com.ztarmobile.exception.ErrorResponse;
 import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
@@ -22,7 +24,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,7 +59,7 @@ public class GlobalExceptionController {
      *             Exception while trying to write the response.
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Exception e)
+    public ModelAndView handleMethodNotSupported(HttpServletRequest request, HttpServletResponse response, Exception e)
             throws IOException {
 
         String method = request.getMethod();
@@ -73,9 +74,55 @@ public class GlobalExceptionController {
         errorResponse.setStatus(METHOD_NOT_SUPPORTED.getNumber());
         errorResponse.setError("Unsupported");
 
+        return createJSONResponse(response, errorResponse, METHOD_NOT_ALLOWED.value());
+    }
+
+    /**
+     * When there's an exception of type <code>AccountServiceException</code>,
+     * the exception handler will convert it into JSON and return it as the
+     * final response.
+     * 
+     * @param request
+     *            The HTTP request.
+     * @param response
+     *            The HTTP response.
+     * @param e
+     *            The exception for this transaction.
+     * @return The modelAndView
+     * @throws IOException
+     *             Exception while trying to write the response.
+     */
+    @ExceptionHandler(AccountServiceException.class)
+    public ModelAndView handleAccountServiceException(HttpServletRequest request, HttpServletResponse response,
+            Exception e) throws IOException {
+
+        AccountServiceException accountException = (AccountServiceException) e;
+
+        ErrorResponse errorResponse = new ErrorResponse(accountException.getMessage());
+        errorResponse.setStatus(accountException.getHttpMessageErrorCode().getNumber());
+        errorResponse.setError("User Account Error");
+
+        return createJSONResponse(response, errorResponse, accountException.getHttpMessageErrorCode().getHttpCode());
+    }
+
+    /**
+     * Construct a JSON response based on the error response object.
+     * 
+     * @param response
+     *            The HTTP response.
+     * @param errorResponse
+     *            The error response.
+     * @param The
+     *            HTTP status.
+     * @return a JSON response.
+     * @throws IOException
+     *             Exception while trying to write the response.
+     */
+    private ModelAndView createJSONResponse(HttpServletResponse response, ErrorResponse errorResponse, int httpStatus)
+            throws IOException {
         response.reset();
         response.setContentType(MediaType.APPLICATION_JSON);
-        response.setStatus(Integer.parseInt(HttpStatus.METHOD_NOT_ALLOWED.toString()));
+        response.setStatus(httpStatus);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(NON_NULL);

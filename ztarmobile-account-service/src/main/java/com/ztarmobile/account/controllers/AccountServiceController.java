@@ -11,6 +11,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import com.ztarmobile.account.model.Echo;
+import com.ztarmobile.account.model.UserAccount;
+import com.ztarmobile.account.repository.UserAccountRepository;
+import com.ztarmobile.account.service.UserAccountService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.ztarmobile.account.model.Echo;
-import com.ztarmobile.account.model.UserAccount;
-import com.ztarmobile.account.repository.UserAccountRepository;
-import com.ztarmobile.account.service.UserAccountService;
 
 /**
  * The controller class.
@@ -43,7 +43,7 @@ public class AccountServiceController {
     /**
      * All the mappings.
      */
-    private static final String ECHO_MAPPING = "/echo";
+    private static final String ECHO_MAPPING = "echo";
     private static final String USER_ACCOUNT_MAPPING = "users";
 
     @Autowired
@@ -61,9 +61,9 @@ public class AccountServiceController {
      */
     @RequestMapping(value = USER_ACCOUNT_MAPPING, consumes = APPLICATION_JSON_VALUE, method = POST)
     public HttpEntity<UserAccount> createNewAccount(@RequestBody UserAccount userAccount) {
-
         // delegates the work to the service layer.
         userAccountService.createNewUserAccount(userAccount);
+
         return new ResponseEntity<UserAccount>(userAccount, HttpStatus.CREATED);
     }
 

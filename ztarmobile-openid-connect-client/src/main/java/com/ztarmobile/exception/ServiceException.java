@@ -4,17 +4,16 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, May 2017.
  */
-package com.ztarmobile.openid.connect.security.authorization;
+package com.ztarmobile.exception;
 
 /**
- * Abstract superclass for all exceptions related to Authentication being
- * invalid for whatever reason.
+ * Abstract superclass for all exceptions related to the services.
  *
  * @author armandorivas
  * @version %I%, %G%
  * @since 3.0
  */
-public abstract class AuthorizationException extends RuntimeException {
+public abstract class ServiceException extends RuntimeException {
     /**
      * The serial number.
      */
@@ -25,26 +24,26 @@ public abstract class AuthorizationException extends RuntimeException {
     protected String msg;
 
     /**
-     * Constructs an {@code AuthorizationException} with the specified message
-     * and root cause.
+     * Constructs an {@code ServiceException} with the specified message and
+     * root cause.
      *
      * @param msg
      *            the detail message
      * @param t
      *            the root cause
      */
-    public AuthorizationException(String msg, Throwable t) {
+    public ServiceException(String msg, Throwable t) {
         super(msg, t);
     }
 
     /**
-     * Constructs an {@code AuthenticationException} with the specified message
-     * and no root cause.
+     * Constructs an {@code ServiceException} with the specified message and no
+     * root cause.
      *
      * @param msg
      *            the detail message
      */
-    public AuthorizationException(String msg) {
+    public ServiceException(String msg) {
         super(msg);
         this.msg = msg;
     }

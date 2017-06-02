@@ -8,8 +8,17 @@ account:
     context: http://localhost:8080/auth
     issuer: ${account.openid.context}/realms/${account.openid.keycloak.realm}
     keycloak:
-      users-uri: ${account.openid.context}/admin/realms/${account.openid.keycloak.realm}/users
+      client-id: admin-cli
+      password: admin
+      master-realm: master
       realm: demo
+      username: mykeycloak
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
 
 # HOST SERVER (where the service is running on)
 server:
