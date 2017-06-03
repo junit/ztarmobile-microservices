@@ -20,12 +20,15 @@ import com.ztarmobile.account.exception.AccountServiceException;
 import com.ztarmobile.account.model.UserAccount;
 import com.ztarmobile.account.service.UserAccountService;
 
+import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
 
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +97,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     private String createKeycloakUser(UserAccount userAccount) {
         Keycloak kc = null;
         kc = Keycloak.getInstance(context, keycloakMasterRealm, keycloakUsername, keycloakPassword, keycloakClientId);
+        RoleRepresentation heroReamlRole = kc.realm(keycloakRealm).roles().get("ztar_pix").toRepresentation();
 
         // we make sure we don't have the same user registered
         List<UserRepresentation> usersFound = kc.realm(keycloakRealm).users().search(userAccount.getEmail());
@@ -112,19 +116,28 @@ public class UserAccountServiceImpl implements UserAccountService {
         user.setUsername(userAccount.getEmail());
         user.setFirstName(userAccount.getFirstName());
         user.setLastName(userAccount.getLastName());
+        user.setEmail(userAccount.getEmail());
         user.setCredentials(asList(credential));
         user.setEnabled(true);
-        user.setRealmRoles(asList("ztar_pix"));
 
         // Create a keycloak user.
         Response response = kc.realm(keycloakRealm).users().create(user);
+        String userId = getCreatedId(response);
+
+        // Assign realm role hero to user
+        kc.realm(keycloakRealm).users().get(userId).roles().realmLevel().add(Arrays.asList(heroReamlRole));
+
+        return null;
+    }
+
+    private String getCreatedId(Response response) {
+        URI location = response.getLocation();
         if (response.getStatus() != CREATED.getStatusCode()) {
             log.error("Unable to create a new user in keycloak");
             // couldn't create user.
             throw new AccountServiceException(UNABLE_CREATE_ACCOUNT);
         }
-        List<UserRepresentation> userJustFound = kc.realm(keycloakRealm).users().search(userAccount.getEmail());
-        UserRepresentation userRepresentation = userJustFound.get(0);
-        return null;
+        String path = location.getPath();
+        return path.substring(path.lastIndexOf('/') + 1);
     }
 }

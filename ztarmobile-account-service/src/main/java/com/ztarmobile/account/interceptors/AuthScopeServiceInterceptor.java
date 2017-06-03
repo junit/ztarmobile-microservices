@@ -7,6 +7,8 @@
 package com.ztarmobile.account.interceptors;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static com.ztarmobile.account.controllers.ConstantControllerAttribute.BASIC_AUTHENTICATION;
+import static com.ztarmobile.account.controllers.ConstantControllerAttribute.IGNORE_SECURITY;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.INTROSPECTED_TOKEN;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.REQUESTED_RESOURCE;
 import static org.springframework.http.HttpHeaders.WWW_AUTHENTICATE;
@@ -68,6 +70,16 @@ public class AuthScopeServiceInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         log.debug("Validating Scopes Accesses...");
+
+        // checks whether this interceptor should be executed.
+        Boolean ignoreSecurity = (Boolean) request.getAttribute(IGNORE_SECURITY);
+        Boolean basicAuth = (Boolean) request.getAttribute(BASIC_AUTHENTICATION);
+
+        if (ignoreSecurity || basicAuth) {
+            log.warn("Scope Access validation skipped");
+            return true;
+        }
+
         int responseStatus = 0;
         ErrorResponse errorResponse = null;
         ProtectedResource protectedResource = null;

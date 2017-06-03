@@ -41,6 +41,12 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
     private LoggerServiceInterceptor loggerServiceInterceptor;
 
     /**
+     * Determines whether the security will be applicable or not.
+     */
+    @Autowired
+    private AuthInitialServiceInterceptor authInitialServiceInterceptor;
+
+    /**
      * Authorize the request against the OpenId Provider (Authorization Server).
      */
     @Autowired
@@ -62,6 +68,7 @@ public class AccountServiceWebMvcConfig extends WebMvcConfigurerAdapter {
 
         // add all the interceptors here.
         registry.addInterceptor(loggerServiceInterceptor).addPathPatterns(includePatterns);
+        registry.addInterceptor(authInitialServiceInterceptor).addPathPatterns(includePatterns);
         registry.addInterceptor(authTokenServiceInterceptor).addPathPatterns(includePatterns);
         registry.addInterceptor(authScopeServiceInterceptor).addPathPatterns(includePatterns);
         // add more interceptors here when needed

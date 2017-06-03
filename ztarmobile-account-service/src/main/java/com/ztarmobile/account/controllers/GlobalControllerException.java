@@ -37,12 +37,12 @@ import org.springframework.web.servlet.ModelAndView;
  * @since 3.0
  */
 @ControllerAdvice
-public class GlobalExceptionController {
+public class GlobalControllerException {
 
     /**
      * Logger for this class.
      */
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionController.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalControllerException.class);
 
     /**
      * When the HTTP method is not supported, this method will be fired to state

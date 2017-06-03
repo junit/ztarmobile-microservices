@@ -15,6 +15,15 @@ package com.ztarmobile.account.controllers;
  * @since 3.0
  */
 public interface ConstantControllerAttribute {
+
+    /**
+     * Attribute name to ignore the security.
+     */
+    String IGNORE_SECURITY = "ignoreSecurity";
+    /**
+     * Attribute name to ignore access token.
+     */
+    String BASIC_AUTHENTICATION = "basicAuthentication";
     /**
      * Attribute name for the introspected token.
      */

@@ -43,6 +43,12 @@ public class AccountRepositoryRestConfig {
     private LoggerServiceInterceptor loggerServiceInterceptor;
 
     /**
+     * Determines whether the security will be applicable or not.
+     */
+    @Autowired
+    private AuthInitialServiceInterceptor authInitialServiceInterceptor;
+
+    /**
      * Authorize the request against the OpenId Provider (Authorization Server).
      */
     @Autowired
@@ -75,6 +81,7 @@ public class AccountRepositoryRestConfig {
         // the order of the interceptors MUST be the same as class:
         // AccountServiceWebMvcConfig
         repositoryInterceptor.addInterceptor(loggerServiceInterceptor);
+        repositoryInterceptor.addInterceptor(authInitialServiceInterceptor);
         repositoryInterceptor.addInterceptor(authTokenServiceInterceptor);
         repositoryInterceptor.addInterceptor(authScopeServiceInterceptor);
         return new MappedInterceptor(includePatterns, repositoryInterceptor);

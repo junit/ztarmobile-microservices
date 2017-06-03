@@ -29,14 +29,17 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
     AUTHORIZATION_ERROR (80001, "Authorization Error", INTERNAL_SERVER_ERROR),
     NO_ACCESS_TOKEN_FOUND (80002, "Missing access token in the header or payload of the request. " + AUTHORIZATION + ": bearer yourtoken..", BAD_REQUEST),
     UNAUTHORIZED_ACCESS (80003, "Full authentication is required to access this resource", UNAUTHORIZED),
-    NO_ACCESS_EXTERNAL_RESOURCE (80004, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
-    NO_VALID_JSON (80005, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_AVAILABLE (80006, "Retrospection Endpoint did not return an active element: ?", INTERNAL_SERVER_ERROR),
-    NO_SCOPE_AVAILABLE (80007, "No scope available for the access token provided", INTERNAL_SERVER_ERROR),
-    NO_SCOPE_FOUND (80008, "Retrospection Endpoint returned an empty scope element", INTERNAL_SERVER_ERROR),
-    NO_ROLE_AVAILABLE (80009, "Retrospection Endpoint did not return a 'realm_access' element with a valid role element: ?", INTERNAL_SERVER_ERROR),
-    NO_ACTIVE_TOKEN (80010, "Access token is no longer active or valid", UNAUTHORIZED),
-    INSUFFICIENT_SCOPE (80011, "Insufficient Scope to access this resource: ?", FORBIDDEN);
+    INVALID_BASIC_CRED (80004, "Unable to authenticate with the credentials provided", UNAUTHORIZED),
+    UNAUTHORIZED_BASIC (80005, "Basic authentication is required to access this resource", UNAUTHORIZED),
+    INVALID_BASIC (80006, "Unable to decode Basic authentication", UNAUTHORIZED),
+    NO_ACCESS_EXTERNAL_RESOURCE (80007, "Unable to get access to external resource [?]", INTERNAL_SERVER_ERROR),
+    NO_VALID_JSON (80008, "Token Endpoint did not return a JSON object: ?", INTERNAL_SERVER_ERROR),
+    NO_ACTIVE_AVAILABLE (80009, "Retrospection Endpoint did not return an active element: ?", INTERNAL_SERVER_ERROR),
+    NO_SCOPE_AVAILABLE (800010, "No scope available for the access token provided", INTERNAL_SERVER_ERROR),
+    NO_SCOPE_FOUND (80011, "Retrospection Endpoint returned an empty scope element", INTERNAL_SERVER_ERROR),
+    NO_ROLE_AVAILABLE (80012, "Retrospection Endpoint did not return a 'realm_access' element with a valid role element: ?", INTERNAL_SERVER_ERROR),
+    NO_ACTIVE_TOKEN (80013, "Access token is no longer active or valid", UNAUTHORIZED),
+    INSUFFICIENT_SCOPE (80014, "Insufficient Scope to access this resource: ?", FORBIDDEN);
 
     private int code;
     private String message;

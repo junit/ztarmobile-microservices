@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.openid.connect.client;
 
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.INVALID_BASIC;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.INVALID_BASIC_CRED;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACCESS_TOKEN_FOUND;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_AVAILABLE;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ACTIVE_TOKEN;
@@ -13,6 +15,7 @@ import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_ROLE_AVA
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_SCOPE_AVAILABLE;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_SCOPE_FOUND;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.NO_VALID_JSON;
+import static com.ztarmobile.exception.AuthorizationMessageErrorCode.UNAUTHORIZED_BASIC;
 import static com.ztarmobile.openid.connect.client.OpenIdConnectUtil.requestTokenIntrospection;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -26,10 +29,12 @@ import com.ztarmobile.openid.connect.security.authorization.AuthorizationService
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +69,54 @@ public class OIDCAuthenticationToken {
     private String clientId;
     // the client secret of the resource server.
     private String clientSecret;
+
+    /**
+     * Checks whether there's a basic authentication in the header of the
+     * request. The basic authentication is compound by: 'Authorization': 'Basic
+     * ' + encodeClientCredentials(client.client_id, client.client_secret). HTTP
+     * Basic is a base64 encoded string made by concatenating the client_id and
+     * client_secret together, separated by a single colon (:) character.
+     * 
+     * @param request
+     *            The standard request, the authorization must be set as part of
+     *            the header of the request.
+     * @param allClients
+     *            List of all possible clients to be evaluated.
+     */
+    public void handleBasicAuthRequest(HttpServletRequest request, Map<String, String> allClients) {
+        // check the authorization header
+        String auth = request.getHeader(AUTHORIZATION);
+        if (auth != null && !auth.trim().isEmpty() && (auth.startsWith("Basic"))) {
+            auth = auth.substring(5).trim();
+
+            byte[] bytes = null;
+            try {
+                bytes = DatatypeConverter.parseBase64Binary(auth);
+            } catch (Exception e) {
+                log.error("The basic auth: [" + auth + "] could not be decoded");
+                throw new AuthorizationServiceException(INVALID_BASIC);
+            }
+
+            String clientIdSecret = new String(bytes);
+            String[] credentials = clientIdSecret.split(":");
+
+            boolean found = false;
+            // look up the right credentials
+            for (String clientId : allClients.keySet()) {
+                String clientSecret = allClients.get(clientId);
+                if (clientId.equals(credentials[0]) && clientSecret.equals(credentials[1])) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                log.debug("Unable to validate request with basic authentication");
+                throw new AuthorizationServiceException(INVALID_BASIC_CRED);
+            }
+        } else {
+            throw new AuthorizationServiceException(UNAUTHORIZED_BASIC);
+        }
+    }
 
     /**
      * Check whether the request is valid based on the access token. It should

@@ -11,6 +11,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import com.ztarmobile.account.annotation.EnableBasicAuthentication;
 import com.ztarmobile.account.model.Echo;
 import com.ztarmobile.account.model.UserAccount;
 import com.ztarmobile.account.repository.UserAccountRepository;
@@ -43,8 +44,8 @@ public class AccountServiceController {
     /**
      * All the mappings.
      */
-    private static final String ECHO_MAPPING = "echo";
-    private static final String USER_ACCOUNT_MAPPING = "users";
+    private static final String ECHO_MAPPING = "/echo";
+    private static final String USER_ACCOUNT_MAPPING = "/users";
 
     @Autowired
     private UserAccountRepository userAccountRepository;
@@ -56,8 +57,12 @@ public class AccountServiceController {
     private UserAccountService userAccountService;
 
     /**
+     * This endPoint creates a new account so that the user can be
+     * authenticated.
      * 
-     * @return
+     * @param userAccount
+     *            The user account to be created.
+     * @return The user created.
      */
     @RequestMapping(value = USER_ACCOUNT_MAPPING, consumes = APPLICATION_JSON_VALUE, method = POST)
     public HttpEntity<UserAccount> createNewAccount(@RequestBody UserAccount userAccount) {
@@ -72,6 +77,7 @@ public class AccountServiceController {
      * 
      * @return Just a 'OK' message to indicate that the service is alive.
      */
+    @EnableBasicAuthentication
     @RequestMapping(value = ECHO_MAPPING, method = GET)
     public HttpEntity<Echo> echo() {
         log.debug("Requesting GET echo...");
