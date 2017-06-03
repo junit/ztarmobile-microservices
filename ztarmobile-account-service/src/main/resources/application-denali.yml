@@ -5,7 +5,14 @@ account:
       config: /tmp/trusted-denali-clients.json
       name: Resource Server (Denali)
       redirect-uri: http://localhost:1010/dummy-not-used
-    issuer: http://localhost:8080/auth/realms/demo
+    context: http://localhost:8080/auth
+    issuer: ${account.openid.context}/realms/${account.openid.keycloak.realm}
+    keycloak:
+      client-id: admin-cli
+      password: ztar-keycloak
+      master-realm: master
+      realm: denali
+      username: denali-keycloak
 
 # HOST SERVER (where the service is running on)
 server:

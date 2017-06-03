@@ -5,7 +5,14 @@ account:
       config: /tmp/trusted-solo-clients.json
       name: Resource Server (Solo)
       redirect-uri: http://localhost:1010/dummy-not-used
-    issuer: http://localhost:8080/auth/realms/demo
+    context: http://localhost:8080/auth
+    issuer: ${account.openid.context}/realms/${account.openid.keycloak.realm}
+    keycloak:
+      client-id: admin-cli
+      password: ztar-keycloak
+      master-realm: master
+      realm: solo
+      username: solo-keycloak
 
 # HOST SERVER (where the service is running on)
 server:
