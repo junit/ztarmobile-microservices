@@ -27,8 +27,15 @@ public class CommonUtils {
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-    private static Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-    private static Matcher matcher;
+    public static final int P_MIN = 8;
+    public static final int P_MAX = 20;
+    /**
+     * The password pattern.
+     */
+    private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[!@#$%]).{" + P_MIN + "," + P_MAX + "})";
+
+    private static Pattern patternEmail = Pattern.compile(EMAIL_PATTERN);
+    private static Pattern patternPass = Pattern.compile(PASSWORD_PATTERN);
 
     /**
      * Private constructor.
@@ -207,8 +214,20 @@ public class CommonUtils {
      * @return true valid hex, false invalid hex
      */
     public static boolean validateEmail(final String hex) {
-        matcher = pattern.matcher(hex);
+        Matcher matcher = patternEmail.matcher(hex);
         return matcher.matches();
+    }
 
+    /**
+     * Validates the password by having at least one digit and a special
+     * character.
+     * 
+     * @param password
+     *            The password.
+     * @return true, the password matches, false it does not match.
+     */
+    public static boolean validatePassword(final String password) {
+        Matcher matcher = patternPass.matcher(password);
+        return matcher.matches();
     }
 }

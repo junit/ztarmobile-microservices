@@ -6,7 +6,10 @@
  */
 package com.ztarmobile.account.service.impl;
 
+import static com.ztarmobile.account.common.CommonUtils.P_MAX;
+import static com.ztarmobile.account.common.CommonUtils.P_MIN;
 import static com.ztarmobile.account.common.CommonUtils.validateEmail;
+import static com.ztarmobile.account.common.CommonUtils.validatePassword;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.DUPLICATE_ACCOUNT;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.EMAIL_EMPTY;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.EMAIL_INVALID;
@@ -16,6 +19,8 @@ import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.FIRST
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.LAST_NAME_EMPTY;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.LAST_NAME_LENGTH;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.PASSWORD_EMPTY;
+import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.PASSWORD_INVALID;
+import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.PASSWORD_LENGTH;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.UNABLE_CREATE_ACCOUNT;
 import static java.util.Arrays.asList;
 import static javax.ws.rs.core.Response.Status.CONFLICT;
@@ -119,6 +124,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         // validation for the password.
         if (!hasText(userAccount.getPassword())) {
             throw new AccountServiceException(PASSWORD_EMPTY);
+        } else if (userAccount.getPassword().length() < P_MIN || userAccount.getPassword().length() > P_MAX) {
+            throw new AccountServiceException(
+                    new HttpMessageErrorCodeResolver(PASSWORD_LENGTH, String.valueOf(P_MIN), String.valueOf(P_MAX)));
+        } else if (!validatePassword(userAccount.getPassword())) {
+            throw new AccountServiceException(PASSWORD_INVALID);
         }
 
         UserAccount newUserCreated = createKeycloakUser(userAccount);

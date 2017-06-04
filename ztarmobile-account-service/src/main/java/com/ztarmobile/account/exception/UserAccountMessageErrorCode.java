@@ -33,7 +33,9 @@ public enum UserAccountMessageErrorCode implements HttpMessageErrorCode {
     EMAIL_EMPTY (90008, "The email must be provided and must not be empty", BAD_REQUEST),
     EMAIL_LENGTH (90009, "The email entered is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
     EMAIL_INVALID (90010, "The email provided is not valid", BAD_REQUEST),
-    PASSWORD_EMPTY (90011, "A valid password must be provided", BAD_REQUEST);
+    PASSWORD_EMPTY (90011, "A valid password must be provided", BAD_REQUEST),
+    PASSWORD_LENGTH (90012, "A valid password must have at least ? characters and a maximum of ? characters", BAD_REQUEST),
+    PASSWORD_INVALID (90013, "A valid password must have at least one number and a symbol (like !@#$%^)", BAD_REQUEST);
 
     private int code;
     private String message;

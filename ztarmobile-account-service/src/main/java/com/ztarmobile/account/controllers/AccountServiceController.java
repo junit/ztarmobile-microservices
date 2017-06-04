@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.account.controllers;
 
+import static com.ztarmobile.account.common.CommonUtils.createServiceUrl;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -14,7 +15,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +28,6 @@ import com.ztarmobile.account.annotation.EnableBasicAuthentication;
 import com.ztarmobile.account.annotation.IgnoreSecurity;
 import com.ztarmobile.account.model.Echo;
 import com.ztarmobile.account.model.UserAccount;
-import com.ztarmobile.account.repository.UserAccountRepository;
 import com.ztarmobile.account.service.UserAccountService;
 
 /**
@@ -48,8 +50,21 @@ public class AccountServiceController {
     private static final String ECHO_MAPPING = "/echo";
     private static final String USER_ACCOUNT_MAPPING = "/users";
 
-    @Autowired
-    private UserAccountRepository userAccountRepository;
+    /**
+     * Based path.
+     */
+    @Value("${spring.data.rest.base-path}")
+    private String basePath;
+    /**
+     * The server address.
+     */
+    @Value("${server.address}")
+    private String serverAddress;
+    /**
+     * The server port.
+     */
+    @Value("${server.port}")
+    private String serverPort;
 
     /**
      * The service associated with the account management.
@@ -70,8 +85,21 @@ public class AccountServiceController {
     public HttpEntity<UserAccount> createNewAccount(@RequestBody UserAccount userAccount) {
         // delegates the work to the service layer.
         userAccountService.createNewUserAccount(userAccount);
+        // the service has been created, we add some info in the header.
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Location", createLocation(userAccount.getUserId()));
+        return new ResponseEntity<UserAccount>(userAccount, responseHeaders, HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity<UserAccount>(userAccount, HttpStatus.CREATED);
+    /**
+     * Creates the location of the new account created.
+     * 
+     * @param userId
+     *            The userId generated.
+     * @return The location.
+     */
+    private String createLocation(String userId) {
+        return createServiceUrl(serverAddress, serverPort, basePath) + USER_ACCOUNT_MAPPING + "/" + userId;
     }
 
     /**

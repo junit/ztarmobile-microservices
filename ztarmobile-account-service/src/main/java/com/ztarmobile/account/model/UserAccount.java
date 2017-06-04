@@ -6,13 +6,6 @@
  */
 package com.ztarmobile.account.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -23,34 +16,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * @version %I%, %G%
  * @since 3.0
  */
-@Entity
-@Table(name = "user_account")
 @JsonInclude(Include.NON_NULL)
 public class UserAccount {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "row_id")
-    private Long id;
     private String userId;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     *            the id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * @return the userId
@@ -134,7 +106,7 @@ public class UserAccount {
      */
     @Override
     public String toString() {
-        return "UserAccount [id=" + id + ", userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", email=" + email + "]";
+        return "UserAccount [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
+                + email + "]";
     }
 }
