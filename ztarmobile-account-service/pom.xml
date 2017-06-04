@@ -74,6 +74,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Keycloak dependencies -->
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-admin-client</artifactId>
@@ -94,7 +95,7 @@
             <artifactId>resteasy-multipart-provider</artifactId>
             <version>${keycloak-admin-client.version}</version>
         </dependency>
-       
+        
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

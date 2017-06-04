@@ -11,12 +11,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-import com.ztarmobile.account.annotation.EnableBasicAuthentication;
-import com.ztarmobile.account.model.Echo;
-import com.ztarmobile.account.model.UserAccount;
-import com.ztarmobile.account.repository.UserAccountRepository;
-import com.ztarmobile.account.service.UserAccountService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ztarmobile.account.annotation.EnableBasicAuthentication;
+import com.ztarmobile.account.annotation.IgnoreSecurity;
+import com.ztarmobile.account.model.Echo;
+import com.ztarmobile.account.model.UserAccount;
+import com.ztarmobile.account.repository.UserAccountRepository;
+import com.ztarmobile.account.service.UserAccountService;
 
 /**
  * The controller class.
@@ -64,6 +65,7 @@ public class AccountServiceController {
      *            The user account to be created.
      * @return The user created.
      */
+    @EnableBasicAuthentication
     @RequestMapping(value = USER_ACCOUNT_MAPPING, consumes = APPLICATION_JSON_VALUE, method = POST)
     public HttpEntity<UserAccount> createNewAccount(@RequestBody UserAccount userAccount) {
         // delegates the work to the service layer.
@@ -77,7 +79,7 @@ public class AccountServiceController {
      * 
      * @return Just a 'OK' message to indicate that the service is alive.
      */
-    @EnableBasicAuthentication
+    @IgnoreSecurity
     @RequestMapping(value = ECHO_MAPPING, method = GET)
     public HttpEntity<Echo> echo() {
         log.debug("Requesting GET echo...");

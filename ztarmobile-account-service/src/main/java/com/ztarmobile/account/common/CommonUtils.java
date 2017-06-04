@@ -6,10 +6,13 @@
  */
 package com.ztarmobile.account.common;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.hateoas.Link;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Utility to handle some common operations.
@@ -18,6 +21,15 @@ import org.springframework.hateoas.Link;
  * @since 03/01/17
  */
 public class CommonUtils {
+    /**
+     * The email pattern.
+     */
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+    private static Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private static Matcher matcher;
+
     /**
      * Private constructor.
      */
@@ -185,5 +197,18 @@ public class CommonUtils {
         href = href.replace("${spring.data.rest.base-path}", tmpPath);
 
         return new Link(href, rel);
+    }
+
+    /**
+     * Validate hex with regular expression
+     *
+     * @param hex
+     *            hex for validation
+     * @return true valid hex, false invalid hex
+     */
+    public static boolean validateEmail(final String hex) {
+        matcher = pattern.matcher(hex);
+        return matcher.matches();
+
     }
 }

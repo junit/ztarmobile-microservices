@@ -82,10 +82,14 @@ public class OIDCAuthenticationToken {
      *            the header of the request.
      * @param allClients
      *            List of all possible clients to be evaluated.
+     * @return The credentials for this client, the clientId (index 0) and
+     *         clientSecret at (index 1).
      */
-    public void handleBasicAuthRequest(HttpServletRequest request, Map<String, String> allClients) {
+    public String[] handleBasicAuthRequest(HttpServletRequest request, Map<String, String> allClients) {
         // check the authorization header
         String auth = request.getHeader(AUTHORIZATION);
+        String[] credentials = null;
+
         if (auth != null && !auth.trim().isEmpty() && (auth.startsWith("Basic"))) {
             auth = auth.substring(5).trim();
 
@@ -98,7 +102,7 @@ public class OIDCAuthenticationToken {
             }
 
             String clientIdSecret = new String(bytes);
-            String[] credentials = clientIdSecret.split(":");
+            credentials = clientIdSecret.split(":");
 
             boolean found = false;
             // look up the right credentials
@@ -116,6 +120,9 @@ public class OIDCAuthenticationToken {
         } else {
             throw new AuthorizationServiceException(UNAUTHORIZED_BASIC);
         }
+        // at this point the credentials were validated correctly.
+        // we simply return them.
+        return credentials;
     }
 
     /**

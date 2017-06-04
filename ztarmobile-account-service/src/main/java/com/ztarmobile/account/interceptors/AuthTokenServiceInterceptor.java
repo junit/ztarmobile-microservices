@@ -11,13 +11,6 @@ import static com.ztarmobile.account.controllers.ConstantControllerAttribute.BAS
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.IGNORE_SECURITY;
 import static com.ztarmobile.account.controllers.ConstantControllerAttribute.INTROSPECTED_TOKEN;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.ztarmobile.exception.ErrorResponse;
-import com.ztarmobile.exception.HttpMessageErrorCode;
-import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
-import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +31,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.ztarmobile.account.service.UserAccountService;
+import com.ztarmobile.account.service.impl.UserAccountServiceImpl;
+import com.ztarmobile.exception.ErrorResponse;
+import com.ztarmobile.exception.HttpMessageErrorCode;
+import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
+import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 /**
  * Spring bean to authorize incoming requests against the OpenId provider
@@ -75,6 +77,12 @@ public class AuthTokenServiceInterceptor extends HandlerInterceptorAdapter {
 
     @Value("${account.openid.keycloak.client-id}")
     private String keycloakClientId;
+
+    /**
+     * The user account service will be using the client credentials.
+     */
+    @Autowired
+    private UserAccountService userAccountService;
 
     /**
      * Utility to handle the interaction with the server provider.
@@ -145,8 +153,13 @@ public class AuthTokenServiceInterceptor extends HandlerInterceptorAdapter {
         ErrorResponse errorResponse = null;
 
         try {
-            authenticationToken.handleBasicAuthRequest(request, allClients);
+            String[] credentials = authenticationToken.handleBasicAuthRequest(request, allClients);
             log.debug("Basic Authentication ok");
+            // saves the credentials so that those can be accessible later.
+            if (userAccountService instanceof UserAccountServiceImpl) {
+                UserAccountServiceImpl userAccount = (UserAccountServiceImpl) userAccountService;
+                userAccount.setClientId(credentials[0]);
+            }
             return true;
         } catch (AuthorizationServiceException e) {
             HttpMessageErrorCode msg = e.getHttpMessageErrorCode();

@@ -27,9 +27,13 @@ public enum UserAccountMessageErrorCode implements HttpMessageErrorCode {
     UNABLE_CREATE_ACCOUNT (90001, "Unable to create new user account", INTERNAL_SERVER_ERROR),
     DUPLICATE_ACCOUNT (90002, "An account with the same email has been already registered", INTERNAL_SERVER_ERROR),
     FIRST_NAME_EMPTY (90004, "The first name must be provided and must not be empty", BAD_REQUEST),
-    LAST_NAME_EMPTY (90005, "The last name must be provided and must not be empty", BAD_REQUEST),
-    EMAIL_EMPTY (90006, "The email must be provided and must not be empty", BAD_REQUEST),
-    PASSWORD_EMPTY (90007, "A valid password must be provided", BAD_REQUEST);
+    FIRST_NAME_LENGTH (90005, "The first name is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
+    LAST_NAME_EMPTY (90006, "The last name must be provided and must not be empty", BAD_REQUEST),
+    LAST_NAME_LENGTH (90007, "The last name is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
+    EMAIL_EMPTY (90008, "The email must be provided and must not be empty", BAD_REQUEST),
+    EMAIL_LENGTH (90009, "The email entered is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
+    EMAIL_INVALID (90010, "The email provided is not valid", BAD_REQUEST),
+    PASSWORD_EMPTY (90011, "A valid password must be provided", BAD_REQUEST);
 
     private int code;
     private String message;
