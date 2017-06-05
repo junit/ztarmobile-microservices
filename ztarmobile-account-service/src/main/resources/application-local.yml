@@ -12,6 +12,7 @@ account:
       password: admin
       master-realm: master
       realm: demo
+      role-prefix: ztarmobile
       username: mykeycloak
 
 logging:

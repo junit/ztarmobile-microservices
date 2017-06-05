@@ -22,7 +22,6 @@ import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.PASSW
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.PASSWORD_INVALID;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.PASSWORD_LENGTH;
 import static com.ztarmobile.account.exception.UserAccountMessageErrorCode.UNABLE_CREATE_ACCOUNT;
-import static java.util.Arrays.asList;
 import static javax.ws.rs.core.Response.Status.CONFLICT;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static org.springframework.util.StringUtils.hasText;
@@ -37,6 +36,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.ClientResource;
 import org.keycloak.admin.client.resource.RoleMappingResource;
 import org.keycloak.admin.client.resource.RoleScopeResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -157,17 +157,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
 
         // we try to create the user now.
-        CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setType(CredentialRepresentation.PASSWORD);
-        credential.setValue(userAccount.getPassword());
-        credential.setTemporary(false);
-
         UserRepresentation user = new UserRepresentation();
         user.setUsername(userAccount.getEmail());
         user.setFirstName(userAccount.getFirstName());
         user.setLastName(userAccount.getLastName());
         user.setEmail(userAccount.getEmail());
-        user.setCredentials(asList(credential));
         user.setEnabled(true);
 
         // Create a keycloak user.
@@ -176,6 +170,14 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         // Assign realm roles to user
         kc.realm(keycloakRealm).users().get(userId).roles().realmLevel().add(rolesToAdd);
+
+        // creates the password
+        UserResource userResource = kc.realm(keycloakRealm).users().get(userId);
+        CredentialRepresentation newCredential = new CredentialRepresentation();
+        newCredential.setType(CredentialRepresentation.PASSWORD);
+        newCredential.setValue(userAccount.getPassword());
+        newCredential.setTemporary(false);
+        userResource.resetPassword(newCredential);
 
         userAccount.setUserId(userId);
         return userAccount;
