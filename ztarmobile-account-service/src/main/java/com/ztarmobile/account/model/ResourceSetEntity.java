@@ -2,15 +2,18 @@
  * Copyright (C) Ztar Mobile, Inc - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Armando Rivas <arivas@ztarmobile.com>, May 2017.
+ * Written by Armando Rivas <arivas@ztarmobile.com>, Jun 2017.
  */
 package com.ztarmobile.account.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -21,15 +24,18 @@ import javax.persistence.Table;
  * @since 3.0
  */
 @Entity
-@Table(name = "resource_set_scope")
-public class ResourceSetScope {
+@Table(name = "catalog_resource_set")
+public class ResourceSetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "row_id")
     private Long id;
-    private String scope;
     private String verb;
     private String resource;
+    private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SCOPE_ID")
+    private ScopeEntity scope;
 
     /**
      * @return the id
@@ -44,21 +50,6 @@ public class ResourceSetScope {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * @return the scope
-     */
-    public String getScope() {
-        return scope;
-    }
-
-    /**
-     * @param scope
-     *            the scope to set
-     */
-    public void setScope(String scope) {
-        this.scope = scope;
     }
 
     /**
@@ -91,6 +82,36 @@ public class ResourceSetScope {
         this.resource = resource;
     }
 
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the scope
+     */
+    public ScopeEntity getScope() {
+        return scope;
+    }
+
+    /**
+     * @param scope
+     *            the scope to set
+     */
+    public void setScope(ScopeEntity scope) {
+        this.scope = scope;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -98,6 +119,8 @@ public class ResourceSetScope {
      */
     @Override
     public String toString() {
-        return "ResourceSetScope [id=" + id + ", scope=" + scope + ", verb=" + verb + ", resource=" + resource + "]";
+        return "ResourceSetEntity [id=" + id + ", verb=" + verb + ", resource=" + resource + ", description="
+                + description + ", scope=" + scope + "]";
     }
+
 }

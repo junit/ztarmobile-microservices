@@ -9,8 +9,8 @@ package com.ztarmobile.account.service.impl;
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.INSUFFICIENT_SCOPE;
 
 import com.ztarmobile.account.model.ProtectedResource;
-import com.ztarmobile.account.model.ResourceSetScope;
-import com.ztarmobile.account.repository.ResourceSetScopeRepository;
+import com.ztarmobile.account.model.ResourceSetEntity;
+import com.ztarmobile.account.repository.ResourceSetRepository;
 import com.ztarmobile.account.service.ResourceSetScopeService;
 import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
@@ -43,10 +43,10 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
     private static final String ZTAR_PREFIX = "ztar_";
 
     /**
-     * ResourceSetScopeRepository to access.
+     * ResourceSetRepository to access.
      */
     @Autowired
-    private ResourceSetScopeRepository resourceSetScopeRepository;
+    private ResourceSetRepository resourceSetRepository;
 
     /**
      * {@inheritDoc}
@@ -58,10 +58,10 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
         String method = protectedResource.getMethod().toString();
         String path = protectedResource.getPath();
 
-        List<ResourceSetScope> access = null;
+        List<ResourceSetEntity> access = null;
         for (String scope : scopes) {
             if (scope.startsWith(ZTAR_PREFIX)) {
-                access = resourceSetScopeRepository.findByScopeVerbAndResource(scope, method, path);
+                access = resourceSetRepository.findByScopeVerbAndResource(scope, method, path);
                 if (access.isEmpty()) {
                     continue;
                 } else {
@@ -86,10 +86,10 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
         String method = protectedResource.getMethod().toString();
         String path = protectedResource.getPath();
 
-        List<ResourceSetScope> access = resourceSetScopeRepository.findByVerbAndResource(method, path);
+        List<ResourceSetEntity> access = resourceSetRepository.findByVerbAndResource(method, path);
         List<String> scopes = new ArrayList<>();
-        for (ResourceSetScope scope : access) {
-            scopes.add(scope.getScope());
+        for (ResourceSetEntity scope : access) {
+            scopes.add(scope.getScope().getScope());
         }
         return scopes;
     }

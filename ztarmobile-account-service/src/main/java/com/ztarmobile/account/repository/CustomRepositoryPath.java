@@ -18,6 +18,6 @@ public interface CustomRepositoryPath {
     /**
      * Mapping for the repositories.
      */
-    String USER_ACCOUNT_MAPPING = "userAccounts";
-    String RESOURCE_SET_SCOPE_MAPPING = "resourceSetScope";
+    String SCOPE_MAPPING = "scopes";
+    String RESOURCE_SET_MAPPING = "resources";
 }

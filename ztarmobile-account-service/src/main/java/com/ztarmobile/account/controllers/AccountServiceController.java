@@ -12,6 +12,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import com.ztarmobile.account.annotation.EnableBasicAuthentication;
+import com.ztarmobile.account.annotation.IgnoreSecurity;
+import com.ztarmobile.account.model.Echo;
+import com.ztarmobile.account.model.UserAccount;
+import com.ztarmobile.account.service.UserAccountService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.ztarmobile.account.annotation.EnableBasicAuthentication;
-import com.ztarmobile.account.annotation.IgnoreSecurity;
-import com.ztarmobile.account.model.Echo;
-import com.ztarmobile.account.model.UserAccount;
-import com.ztarmobile.account.service.UserAccountService;
 
 /**
  * The controller class.
