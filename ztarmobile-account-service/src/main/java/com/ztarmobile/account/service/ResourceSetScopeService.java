@@ -37,4 +37,9 @@ public interface ResourceSetScopeService {
      * @return List of scopes.
      */
     List<String> getScopesByResource(ProtectedResource protectedResource);
+
+    /**
+     * Synchronize the roles to scopes.
+     */
+    void syncFromRolesToScope();
 }

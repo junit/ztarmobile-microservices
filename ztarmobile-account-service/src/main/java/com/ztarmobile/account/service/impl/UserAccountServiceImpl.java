@@ -26,11 +26,6 @@ import static javax.ws.rs.core.Response.Status.CONFLICT;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static org.springframework.util.StringUtils.hasText;
 
-import com.ztarmobile.account.exception.AccountServiceException;
-import com.ztarmobile.account.model.UserAccount;
-import com.ztarmobile.account.service.UserAccountService;
-import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +44,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.ztarmobile.account.exception.AccountServiceException;
+import com.ztarmobile.account.model.UserAccount;
+import com.ztarmobile.account.service.UserAccountService;
+import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 
 /**
  * Direct implementation for the user management.

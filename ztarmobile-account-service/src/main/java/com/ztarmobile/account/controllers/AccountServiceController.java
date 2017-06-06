@@ -107,7 +107,6 @@ public class AccountServiceController {
      * 
      * @return Just a 'OK' message to indicate that the service is alive.
      */
-    @IgnoreSecurity
     @RequestMapping(value = ECHO_MAPPING, method = GET)
     public HttpEntity<Echo> echo() {
         log.debug("Requesting GET echo...");

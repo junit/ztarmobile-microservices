@@ -12,7 +12,16 @@ account:
       password: ztar-keycloak
       master-realm: master
       realm: solo
+      role-prefix: ztarmobile
       username: solo-keycloak
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+      springframework:
+        web: DEBUG
 
 # HOST SERVER (where the service is running on)
 server:

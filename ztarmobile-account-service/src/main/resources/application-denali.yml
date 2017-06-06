@@ -12,7 +12,16 @@ account:
       password: ztar-keycloak
       master-realm: master
       realm: denali
+      role-prefix: ztarmobile
       username: denali-keycloak
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+      springframework:
+        web: DEBUG
 
 # HOST SERVER (where the service is running on)
 server:

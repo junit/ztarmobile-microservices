@@ -8,8 +8,6 @@ package com.ztarmobile.account.repository;
 
 import static com.ztarmobile.account.repository.CustomRepositoryPath.RESOURCE_SET_MAPPING;
 
-import com.ztarmobile.account.model.ResourceSetEntity;
-
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +15,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.ztarmobile.account.model.ResourceSetEntity;
 
 /**
  * The ResourceSetScope repository that exposes the CRUD operations for the user
@@ -34,7 +34,7 @@ public interface ResourceSetRepository extends JpaRepository<ResourceSetEntity, 
 
     List<ResourceSetEntity> findByResource(String resource);
 
-    @Query("select r from ResourceSetEntity r where r.verb = :verb and r.resource =:resource and r.scope = :scope")
+    @Query("select r from ResourceSetEntity r where r.scope.scope = :scope and r.verb = :verb and r.resource =:resource")
     List<ResourceSetEntity> findByScopeVerbAndResource(@Param("scope") String scope, @Param("verb") String method,
             @Param("resource") String path);
 

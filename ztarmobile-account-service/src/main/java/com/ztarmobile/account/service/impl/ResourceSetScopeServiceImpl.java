@@ -8,20 +8,26 @@ package com.ztarmobile.account.service.impl;
 
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.INSUFFICIENT_SCOPE;
 
-import com.ztarmobile.account.model.ProtectedResource;
-import com.ztarmobile.account.model.ResourceSetEntity;
-import com.ztarmobile.account.repository.ResourceSetRepository;
-import com.ztarmobile.account.service.ResourceSetScopeService;
-import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
-import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.RolesResource;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.ztarmobile.account.model.ProtectedResource;
+import com.ztarmobile.account.model.ResourceSetEntity;
+import com.ztarmobile.account.model.ScopeEntity;
+import com.ztarmobile.account.repository.ResourceSetRepository;
+import com.ztarmobile.account.repository.ScopeRepository;
+import com.ztarmobile.account.service.ResourceSetScopeService;
+import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
+import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 /**
  * Direct service implementation to validate the scopes of the client.
@@ -37,16 +43,41 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
      */
     private static final Logger log = Logger.getLogger(ResourceSetScopeServiceImpl.class);
 
+    @Value("${account.openid.context}")
+    private String context;
+
+    @Value("${account.openid.keycloak.realm}")
+    private String keycloakRealm;
+
+    @Value("${account.openid.keycloak.master-realm}")
+    private String keycloakMasterRealm;
+
+    @Value("${account.openid.keycloak.username}")
+    private String keycloakUsername;
+
+    @Value("${account.openid.keycloak.password}")
+    private String keycloakPassword;
+
+    @Value("${account.openid.keycloak.client-id}")
+    private String keycloakClientId;
+
     /**
      * Prefix for the scopes.
      */
-    private static final String ZTAR_PREFIX = "ztar_";
+    @Value("${account.openid.keycloak.role-prefix}")
+    private String keycloakRolePrefix;
 
     /**
      * ResourceSetRepository to access.
      */
     @Autowired
     private ResourceSetRepository resourceSetRepository;
+
+    /**
+     * ScopeRepository to access.
+     */
+    @Autowired
+    private ScopeRepository scopeRepository;
 
     /**
      * {@inheritDoc}
@@ -60,7 +91,7 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
 
         List<ResourceSetEntity> access = null;
         for (String scope : scopes) {
-            if (scope.startsWith(ZTAR_PREFIX)) {
+            if (scope.startsWith(keycloakRolePrefix)) {
                 access = resourceSetRepository.findByScopeVerbAndResource(scope, method, path);
                 if (access.isEmpty()) {
                     continue;
@@ -92,5 +123,32 @@ public class ResourceSetScopeServiceImpl implements ResourceSetScopeService {
             scopes.add(scope.getScope().getScope());
         }
         return scopes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void syncFromRolesToScope() {
+        Keycloak kc = null;
+        kc = Keycloak.getInstance(context, keycloakMasterRealm, keycloakUsername, keycloakPassword, keycloakClientId);
+        RolesResource rolesResource = kc.realm(keycloakRealm).roles();
+        for (RoleRepresentation roleRepresentation : rolesResource.list()) {
+            if (roleRepresentation.getName().startsWith(keycloakRolePrefix)) {
+                ScopeEntity found = scopeRepository.findByScope(roleRepresentation.getName());
+                if (found == null) {
+                    // saves the scope.
+                    ScopeEntity scopeEntity = new ScopeEntity();
+                    scopeEntity.setScope(roleRepresentation.getName());
+                    scopeEntity.setDescription(roleRepresentation.getDescription());
+
+                    scopeRepository.saveAndFlush(scopeEntity);
+                } else {
+                    // updates the scope.
+                    found.setDescription(roleRepresentation.getDescription());
+                    scopeRepository.saveAndFlush(found);
+                }
+            }
+        }
     }
 }
