@@ -8,7 +8,7 @@ package com.ztarmobile.openid.connect.security.authorization;
 
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.AUTHORIZATION_ERROR;
 
-import com.ztarmobile.exception.HttpMessageErrorCode;
+import com.ztarmobile.exception.AuthorizationMessageErrorCode;
 import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
 import com.ztarmobile.exception.ServiceException;
 
@@ -30,7 +30,7 @@ public class AuthorizationServiceException extends ServiceException {
     private static final long serialVersionUID = -2668956652376062805L;
 
     private int responseStatus = 401;
-    private HttpMessageErrorCode httpMessageErrorCode;
+    private AuthorizationMessageErrorCode httpMessageErrorCode;
 
     /**
      * Constructs an <code>AuthorizationServiceException</code> with the
@@ -53,7 +53,7 @@ public class AuthorizationServiceException extends ServiceException {
      * @param httpMessageErrorCode
      *            The HTTP message error code.
      */
-    public AuthorizationServiceException(HttpMessageErrorCode httpMessageErrorCode) {
+    public AuthorizationServiceException(AuthorizationMessageErrorCode httpMessageErrorCode) {
         super(httpMessageErrorCode.getMessage());
         this.httpMessageErrorCode = httpMessageErrorCode;
     }
@@ -108,7 +108,7 @@ public class AuthorizationServiceException extends ServiceException {
     /**
      * @return the httpMessageErrorCode
      */
-    public HttpMessageErrorCode getHttpMessageErrorCode() {
+    public AuthorizationMessageErrorCode getHttpMessageErrorCode() {
         return httpMessageErrorCode;
     }
 }

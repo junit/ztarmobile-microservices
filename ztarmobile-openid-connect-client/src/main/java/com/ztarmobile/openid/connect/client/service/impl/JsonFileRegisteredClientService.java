@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -64,7 +65,13 @@ public class JsonFileRegisteredClientService implements RegisteredClientService 
 
     private Map<String, RegisteredClient> clients = new HashMap<>();
 
+   
+    @Autowired
     public JsonFileRegisteredClientService(@Value("${account.openid.client.config}") String filename) {
+        init(filename);
+    }
+    
+    public void init(String filename) {
         this.file = new File(filename);
         load();
     }

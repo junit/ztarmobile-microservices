@@ -47,7 +47,7 @@ import org.springframework.stereotype.Component;
  * @version %I%, %G%
  * @since 3.0
  */
-@Component
+@Component(value = "openIdCAuthenticationToken")
 public class OIDCAuthenticationToken {
     /**
      * Logger for this class.

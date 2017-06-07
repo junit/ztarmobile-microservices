@@ -17,7 +17,7 @@ public class HttpMessageErrorCodeResolver {
     /**
      * The message error code.
      */
-    private HttpMessageErrorCode httpMessageErrorCode;
+    private AuthorizationMessageErrorCode httpMessageErrorCode;
     /**
      * The resolved message.
      */
@@ -30,10 +30,10 @@ public class HttpMessageErrorCodeResolver {
      *            The message error code.
      * @param param
      *            The parameter.
-     * @see HttpMessageErrorCodeResolver#HttpMessageErrorCodeResolver(HttpMessageErrorCode,
+     * @see HttpMessageErrorCodeResolver#HttpMessageErrorCodeResolver(AuthorizationMessageErrorCode,
      *      String...)
      */
-    public HttpMessageErrorCodeResolver(HttpMessageErrorCode httpMessageErrorCode, Object param) {
+    public HttpMessageErrorCodeResolver(AuthorizationMessageErrorCode httpMessageErrorCode, Object param) {
         this(httpMessageErrorCode, new String[] { param.toString() });
     }
 
@@ -44,10 +44,10 @@ public class HttpMessageErrorCodeResolver {
      *            The message error code.
      * @param params
      *            The parameters.
-     * @see HttpMessageErrorCodeResolver#HttpMessageErrorCodeResolver(HttpMessageErrorCode,
+     * @see HttpMessageErrorCodeResolver#HttpMessageErrorCodeResolver(AuthorizationMessageErrorCode,
      *      Object)
      */
-    public HttpMessageErrorCodeResolver(HttpMessageErrorCode httpMessageErrorCode, String... params) {
+    public HttpMessageErrorCodeResolver(AuthorizationMessageErrorCode httpMessageErrorCode, String... params) {
         this.resolvedMessage = resolveMessage(httpMessageErrorCode, params);
         this.httpMessageErrorCode = httpMessageErrorCode;
     }
@@ -55,7 +55,7 @@ public class HttpMessageErrorCodeResolver {
     /**
      * @return the httpMessageErrorCode
      */
-    public HttpMessageErrorCode getHttpMessageErrorCode() {
+    public AuthorizationMessageErrorCode getHttpMessageErrorCode() {
         return httpMessageErrorCode;
     }
 
@@ -73,7 +73,7 @@ public class HttpMessageErrorCodeResolver {
      *            The httpMessageErrorCode.
      * @return The final message.
      */
-    private static String resolveMessage(HttpMessageErrorCode httpMessageErrorCode, String... params) {
+    private static String resolveMessage(AuthorizationMessageErrorCode httpMessageErrorCode, String... params) {
         String originalMessage = httpMessageErrorCode.getMessage();
         StringBuilder finalMessage = new StringBuilder(originalMessage);
 

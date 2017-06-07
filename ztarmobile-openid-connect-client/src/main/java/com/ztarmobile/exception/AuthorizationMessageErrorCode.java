@@ -9,7 +9,6 @@ package com.ztarmobile.exception;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -25,7 +24,7 @@ import javax.ws.rs.core.Response;
 public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
 
     // Generic message
-    METHOD_NOT_SUPPORTED (80000, "Request method '?' not allowed for this resource: ?", METHOD_NOT_ALLOWED),
+    METHOD_NOT_SUPPORTED (80000, "Request method '?' not allowed for this resource: ?", 405),
     AUTHORIZATION_ERROR (80001, "Authorization Error", INTERNAL_SERVER_ERROR),
     NO_ACCESS_TOKEN_FOUND (80002, "Missing access token in the header or payload of the request. " + AUTHORIZATION + ": bearer yourtoken..", BAD_REQUEST),
     UNAUTHORIZED_ACCESS (80003, "Full authentication is required to access this resource", UNAUTHORIZED),
@@ -58,10 +57,24 @@ public enum AuthorizationMessageErrorCode implements HttpMessageErrorCode {
      *            The HTTP status.
      */
     AuthorizationMessageErrorCode(int code, String message, Response.Status httpStatus) {
+        this(code, message, httpStatus.getStatusCode());
+    }
+
+    /**
+     * Creates a header message error with code, message and HTTP status.
+     *
+     * @param code
+     *            The code.
+     * @param message
+     *            The message.
+     * @param httpCode
+     *            The HTTP code.
+     */
+    AuthorizationMessageErrorCode(int code, String message, int httpCode) {
         this.code = code;
         this.message = message;
         this.evaluatedMessage = this.message;
-        this.httpCode = httpStatus.getStatusCode();
+        this.httpCode = httpCode;
     }
 
     /**
