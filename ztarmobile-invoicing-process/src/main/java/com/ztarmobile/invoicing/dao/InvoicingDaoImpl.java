@@ -78,6 +78,15 @@ public class InvoicingDaoImpl extends AbstractJdbc implements InvoicingDao {
         // (minutes or seconds), the real distinction between them is in
         // invoicing_report_details.
         params.put("seconds", isCdma ? String.valueOf(1) : String.valueOf(60));
+        // the cdma file (sprint), the usage are already in KiloBytes, that's
+        // why we set the value as 1, but the ericsson files are expressed in
+        // bytes,
+        // that's why we need to set it as 1024, so that we can calculate the
+        // MB.
+        // reseller_subs_usage table has the original value from the CDR files
+        // (bytes or KB), the real distinction between them is in
+        // invoicing_report_details.
+        params.put("kiloBytes", isCdma ? String.valueOf(1) : String.valueOf(1024));
         this.getJdbc().update(sql, new MapSqlParameterSource(params));
     }
 
