@@ -4,15 +4,15 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, March 2017.
  */
-package com.ztarmobile.account.service;
+package com.ztarmobile.openid.connect;
 
-import com.ztarmobile.account.model.ProtectedResource;
+import com.ztarmobile.util.ProtectedResource;
 
 import java.util.List;
 import java.util.Set;
 
 /**
- * Service that calculates and perform the invoicing process.
+ * Service that manages the scopes.
  *
  * @author armandorivas
  * @version %I%, %G%

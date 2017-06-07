@@ -15,12 +15,12 @@ import static org.springframework.http.HttpHeaders.WWW_AUTHENTICATE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
-import com.ztarmobile.account.model.ProtectedResource;
-import com.ztarmobile.account.service.ResourceSetScopeService;
+import com.ztarmobile.openid.connect.ResourceSetScopeService;
 import com.ztarmobile.exception.ErrorResponse;
 import com.ztarmobile.exception.HttpMessageErrorCode;
 import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
 import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
+import com.ztarmobile.util.ProtectedResource;
 
 import java.util.List;
 import java.util.Set;

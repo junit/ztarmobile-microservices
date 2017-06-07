@@ -13,7 +13,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import com.ztarmobile.account.annotation.EnableBasicAuthentication;
-import com.ztarmobile.account.annotation.IgnoreSecurity;
 import com.ztarmobile.account.model.Echo;
 import com.ztarmobile.account.model.UserAccount;
 import com.ztarmobile.account.service.UserAccountService;

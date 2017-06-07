@@ -16,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
 
-import com.ztarmobile.account.model.ProtectedResource;
+import com.ztarmobile.util.ProtectedResource;
 
 import java.util.Enumeration;
 

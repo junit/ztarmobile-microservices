@@ -6,14 +6,14 @@
  */
 package com.ztarmobile.account;
 
+import com.ztarmobile.openid.connect.ResourceSetScopeService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import com.ztarmobile.account.service.ResourceSetScopeService;
 
 /**
  * Application ready listener.

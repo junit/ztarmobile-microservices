@@ -6,6 +6,13 @@
  */
 package com.ztarmobile.account;
 
+import com.ztarmobile.oauth2.model.RegisteredClient;
+import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
+import com.ztarmobile.openid.connect.client.service.impl.DynamicRegistrationClientConfigurationService;
+import com.ztarmobile.openid.connect.config.service.ClientConfigurationService;
+import com.ztarmobile.openid.connect.config.service.ServerConfiguration;
+import com.ztarmobile.openid.connect.config.service.ServerConfigurationService;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,13 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import com.ztarmobile.oauth2.model.RegisteredClient;
-import com.ztarmobile.openid.connect.client.OIDCAuthenticationToken;
-import com.ztarmobile.openid.connect.client.service.impl.DynamicRegistrationClientConfigurationService;
-import com.ztarmobile.openid.connect.config.service.ClientConfigurationService;
-import com.ztarmobile.openid.connect.config.service.ServerConfiguration;
-import com.ztarmobile.openid.connect.config.service.ServerConfigurationService;
 
 /**
  * Application ready listener.

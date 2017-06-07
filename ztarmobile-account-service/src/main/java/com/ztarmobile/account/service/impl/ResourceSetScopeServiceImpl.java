@@ -8,6 +8,15 @@ package com.ztarmobile.account.service.impl;
 
 import static com.ztarmobile.exception.AuthorizationMessageErrorCode.INSUFFICIENT_SCOPE;
 
+import com.ztarmobile.account.model.ResourceSetEntity;
+import com.ztarmobile.account.model.ScopeEntity;
+import com.ztarmobile.account.repository.ResourceSetRepository;
+import com.ztarmobile.account.repository.ScopeRepository;
+import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
+import com.ztarmobile.openid.connect.ResourceSetScopeService;
+import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
+import com.ztarmobile.util.ProtectedResource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,15 +28,6 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.ztarmobile.account.model.ProtectedResource;
-import com.ztarmobile.account.model.ResourceSetEntity;
-import com.ztarmobile.account.model.ScopeEntity;
-import com.ztarmobile.account.repository.ResourceSetRepository;
-import com.ztarmobile.account.repository.ScopeRepository;
-import com.ztarmobile.account.service.ResourceSetScopeService;
-import com.ztarmobile.exception.HttpMessageErrorCodeResolver;
-import com.ztarmobile.openid.connect.security.authorization.AuthorizationServiceException;
 
 /**
  * Direct service implementation to validate the scopes of the client.
