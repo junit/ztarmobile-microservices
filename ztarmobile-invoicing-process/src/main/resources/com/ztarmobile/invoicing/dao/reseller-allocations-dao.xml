@@ -28,7 +28,7 @@
                 AND     pln.eff_date  <= date(:call_dt)
                 AND     pln.end_date  >= date(:call_dt)
                 AND     pln.status    = 'A'
-                AND     rpb.billing_status IN ('A', 'N') 
+                AND     rpb.billing_status IN ('A', 'N', 'C') 
                 AND     rpb.mdn NOT IN (SELECT mdn FROM ztar.test_accounts) -- excluding testing accounts
                 AND     date(rpb.billing_start_date) <= date(:call_dt)
                 AND     (rpb.billing_end_date is null OR date(rpb.billing_end_date) >= date(:call_dt))
