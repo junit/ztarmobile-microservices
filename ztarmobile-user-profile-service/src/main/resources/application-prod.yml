@@ -1,0 +1,39 @@
+# PROFILE configuration stuff
+# LOGGING configuration stuff
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+# HOST SERVER (where the service is running on)
+server:
+  address: 10.0.0.127
+
+spring:
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: xxxxxx
+    test-while-idle: true
+    url: jdbc:mysql://10.0.0.142:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: xxxxxx
+    validation-query: SELECT 1
+# Email (MailProperties)
+  mail:
+    defaultEncoding: UTF-8
+    host: smtpout.secureserver.net
+    password: unlmtd45
+    port: 80
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: true
+    username: admin@good2gomobile.com
+# PROFILES
+  profiles:
+    active: "@activatedProperties@"
+    

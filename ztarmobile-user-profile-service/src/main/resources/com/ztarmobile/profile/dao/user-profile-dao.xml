@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="userProfileDao">
+        <prop key="select.user-profile">
+            <![CDATA[
+                SELECT row_id, email, first_name, last_name, password
+                FROM   user_profiles
+                WHERE row_id = :row_id
+            ]]>
+        </prop>
+        <prop key="select.all.user-profile">
+            <![CDATA[
+                SELECT up.row_id, up.email, up.first_name, up.last_name, up.password
+                FROM   user_profiles up
+                WHERE up.row_id = :row_id
+            ]]>
+        </prop>
+        <prop key="select.user-profile.by.email">
+        <![CDATA[
+                SELECT up.row_id, up.email, up.first_name, up.last_name, up.password
+                FROM   user_profiles up
+                WHERE up.email = :email
+            ]]>
+        </prop>
+        <prop key="insert.user-profile">
+            <![CDATA[
+                INSERT INTO user_profiless (first_name, last_name, email, password) VALUES(:first_name, :last_name, :email, :password)
+            ]]>
+        </prop>
+        
+    </util:properties>
+    
+</beans>

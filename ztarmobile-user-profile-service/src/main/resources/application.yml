@@ -1,0 +1,60 @@
+# BANNER
+banner:
+  charset: UTF-8
+  location: classpath:com/ztarmobile/profile/config/banner.txt
+  
+# ENDPOINTS (AbstractEndpoint subclasses) curl -X POST localhost:${server.port}/shutdown
+endpoints:
+  health:
+    sensitive: false
+  shutdown:
+    enabled: true
+    sensitive: false
+
+# BUILD INFO.
+info:
+  build:
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+  contact-dev: arivas@ztarmobile.com
+  notify-dev: false
+
+# MANAGEMENT HTTP SERVER (ManagementServerProperties)
+management:
+  security:
+    enabled: false
+
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+server:
+  port: 38060
+
+spring:
+# IDENTITY (ContextIdApplicationContextInitializer)
+  application:
+    name: User Profile Microservice v3
+# DATA REST (RepositoryRestProperties)
+  data:
+    rest:
+      base-path: /api/v3/profile
+# PROJECT INFORMATION (ProjectInfoProperties)
+  info:
+    build:
+      location: classpath:META-INF/build-info.properties  
+# PROFILES
+# Luckily adding quotes around the @@ placeholders is another workaround
+# https://jira.spring.io/browse/STS-4250
+# https://jira.spring.io/browse/STS-4201
+  profiles:
+    active: "@activatedProperties@"
+    
+# THYMELEAF (ThymeleafAutoConfiguration)
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    content-type: text/html
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/com/ztarmobile/profile/templates/
+    suffix: .html
