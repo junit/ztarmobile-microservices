@@ -19,9 +19,6 @@ spring:
     url: jdbc:mysql://localhost:3306/account?allowMultiQueries=true&autoReconnect=true&useSSL=false
     username: root
     validation-query: SELECT 1
-  #jpa:
-  #  hibernate:
-  #    ddl-auto: create-drop
 # Email (MailProperties)
 # http://stackoverflow.com/questions/17987334/not-able-to-send-mail-using-java-mail-api
 # https://myaccount.google.com/lesssecureapps

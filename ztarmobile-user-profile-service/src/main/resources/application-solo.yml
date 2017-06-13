@@ -16,7 +16,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     password: ztar11admin
     test-while-idle: true
-    url: jdbc:mysql://solo.ztarmobile.local:3306/ztar?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://solo.ztarmobile.local:3306/account?allowMultiQueries=true&autoReconnect=true&useSSL=false
     username: ztar_db_user
     validation-query: SELECT 1
 # Email (MailProperties)
