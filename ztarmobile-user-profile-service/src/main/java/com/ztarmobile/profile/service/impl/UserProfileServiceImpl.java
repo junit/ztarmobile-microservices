@@ -127,6 +127,54 @@ public class UserProfileServiceImpl implements UserProfileService {
      * {@inheritDoc}
      */
     @Override
+    public UserProfile readUserProfileWithFiltering(long userProfileId, FilteringMode... filteringModes) {
+        if (filteringModes == null || filteringModes.length == 0) {
+            throw new IllegalArgumentException("No filtered was provided");
+        }
+
+        // reads the user profile...
+        UserProfile userProfile = userProfileRepository.findOne(userProfileId);
+        if (userProfile == null) {
+            throw new ProfileServiceException(new HttpMessageErrorCodeResolver(USER_PROFILE_NOT_FOUND, userProfileId));
+        }
+
+        for (FilteringMode filteringMode : filteringModes) {
+            switch (filteringMode) {
+            case PAYMENT_PROFILE:
+                List<PaymentProfile> paymentProfiles = paymentProfileRepository.findByUserProfile(userProfile);
+                for (PaymentProfile paymentProfile : paymentProfiles) {
+                    // now, for each one, it retrieves the addresses if any
+                    Address address = paymentProfile.getAddress();
+                    if (address != null && address.getId() != null) {
+                        Address addressFound = addressRepository.findOne(address.getId());
+                        if (addressFound != null) {
+                            paymentProfile.setAddress(addressFound);
+                        }
+                    }
+                }
+                userProfile.setPaymentProfiles(paymentProfiles);
+                break;
+            case ADDRESS:
+                List<Address> addresses = addressRepository.findByUserProfile(userProfile);
+                userProfile.setAddresses(addresses);
+                break;
+            case MDN:
+                List<Mdn> mdns = mdnRepository.findByUserProfile(userProfile);
+                userProfile.setMdns(mdns);
+                break;
+            default:
+                log.warn("No filter was profiled");
+                break;
+            }
+        }
+        log.debug("User Profile read and filtered: " + userProfile);
+        return userProfile;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public long createNewMdn(long userProfileId, Mdn mdn) {
         log.debug("Creating a new mdn...");
 
@@ -303,6 +351,7 @@ public class UserProfileServiceImpl implements UserProfileService {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public long createNewPaymentProfileWithUserProfile(long userProfileId, PaymentProfile paymentProfile) {
         log.debug("Creating a new paymentProfile with user profile...");
 
@@ -315,6 +364,22 @@ public class UserProfileServiceImpl implements UserProfileService {
             throw new ProfileServiceException(new HttpMessageErrorCodeResolver(USER_PROFILE_NOT_FOUND, userProfileId));
         }
         paymentProfile.setUserProfile(userSaved);
+
+        // now checks whether this payment profile has associated an address
+        Address address = paymentProfile.getAddress();
+        if (address != null) {
+            // validates the address
+            validator.validateAddress(address);
+
+            // saves the address first
+            address.setUserProfile(userSaved);
+            Address addressSaved = addressRepository.save(address);
+            log.debug("Address Created with id: " + addressSaved);
+
+            // associates the new address with the existing payment profile.
+            paymentProfile.setAddress(addressSaved);
+        }
+
         PaymentProfile paymentProfileSaved = paymentProfileRepository.save(paymentProfile);
         log.debug("Payment Profile Created with id: " + paymentProfileSaved);
         return paymentProfileSaved.getId();
@@ -402,4 +467,5 @@ public class UserProfileServiceImpl implements UserProfileService {
         log.debug("Payment Profile Created with id: " + paymentProfileSaved);
         return paymentProfileSaved.getId();
     }
+
 }

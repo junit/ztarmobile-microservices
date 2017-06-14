@@ -50,7 +50,10 @@ public class PaymentProfileDaoImpl extends AbstractJdbc implements PaymentProfil
         params.put("exp_date", paymentProfile.getExpirationDate());
         params.put("profile_key", paymentProfile.getProfileKey());
         params.put("user_profile_id", String.valueOf(paymentProfile.getUserProfile().getId()));
-        params.put("address_id", String.valueOf(paymentProfile.getAddress().getId()));
+
+        Address addressToBeSaved = paymentProfile.getAddress();
+        String addressId = addressToBeSaved == null ? null : String.valueOf(addressToBeSaved.getId());
+        params.put("address_id", addressId);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         this.getJdbc().update(sql, new MapSqlParameterSource(params), keyHolder, new String[] { "row_id" });

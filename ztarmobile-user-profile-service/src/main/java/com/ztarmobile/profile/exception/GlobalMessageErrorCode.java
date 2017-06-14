@@ -57,14 +57,15 @@ public enum GlobalMessageErrorCode implements HttpMessageErrorCode {
     MDN_NOT_FOUND (90030, "Mdn with identifier '?' was not found", BAD_REQUEST),
     MDN_PHONE_EMPTY (90031, "The phone number must be provided and must not be empty", BAD_REQUEST),
     MDN_PHONE_MAX_LEN (90032, "The phone number is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
+    MDN_PHONE_FORMAT (90033, "The phone number provided '?' has not a valid format, it must be a valid ? digit number (no dashes)", BAD_REQUEST),
     
-    PAYMENT_PROFILE_NOT_FOUND (90033, "The Payment Profile with identifier '?' was not found", BAD_REQUEST),
-    PAYMENT_PROFILE_ALIAS_EMPTY (90034, "The alias must be provided and must not be empty", BAD_REQUEST),
-    PAYMENT_PROFILE_ALIAS_MAX_LEN (90035, "The alias is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
-    PAYMENT_PROFILE_EXP_EMPTY (90036, "The expiration date must be provided and must not be empty", BAD_REQUEST),
-    PAYMENT_PROFILE_EXP_MAX_LEN (90037, "The expiration date is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
-    PAYMENT_PROFILE_KEY_EMPTY (90038, "The profile key must be provided and must not be empty", BAD_REQUEST),
-    PAYMENT_PROFILE_KEY_MAX_LEN (90039, "The profile key is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST);
+    PAYMENT_PROFILE_NOT_FOUND (90034, "The Payment Profile with identifier '?' was not found", BAD_REQUEST),
+    PAYMENT_PROFILE_ALIAS_EMPTY (90035, "The alias must be provided and must not be empty", BAD_REQUEST),
+    PAYMENT_PROFILE_ALIAS_MAX_LEN (90036, "The alias is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
+    PAYMENT_PROFILE_EXP_EMPTY (90037, "The expiration date must be provided and must not be empty", BAD_REQUEST),
+    PAYMENT_PROFILE_EXP_MAX_LEN (90038, "The expiration date is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
+    PAYMENT_PROFILE_KEY_EMPTY (90039, "The profile key must be provided and must not be empty", BAD_REQUEST),
+    PAYMENT_PROFILE_KEY_MAX_LEN (90040, "The profile key is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST);
     
     private int code;
     private String message;

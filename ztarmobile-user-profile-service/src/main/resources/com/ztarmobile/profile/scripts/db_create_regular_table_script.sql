@@ -49,7 +49,7 @@ CREATE TABLE `payment_profiles` (
   `exp_date` varchar(4) NOT NULL,
   `profile_key` varchar(50) NOT NULL,
   `user_profile_id` bigint(20) NOT NULL,
-  `address_id` bigint(20) NOT NULL,
+  `address_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`row_id`),
   KEY `fk_payment_profiles-user_profiles-user_profile_id` (`user_profile_id`),
   KEY `fk_payment_profiles-addresses-address_id` (`address_id`),

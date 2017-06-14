@@ -10,6 +10,7 @@ import com.ztarmobile.profile.model.Address;
 import com.ztarmobile.profile.model.Mdn;
 import com.ztarmobile.profile.model.PaymentProfile;
 import com.ztarmobile.profile.model.UserProfile;
+import com.ztarmobile.profile.service.impl.FilteringMode;
 
 /**
  * Service that handles the user profile management.
@@ -23,6 +24,8 @@ public interface UserProfileService {
     long createNewUserProfile(UserProfile userProfile);
 
     UserProfile readUserProfile(long userProfileId);
+
+    UserProfile readUserProfileWithFiltering(long userProfileId, FilteringMode... filteringModes);
 
     long createNewMdn(long userProfileId, Mdn mdn);
 
@@ -51,4 +54,5 @@ public interface UserProfileService {
     PaymentProfile deletePaymentProfile(long paymentProfileId);
 
     long createNewPaymentProfileWithAddress(long addressId, PaymentProfile paymentProfile);
+
 }

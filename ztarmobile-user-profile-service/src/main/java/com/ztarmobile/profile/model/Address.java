@@ -27,7 +27,7 @@ public class Address {
     private String state;
     private String zip;
     private String country;
-    private boolean primary;
+    private Boolean primary;
     private UserProfile userProfile;
 
     /**
@@ -168,7 +168,7 @@ public class Address {
     /**
      * @return the primary
      */
-    public boolean isPrimary() {
+    public Boolean getPrimary() {
         return primary;
     }
 
@@ -176,7 +176,7 @@ public class Address {
      * @param primary
      *            the primary to set
      */
-    public void setPrimary(boolean primary) {
+    public void setPrimary(Boolean primary) {
         this.primary = primary;
     }
 
@@ -206,5 +206,4 @@ public class Address {
                 + ", city=" + city + ", state=" + state + ", zip=" + zip + ", country=" + country + ", primary="
                 + primary + ", userProfile=" + userProfile + "]";
     }
-
 }

@@ -52,7 +52,9 @@ public class AddressDaoImpl extends AbstractJdbc implements AddressDao {
         params.put("state", address.getState());
         params.put("zip", address.getZip());
         params.put("country", address.getCountry());
-        params.put("is_primary", String.valueOf(address.isPrimary() ? 1 : 0));
+
+        boolean isPrimary = address.getPrimary() == null ? false : address.getPrimary();
+        params.put("is_primary", String.valueOf(isPrimary ? 1 : 0));
         params.put("user_profile_id", String.valueOf(address.getUserProfile().getId()));
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -157,7 +159,9 @@ public class AddressDaoImpl extends AbstractJdbc implements AddressDao {
         params.put("state", address.getState());
         params.put("zip", address.getZip());
         params.put("country", address.getCountry());
-        params.put("is_primary", String.valueOf(address.isPrimary() ? 1 : 0));
+
+        boolean isPrimary = address.getPrimary() == null ? false : address.getPrimary();
+        params.put("is_primary", String.valueOf(isPrimary ? 1 : 0));
         params.put("row_id", String.valueOf(address.getId()));
 
         this.getJdbc().update(sql, params);

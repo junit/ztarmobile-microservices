@@ -8,6 +8,7 @@ package com.ztarmobile.profile.controllers;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.UNABLE_COMPLETE_TRANSACTION;
+import static javax.ws.rs.core.Response.Status.METHOD_NOT_ALLOWED;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ztarmobile.profile.exception.ErrorResponse;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,6 +68,29 @@ public class GlobalControllerException {
         errorResponse.setError("User Profile Error");
 
         return createJSONResponse(response, errorResponse, profileException.getHttpMessageErrorCode().getHttpCode());
+    }
+
+    /**
+     * This method is executed when an specific call is not allowed.
+     * 
+     * @param request
+     *            The TTTP Request.
+     * @param response
+     *            The HTTP Response.
+     * @param e
+     *            The exception for this transaction.
+     * @return The modelAndView
+     * @throws IOException
+     *             Exception while trying to write the response.
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ModelAndView handleMethodNotSupportedException(HttpServletRequest request, HttpServletResponse response,
+            Exception e) throws IOException {
+
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        errorResponse.setError("Unsupported Method");
+
+        return createJSONResponse(response, errorResponse, METHOD_NOT_ALLOWED.getStatusCode());
     }
 
     /**

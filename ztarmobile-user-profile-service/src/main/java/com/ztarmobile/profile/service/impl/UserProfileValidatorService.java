@@ -38,8 +38,8 @@ import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_ST
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_STATE_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_ZIP_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_ZIP_MAX_LEN;
-import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_DUPLICATE_PROFILE;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_EMPTY;
+import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_FORMAT;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_ALIAS_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_ALIAS_MAX_LEN;
@@ -47,6 +47,7 @@ import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PR
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_EXP_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_KEY_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_KEY_MAX_LEN;
+import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_DUPLICATE_PROFILE;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_EMAIL_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_EMAIL_INVALID;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_EMAIL_LENGTH;
@@ -237,6 +238,13 @@ public class UserProfileValidatorService {
         } else if (mdn.getPhoneNumber().length() > MDN_PHONE_LEN) {
             throw new ProfileServiceException(new HttpMessageErrorCodeResolver(MDN_PHONE_MAX_LEN, MDN_PHONE_LEN));
         }
+        try {
+            Long.parseLong(mdn.getPhoneNumber());
+        } catch (NumberFormatException e) {
+            throw new ProfileServiceException(new HttpMessageErrorCodeResolver(MDN_PHONE_FORMAT, mdn.getPhoneNumber(),
+                    String.valueOf(MDN_PHONE_LEN)));
+        }
+
     }
 
     /**
