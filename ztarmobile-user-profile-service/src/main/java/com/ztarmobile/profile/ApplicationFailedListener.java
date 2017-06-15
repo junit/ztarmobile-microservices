@@ -49,13 +49,20 @@ public class ApplicationFailedListener implements ApplicationListener<Applicatio
     private boolean notify;
 
     /**
+     * The active profile.
+     */
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void onApplicationEvent(ApplicationFailedEvent event) {
         if (notify) {
             // we notify when there's an error at startup
-            ApplicationEmailNotification notification = new ApplicationEmailNotification(false, event.getException());
+            ApplicationEmailNotification notification = new ApplicationEmailNotification(false, activeProfile,
+                    event.getException());
             notification.setTo(contactDev);
             applicationStateMailSender.sendNotificationAtStartup(notification);
         } else {

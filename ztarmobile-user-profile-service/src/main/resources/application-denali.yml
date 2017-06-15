@@ -8,7 +8,7 @@ logging:
 
 # HOST SERVER (where the service is running on)
 server:
-  address: denali.ztarmobile.com
+  address: 10.0.0.123
 
 spring:
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)

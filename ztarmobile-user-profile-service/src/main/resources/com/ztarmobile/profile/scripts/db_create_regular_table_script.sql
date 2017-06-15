@@ -10,6 +10,7 @@ CREATE TABLE `user_profiles` (
   `last_name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(20) NOT NULL,
+  `contact_phone_number` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`row_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

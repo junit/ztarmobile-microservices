@@ -25,6 +25,7 @@ public class UserProfile {
     private String lastName;
     private String email;
     private String password;
+    private String contactPhoneNumber;
 
     private List<Mdn> mdns;
     private List<Address> addresses;
@@ -106,6 +107,21 @@ public class UserProfile {
     }
 
     /**
+     * @return the contactPhoneNumber
+     */
+    public String getContactPhoneNumber() {
+        return contactPhoneNumber;
+    }
+
+    /**
+     * @param contactPhoneNumber
+     *            the contactPhoneNumber to set
+     */
+    public void setContactPhoneNumber(String contactPhoneNumber) {
+        this.contactPhoneNumber = contactPhoneNumber;
+    }
+
+    /**
      * @return the mdns
      */
     public List<Mdn> getMdns() {
@@ -150,4 +166,15 @@ public class UserProfile {
         this.paymentProfiles = paymentProfiles;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "UserProfile [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+                + ", password=" + password + ", contactPhoneNumber=" + contactPhoneNumber + ", mdns=" + mdns
+                + ", addresses=" + addresses + ", paymentProfiles=" + paymentProfiles + "]";
+    }
 }

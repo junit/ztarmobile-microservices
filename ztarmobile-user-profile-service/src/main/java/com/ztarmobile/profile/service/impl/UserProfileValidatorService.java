@@ -40,13 +40,15 @@ import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_ZI
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_ZIP_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_FORMAT;
-import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_MAX_LEN;
+import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_M_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_ALIAS_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_ALIAS_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_EXP_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_EXP_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_KEY_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_KEY_MAX_LEN;
+import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_CONTACT_PHONE_FORMAT;
+import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_CONTACT_PHONE_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_DUPLICATE_PROFILE;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_EMAIL_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.USER_PROFILE_EMAIL_INVALID;
@@ -150,6 +152,19 @@ public class UserProfileValidatorService {
             throw new ProfileServiceException(USER_PROFILE_PASSWORD_INVALID);
         }
 
+        // validation for the contact phone number
+        if (userProfile.getContactPhoneNumber() != null) {
+            if (userProfile.getContactPhoneNumber().length() != MDN_PHONE_LEN) {
+                throw new ProfileServiceException(
+                        new HttpMessageErrorCodeResolver(USER_PROFILE_CONTACT_PHONE_LEN, MDN_PHONE_LEN));
+            }
+            try {
+                Long.parseLong(userProfile.getContactPhoneNumber());
+            } catch (NumberFormatException e) {
+                throw new ProfileServiceException(new HttpMessageErrorCodeResolver(USER_PROFILE_CONTACT_PHONE_FORMAT,
+                        userProfile.getContactPhoneNumber(), String.valueOf(MDN_PHONE_LEN)));
+            }
+        }
     }
 
     /**
@@ -236,7 +251,7 @@ public class UserProfileValidatorService {
         if (!hasText(mdn.getPhoneNumber())) {
             throw new ProfileServiceException(MDN_PHONE_EMPTY);
         } else if (mdn.getPhoneNumber().length() > MDN_PHONE_LEN) {
-            throw new ProfileServiceException(new HttpMessageErrorCodeResolver(MDN_PHONE_MAX_LEN, MDN_PHONE_LEN));
+            throw new ProfileServiceException(new HttpMessageErrorCodeResolver(MDN_PHONE_M_LEN, MDN_PHONE_LEN));
         }
         try {
             Long.parseLong(mdn.getPhoneNumber());

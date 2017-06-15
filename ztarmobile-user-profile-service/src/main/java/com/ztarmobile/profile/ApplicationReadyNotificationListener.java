@@ -88,13 +88,19 @@ public class ApplicationReadyNotificationListener implements ApplicationListener
     private String serverPort;
 
     /**
+     * The active profile.
+     */
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         if (notify) {
             // we notify when everything was OK
-            ApplicationEmailNotification applicationNotif = new ApplicationEmailNotification();
+            ApplicationEmailNotification applicationNotif = new ApplicationEmailNotification(activeProfile);
             applicationNotif.setTo(contactDev);
             applicationNotif.setArtifact(artifact);
             applicationNotif.setDescription(description);

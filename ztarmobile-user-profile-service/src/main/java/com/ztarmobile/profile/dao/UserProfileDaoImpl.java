@@ -73,6 +73,7 @@ public class UserProfileDaoImpl extends AbstractJdbc implements UserProfileDao {
             vo.setLastName(rs.getString("last_name"));
             vo.setEmail(rs.getString("email"));
             vo.setPassword(rs.getString("password"));
+            vo.setContactPhoneNumber(rs.getString("contact_phone_number"));
             return vo;
         }
     }
@@ -90,6 +91,7 @@ public class UserProfileDaoImpl extends AbstractJdbc implements UserProfileDao {
         params.put("first_name", userProfile.getFirstName());
         params.put("last_name", userProfile.getLastName());
         params.put("password", userProfile.getPassword());
+        params.put("contact_phone_number", userProfile.getContactPhoneNumber());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         this.getJdbc().update(sql, new MapSqlParameterSource(params), keyHolder, new String[] { "row_id" });

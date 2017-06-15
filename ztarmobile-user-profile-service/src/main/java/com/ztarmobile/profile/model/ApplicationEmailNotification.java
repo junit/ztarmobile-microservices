@@ -46,9 +46,11 @@ public class ApplicationEmailNotification extends EmailNotification {
      * Creates an object that holds the state of the application when it started
      * Successfully.
      * 
+     * @param enviroment
+     *            The environment.
      */
-    public ApplicationEmailNotification() {
-        this(true, null);
+    public ApplicationEmailNotification(String enviroment) {
+        this(true, enviroment, null);
     }
 
     /**
@@ -56,18 +58,20 @@ public class ApplicationEmailNotification extends EmailNotification {
      * 
      * @param success
      *            Was success or not.
+     * @param enviroment
+     *            The environment.
      * @param reason
      *            The reason of failure in case success is false, if success is
      *            true, this is ignored.
      */
-    public ApplicationEmailNotification(boolean success, Throwable reason) {
+    public ApplicationEmailNotification(boolean success, String enviroment, Throwable reason) {
         this.reason = reason;
         this.success = success;
         if (success) {
-            this.setSubject("Microservice User Profile has started successfully!!!");
+            this.setSubject("[" + enviroment + "] Microservice User Profile has started successfully!!!");
             this.reason = null;
         } else {
-            this.setSubject("Ohh no!!, Microservice User Profile could not start");
+            this.setSubject("[" + enviroment + "] Ohh no!!, Microservice User Profile could not start");
         }
     }
 
