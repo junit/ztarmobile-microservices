@@ -49,7 +49,20 @@ public class ApplicationResourceHalProcessor implements ResourceProcessor<Reposi
         // adds new links to the index resource.
 
         resource.add(evaluateHateoasLink(linkTo(methodOn(UserProfileServiceController.class).createNewUserProfile(null))
-                .withRel("_user_profile"), basePath));
+                .withRel("createNewUserProfile"), basePath));
+        resource.add(evaluateHateoasLink(
+                linkTo(methodOn(UserProfileServiceController.class).readUserProfile(0)).withRel("readUserProfile"),
+                basePath));
+        resource.add(evaluateHateoasLink(
+                linkTo(methodOn(UserProfileServiceController.class).readUserProfileWithPaymentProfile(0))
+                        .withRel("readUserProfileWithPaymentProfile"),
+                basePath));
+        resource.add(
+                evaluateHateoasLink(linkTo(methodOn(UserProfileServiceController.class).readUserProfileWithAddress(0))
+                        .withRel("readUserProfileWithAddress"), basePath));
+        resource.add(evaluateHateoasLink(linkTo(methodOn(UserProfileServiceController.class).readUserProfileWithMdn(0))
+                .withRel("readUserProfileWithMdn"), basePath));
+
         return resource;
     }
 
