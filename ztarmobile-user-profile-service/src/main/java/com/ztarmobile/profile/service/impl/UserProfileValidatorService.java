@@ -24,6 +24,7 @@ import static com.ztarmobile.profile.common.CommonUtils.PROFILE_LAST_NAME_LEN;
 import static com.ztarmobile.profile.common.CommonUtils.PROFILE_PASS_MAX;
 import static com.ztarmobile.profile.common.CommonUtils.PROFILE_PASS_MIN;
 import static com.ztarmobile.profile.common.CommonUtils.validateEmail;
+import static com.ztarmobile.profile.common.CommonUtils.validateExpDate;
 import static com.ztarmobile.profile.common.CommonUtils.validatePassword;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_CITY_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.ADDRESS_CITY_MAX_LEN;
@@ -44,6 +45,7 @@ import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.MDN_PHONE_
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_ALIAS_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_ALIAS_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_EXP_EMPTY;
+import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_EXP_FORMAT;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_EXP_MAX_LEN;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_KEY_EMPTY;
 import static com.ztarmobile.profile.exception.GlobalMessageErrorCode.PAYMENT_PROFILE_KEY_MAX_LEN;
@@ -285,9 +287,11 @@ public class UserProfileValidatorService {
         // validation for the expiration date.
         if (!hasText(paymentProfile.getExpirationDate())) {
             throw new ProfileServiceException(PAYMENT_PROFILE_EXP_EMPTY);
-        } else if (paymentProfile.getExpirationDate().length() > PAYMENT_PROFILE_EXP_LEN) {
+        } else if (paymentProfile.getExpirationDate().length() != PAYMENT_PROFILE_EXP_LEN) {
             throw new ProfileServiceException(
                     new HttpMessageErrorCodeResolver(PAYMENT_PROFILE_EXP_MAX_LEN, PAYMENT_PROFILE_EXP_LEN));
+        } else if (!validateExpDate(paymentProfile.getExpirationDate())) {
+            throw new ProfileServiceException(PAYMENT_PROFILE_EXP_FORMAT);
         }
 
         // validation for the profile key.
@@ -297,7 +301,5 @@ public class UserProfileValidatorService {
             throw new ProfileServiceException(
                     new HttpMessageErrorCodeResolver(PAYMENT_PROFILE_KEY_MAX_LEN, PAYMENT_PROFILE_KEY_LEN));
         }
-
     }
-
 }

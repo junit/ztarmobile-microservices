@@ -36,9 +36,9 @@ public class CommonUtils {
     public static final int ADDRESS_STATE_LEN = 2;
     public static final int ADDRESS_ZIP_LEN = 15;
     public static final int ADDRESS_COUNTRY_LEN = 100;
-    
+
     public static final int MDN_PHONE_LEN = 10;
-    
+
     public static final int PAYMENT_PROFILE_ALIAS_LEN = 50;
     public static final int PAYMENT_PROFILE_EXP_LEN = 4;
     public static final int PAYMENT_PROFILE_KEY_LEN = 50;
@@ -56,8 +56,14 @@ public class CommonUtils {
     private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[!@#$%]).{" + PROFILE_PASS_MIN + ","
             + PROFILE_PASS_MAX + "})";
 
+    /**
+     * The expiration date pattern.
+     */
+    private static final String EXP_DATE_PATTERN = "(0[1-9]|1[0-2])[0-9]{2}";
+
     private static Pattern patternEmail = Pattern.compile(EMAIL_PATTERN);
     private static Pattern patternPass = Pattern.compile(PASSWORD_PATTERN);
+    private static Pattern patternExpDate = Pattern.compile(EXP_DATE_PATTERN);
 
     /**
      * Private constructor.
@@ -250,6 +256,19 @@ public class CommonUtils {
      */
     public static boolean validatePassword(final String password) {
         Matcher matcher = patternPass.matcher(password);
+        return matcher.matches();
+    }
+
+    /**
+     * Validates that the expiration date has at least 2 digits as part of the
+     * month and another 2 digits for the year.
+     * 
+     * @param expirationDate
+     *            The expiration date.
+     * @return true, the expiration date matches, false it does not match.
+     */
+    public static boolean validateExpDate(final String expirationDate) {
+        Matcher matcher = patternExpDate.matcher(expirationDate);
         return matcher.matches();
     }
 }

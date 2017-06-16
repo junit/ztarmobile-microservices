@@ -65,9 +65,10 @@ public enum GlobalMessageErrorCode implements HttpMessageErrorCode {
     PAYMENT_PROFILE_ALIAS_EMPTY (93002, "The alias must be provided and must not be empty", BAD_REQUEST),
     PAYMENT_PROFILE_ALIAS_MAX_LEN (93003, "The alias is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
     PAYMENT_PROFILE_EXP_EMPTY (93004, "The expiration date must be provided and must not be empty", BAD_REQUEST),
-    PAYMENT_PROFILE_EXP_MAX_LEN (93005, "The expiration date is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST),
-    PAYMENT_PROFILE_KEY_EMPTY (93006, "The profile key must be provided and must not be empty", BAD_REQUEST),
-    PAYMENT_PROFILE_KEY_MAX_LEN (93007, "The profile key is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST);
+    PAYMENT_PROFILE_EXP_MAX_LEN (93005, "The expiration date must be ? characters long", BAD_REQUEST),
+    PAYMENT_PROFILE_EXP_FORMAT (93006, "The expiration date must have the following format: MMyy", BAD_REQUEST),
+    PAYMENT_PROFILE_KEY_EMPTY (93007, "The profile key must be provided and must not be empty", BAD_REQUEST),
+    PAYMENT_PROFILE_KEY_MAX_LEN (93008, "The profile key is too long, the maximum length must be less or equals than ? characters", BAD_REQUEST);
     
     private int code;
     private String message;
