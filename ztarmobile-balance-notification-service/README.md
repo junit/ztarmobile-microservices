@@ -13,4 +13,4 @@ Next, it’s time to install the Spring Boot CLI, which you do by executing this
 $ sdk install springboot
 $ spring --version
 
-spring init -d=web,thymeleaf,data-rest,actuator,jdbc,mail,mysql,data-rest-hal,data-jpa -g=com.ztarmobile -a=ztarmobile-balance-notification-service -v=1.0.0.RELEASE --package-name=com.ztarmobile.profile -name="Ztar User Profile Management MicroService V1" -description="User Profile Management" -x --force
+spring init -d=web,thymeleaf,data-rest,actuator,jdbc,mail,mysql,data-rest-hal,data-jpa -g=com.ztarmobile -a=ztarmobile-balance-notification-service -v=1.0.0.RELEASE --package-name=com.ztarmobile.profile -name="Ztar Balance Notification MicroService V1" -description="Balance Notification" -x --force

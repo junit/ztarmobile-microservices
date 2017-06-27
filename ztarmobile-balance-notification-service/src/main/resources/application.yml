@@ -1,4 +1,4 @@
-# BANNER
+# BANNER http://patorjk.com
 banner:
   charset: UTF-8
   location: classpath:com/ztarmobile/profile/config/banner.txt
@@ -28,7 +28,7 @@ management:
 
 # EMBEDDED SERVER CONFIGURATION (ServerProperties)
 server:
-  port: 38060
+  port: 38070
 
 spring:
 # IDENTITY (ContextIdApplicationContextInitializer)
