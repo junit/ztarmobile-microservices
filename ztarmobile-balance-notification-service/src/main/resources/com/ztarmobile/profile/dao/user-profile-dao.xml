@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="userProfileDao">
+        <prop key="select.balance-notification">
+            <![CDATA[
+                SELECT up.row_id, up.email, up.first_name, up.last_name, up.password, up.contact_phone_number
+                FROM   user_profiles up
+                WHERE up.row_id = :row_id
+            ]]>
+        </prop>
+        <prop key="select.balance-notification.by.email">
+        <![CDATA[
+                SELECT up.row_id, up.email, up.first_name, up.last_name, up.password, up.contact_phone_number
+                FROM   user_profiles up
+                WHERE up.email = :email
+            ]]>
+        </prop>
+        <prop key="insert.balance-notification">
+            <![CDATA[
+                INSERT INTO user_profiles (first_name, last_name, email, password, contact_phone_number) VALUES(:first_name, :last_name, :email, :password, :contact_phone_number)
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>
