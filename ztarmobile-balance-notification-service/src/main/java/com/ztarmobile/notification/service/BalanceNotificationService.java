@@ -6,6 +6,10 @@
  */
 package com.ztarmobile.notification.service;
 
+import com.ztarmobile.notification.model.NotificationActity;
+
+import java.util.List;
+
 /**
  * Service that handles the user profile management.
  *
@@ -13,6 +17,8 @@ package com.ztarmobile.notification.service;
  * @version %I%, %G%
  * @since 1.0
  */
-public interface UserProfileService {
+public interface BalanceNotificationService {
+
+    List<NotificationActity> getAllAvailableActivity();
 
 }

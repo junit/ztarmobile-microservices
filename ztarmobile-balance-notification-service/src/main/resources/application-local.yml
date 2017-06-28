@@ -1,4 +1,8 @@
-# PROFILE configuration stuff
+# BALANCE NOTIFICATION configuration stuff
+notification:
+  cron:
+    activity: 0 0 0/2 1/1 * ?
+
 # LOGGING configuration stuff
 logging:
   level:
