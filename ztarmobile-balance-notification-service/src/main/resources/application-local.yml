@@ -12,11 +12,18 @@ server:
 
 spring:
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
-  datasource:
+  datasource-cdrs:
     driver-class-name: com.mysql.jdbc.Driver
     password: ztar11
     test-while-idle: false
-    url: jdbc:mysql://localhost:3306/account?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: root
+    validation-query: SELECT 1
+  datasource-ztar:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: ztar11
+    test-while-idle: false
+    url: jdbc:mysql://localhost:3306/ztar?allowMultiQueries=true&autoReconnect=true&useSSL=false
     username: root
     validation-query: SELECT 1
 # Email (MailProperties)

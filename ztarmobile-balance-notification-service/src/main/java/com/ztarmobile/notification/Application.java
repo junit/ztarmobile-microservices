@@ -8,7 +8,7 @@ package com.ztarmobile.notification;
 
 import static com.ztarmobile.notification.common.CommonUtils.createServiceUrl;
 
-import java.util.Map;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.context.annotation.Primary;
 
 /**
  * Main Application.
@@ -31,6 +31,7 @@ import org.springframework.web.context.request.RequestAttributes;
 @SpringBootApplication
 @ImportResource("classpath*:**/*-dao.xml")
 public class Application {
+
     /**
      * Logger for this class.
      */
@@ -82,7 +83,7 @@ public class Application {
 
     /**
      * We just print a reminder message to state that we are using a profile.
-     * 
+     *
      * @return The spring bean.
      */
     @Bean
@@ -101,25 +102,22 @@ public class Application {
     }
 
     @Bean
-    public ErrorAttributes errorAttributes() {
-        return new DefaultErrorAttributes() {
-            @Override
-            public Map<String, Object> getErrorAttributes(RequestAttributes requestAttributes,
-                    boolean includeStackTrace) {
-                Map<String, Object> errorAttributes = super.getErrorAttributes(requestAttributes, includeStackTrace);
-                // Removing those properties that we don't need.
-                errorAttributes.remove("exception");
-                errorAttributes.remove("path");
-                return errorAttributes;
-            }
-        };
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource-cdrs")
+    public DataSource cdrsDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource-ztar")
+    public DataSource ztarDataSource() {
+        return DataSourceBuilder.create().build();
     }
 
     /**
      * Starts the service.
-     * 
-     * @param args
-     *            The command line arguments.
+     *
+     * @param args The command line arguments.
      */
     public static void main(String[] args) {
         // Launch the application
