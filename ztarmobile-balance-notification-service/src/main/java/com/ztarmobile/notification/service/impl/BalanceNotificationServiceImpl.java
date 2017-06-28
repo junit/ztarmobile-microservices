@@ -22,7 +22,15 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
 
     @Override
     public List<NotificationActity> getAllAvailableActivity() {
-        return new ArrayList<NotificationActity>();
+        List<NotificationActity> list = new ArrayList<NotificationActity>();
+        list.add(new NotificationActity());
+        return list;
+    }
+
+    @Override
+    public void performNotification() {
+        System.out.println("sdsddsdsdsdsds++++");
+
     }
 
 }

@@ -21,4 +21,6 @@ public interface BalanceNotificationService {
 
     List<NotificationActity> getAllAvailableActivity();
 
+    void performNotification();
+
 }
