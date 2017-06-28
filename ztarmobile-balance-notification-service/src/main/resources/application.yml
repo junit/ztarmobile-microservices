@@ -34,10 +34,7 @@ spring:
 # IDENTITY (ContextIdApplicationContextInitializer)
   application:
     name: User Profile Microservice v1
-# DATA REST (RepositoryRestProperties)
-  data:
-    rest:
-      base-path: /api/v1/profile
+
 # PROJECT INFORMATION (ProjectInfoProperties)
   info:
     build:

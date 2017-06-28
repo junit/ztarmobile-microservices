@@ -70,11 +70,6 @@ public class Application {
     private String version;
 
     /**
-     * Based path.
-     */
-    @Value("${spring.data.rest.base-path}")
-    private String basePath;
-    /**
      * The server address.
      */
     @Value("${server.address}")
@@ -93,7 +88,7 @@ public class Application {
     @Bean
     CommandLineRunner values() {
         return args -> {
-            String url = createServiceUrl(serverAddress, serverPort, basePath);
+            String url = createServiceUrl(serverAddress, serverPort);
 
             log.debug("*** [" + applicationName + "] Running under profile: " + activeProfile + " ***");
             log.debug("Build Info:");

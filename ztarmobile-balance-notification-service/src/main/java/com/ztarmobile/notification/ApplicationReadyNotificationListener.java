@@ -72,11 +72,6 @@ public class ApplicationReadyNotificationListener implements ApplicationListener
     private boolean notify;
 
     /**
-     * Based path.
-     */
-    @Value("${spring.data.rest.base-path}")
-    private String basePath;
-    /**
      * The server address, by default is: localhost.
      */
     @Value("${server.address:localhost}")
@@ -106,7 +101,7 @@ public class ApplicationReadyNotificationListener implements ApplicationListener
             applicationNotif.setDescription(description);
             applicationNotif.setVersion(version);
             applicationNotif.setName(name);
-            applicationNotif.setUrl(createServiceUrl(serverAddress, serverPort, basePath));
+            applicationNotif.setUrl(createServiceUrl(serverAddress, serverPort));
 
             applicationStateMailSender.sendNotificationAtStartup(applicationNotif);
         } else {

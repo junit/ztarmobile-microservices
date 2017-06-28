@@ -202,12 +202,10 @@ public class CommonUtils {
      *            The server address.
      * @param serverPort
      *            The server port.
-     * @param basePath
-     *            The base path of the service.
      * @return The URL of this service.
      */
-    public static String createServiceUrl(String serverAddress, String serverPort, String basePath) {
-        return "http://" + serverAddress + ":" + serverPort + basePath;
+    public static String createServiceUrl(String serverAddress, String serverPort) {
+        return "http://" + serverAddress + ":" + serverPort;
     }
 
     /**
