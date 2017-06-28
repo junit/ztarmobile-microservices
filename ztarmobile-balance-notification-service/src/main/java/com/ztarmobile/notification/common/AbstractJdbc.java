@@ -9,6 +9,7 @@ package com.ztarmobile.notification.common;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /**
@@ -19,28 +20,50 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
  * @since 03/01/17
  */
 public abstract class AbstractJdbc {
+
     /**
      * The jdbcTemplate.
      */
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplateCdrs;
+    private NamedParameterJdbcTemplate jdbcTemplateZtar;
 
     /**
      * Injects the dataSource.
-     * 
-     * @param dataSource
-     *            The dataSource.
+     *
+     * @param dataSource The dataSource.
      */
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    @Qualifier(value = "cdrsDataSource")
+    public void setCdrsDataSource(DataSource dataSource) {
+        this.jdbcTemplateCdrs = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    /**
+     * Injects the dataSource.
+     *
+     * @param dataSource The dataSource.
+     */
+    @Autowired
+    @Qualifier(value = "ztarDataSource")
+    public void setZtarDataSource(DataSource dataSource) {
+        this.jdbcTemplateZtar = new NamedParameterJdbcTemplate(dataSource);
     }
 
     /**
      * Gets the jdbcTemplate object.
-     * 
+     *
      * @return The JDBC template object.
      */
-    protected NamedParameterJdbcTemplate getJdbc() {
-        return jdbcTemplate;
+    protected NamedParameterJdbcTemplate getCdrsJdbc() {
+        return jdbcTemplateCdrs;
+    }
+
+    /**
+     * Gets the jdbcTemplate object.
+     *
+     * @return The JDBC template object.
+     */
+    protected NamedParameterJdbcTemplate getZtarJdbc() {
+        return jdbcTemplateZtar;
     }
 }
