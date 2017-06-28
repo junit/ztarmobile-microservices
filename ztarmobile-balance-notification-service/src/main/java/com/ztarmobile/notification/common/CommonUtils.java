@@ -9,9 +9,6 @@ package com.ztarmobile.notification.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Utility to handle some common operations.
  *
@@ -19,49 +16,6 @@ import java.util.regex.Pattern;
  * @since 03/01/17
  */
 public class CommonUtils {
-
-    public static final int PROFILE_FIRST_NAME_LEN = 50;
-    public static final int PROFILE_LAST_NAME_LEN = 50;
-    public static final int PROFILE_EMAIL_LEN = 50;
-    public static final int PROFILE_PASS_MIN = 8;
-    public static final int PROFILE_PASS_MAX = 20;
-
-    public static final int ADDRESS_NAME_LEN = 100;
-    public static final int ADDRESS_LINE1_LEN = 100;
-    public static final int ADDRESS_LINE2_LEN = 100;
-    public static final int ADDRESS_LINE3_LEN = 100;
-    public static final int ADDRESS_CITY_LEN = 100;
-    public static final int ADDRESS_STATE_LEN = 2;
-    public static final int ADDRESS_ZIP_LEN = 15;
-    public static final int ADDRESS_COUNTRY_LEN = 100;
-
-    public static final int MDN_PHONE_LEN = 10;
-
-    public static final int PAYMENT_PROFILE_ALIAS_LEN = 50;
-    public static final int PAYMENT_PROFILE_EXP_LEN = 4;
-    public static final int PAYMENT_PROFILE_KEY_LEN = 50;
-
-    public static final String SLASH = "/";
-    /**
-     * The email pattern.
-     */
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
-    /**
-     * The password pattern.
-     */
-    private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[!@#$%]).{" + PROFILE_PASS_MIN + ","
-            + PROFILE_PASS_MAX + "})";
-
-    /**
-     * The expiration date pattern.
-     */
-    private static final String EXP_DATE_PATTERN = "(0[1-9]|1[0-2])[0-9]{2}";
-
-    private static Pattern patternEmail = Pattern.compile(EMAIL_PATTERN);
-    private static Pattern patternPass = Pattern.compile(PASSWORD_PATTERN);
-    private static Pattern patternExpDate = Pattern.compile(EXP_DATE_PATTERN);
 
     /**
      * Private constructor.
@@ -206,43 +160,5 @@ public class CommonUtils {
      */
     public static String createServiceUrl(String serverAddress, String serverPort) {
         return "http://" + serverAddress + ":" + serverPort;
-    }
-
-    /**
-     * Validate hex with regular expression.
-     *
-     * @param hex
-     *            hex for validation
-     * @return true valid hex, false invalid hex
-     */
-    public static boolean validateEmail(final String hex) {
-        Matcher matcher = patternEmail.matcher(hex);
-        return matcher.matches();
-    }
-
-    /**
-     * Validates the password by having at least one digit and a special
-     * character.
-     * 
-     * @param password
-     *            The password.
-     * @return true, the password matches, false it does not match.
-     */
-    public static boolean validatePassword(final String password) {
-        Matcher matcher = patternPass.matcher(password);
-        return matcher.matches();
-    }
-
-    /**
-     * Validates that the expiration date has at least 2 digits as part of the
-     * month and another 2 digits for the year.
-     * 
-     * @param expirationDate
-     *            The expiration date.
-     * @return true, the expiration date matches, false it does not match.
-     */
-    public static boolean validateExpDate(final String expirationDate) {
-        Matcher matcher = patternExpDate.matcher(expirationDate);
-        return matcher.matches();
     }
 }

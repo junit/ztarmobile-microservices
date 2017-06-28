@@ -19,7 +19,7 @@
                 FROM payment_profiles WHERE row_id = :row_id 
             ]]>
         </prop>
-        <prop key="select.payment-profile.with.balance-notification">
+        <prop key="select.payment-profile.with.user-profile">
             <![CDATA[
                 SELECT pp.row_id, pp.alias, pp.is_primary, pp.exp_date, pp.profile_key, up.row_id as user_profile_id
                 FROM payment_profiles pp, user_profiles up
@@ -27,7 +27,7 @@
                 AND pp.row_id = :row_id 
             ]]>
         </prop>
-        <prop key="select.payment-profile.by.balance-notification">
+        <prop key="select.payment-profile.by.user-profile">
             <![CDATA[
                 SELECT pp.row_id, pp.alias, pp.exp_date, pp.is_primary, pp.profile_key, pp.address_id 
                 FROM payment_profiles pp

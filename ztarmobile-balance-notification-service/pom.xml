@@ -31,6 +31,7 @@
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
         <findbugs-maven-plugin.version>3.0.4</findbugs-maven-plugin.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
+        <ztar-utils.version>1.0-SNAPSHOT</ztar-utils.version>
         
         <javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
     </properties>
@@ -67,6 +68,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.ztarmobile</groupId>
+            <artifactId>ztar-utils</artifactId>
+            <version>${ztar-utils.version}</version>
         </dependency>
         
         <!-- This dependency was added because of the issue with the @Transactional annotation -->
