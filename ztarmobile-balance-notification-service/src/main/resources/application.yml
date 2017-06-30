@@ -1,7 +1,7 @@
 # BANNER http://patorjk.com
 banner:
   charset: UTF-8
-  location: classpath:com/ztarmobile/profile/config/banner.txt
+  location: classpath:com/ztarmobile/notification/config/banner.txt
   
 # ENDPOINTS (AbstractEndpoint subclasses) curl -X POST localhost:${server.port}/shutdown
 endpoints:
@@ -53,5 +53,5 @@ spring:
     content-type: text/html
     encoding: UTF-8
     mode: HTML5
-    prefix: classpath:/com/ztarmobile/profile/templates/
+    prefix: classpath:/com/ztarmobile/notification/templates/
     suffix: .html

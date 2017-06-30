@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, Jun 2017.
  */
-package com.ztarmobile.notification.model;
+package com.ztarmobile.notification.model.ztar;
 
 import java.util.Date;
 import java.util.List;

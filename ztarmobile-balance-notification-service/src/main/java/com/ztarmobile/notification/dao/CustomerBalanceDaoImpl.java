@@ -49,9 +49,28 @@ public class CustomerBalanceDaoImpl extends AbstractJdbc implements CustomerBala
         log.debug("Updating customer balances...");
         String sql = sqlStatements.getProperty("insert-update.customer-balances");
 
-        Map<String, String> params = new HashMap<>();
-        params.put("data", customerBalance.getData());
+        String bundleId = customerBalance.getBundleRowId() == null ? null
+                : String.valueOf(customerBalance.getBundleRowId());
 
-        this.getZtarJdbc().update(sql, new MapSqlParameterSource(params));
+        Map<String, String> params = new HashMap<>();
+        params.put("mdn", customerBalance.getMdn());
+        params.put("plan_billing_id", bundleId);
+        params.put("data", customerBalance.getData());
+        params.put("low_data", customerBalance.getLowData());
+        params.put("high_data", customerBalance.getHighData());
+        params.put("voice", customerBalance.getVoice());
+        params.put("sms", customerBalance.getSms());
+        params.put("mms", customerBalance.getMms());
+        params.put("percentage_data", String.valueOf(customerBalance.getPercentageData()));
+        params.put("percentage_voice", String.valueOf(customerBalance.getPercentageVoice()));
+        params.put("percentage_sms", String.valueOf(customerBalance.getPercentageSms()));
+        params.put("notified_data", customerBalance.isNotifiedData() ? "1" : "0");
+        params.put("notified_voice", customerBalance.isNotifiedVoice() ? "1" : "0");
+        params.put("notified_sms", customerBalance.isNotifiedSms() ? "1" : "0");
+
+        params.put("status", customerBalance.getStatus().getValue());
+        params.put("status_message", customerBalance.getStatusMessage());
+
+        checkAffected(this.getZtarJdbc().update(sql, new MapSqlParameterSource(params)));
     }
 }

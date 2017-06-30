@@ -2,6 +2,12 @@
 notification:
   cron:
     activity: 0 0 0/2 1/1 * ?
+  ztarmobile:
+    search:
+      provider-uri: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm/account/search/provider
+      ztar-uri: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm/account/search/ztar
+    sender:
+      sms-uri: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm/notification/sms
 
 # LOGGING configuration stuff
 logging:

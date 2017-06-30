@@ -4,7 +4,7 @@
  * Proprietary and confidential
  * Written by Armando Rivas <arivas@ztarmobile.com>, Jun 2017.
  */
-package com.ztarmobile.notification.model;
+package com.ztarmobile.notification.model.ztar;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,6 +22,10 @@ public class DedicatedAccount implements Serializable {
     public static final int ACCOUNT_ID_MMS = 3;
     public static final int ACCOUNT_ID_DATA = 4;
     public static final int ACCOUNT_ID_US_IDD_PREFERRED = 5;
+    public static final int ACCOUNT_ID_HIGHDATA = 6;
+    public static final int ACCOUNT_ID_LOWDATA = 7;
+    public static final int ACCOUNT_ID_INTLSMS = 8;
+    public static final int ACCOUNT_ID_INTLVOICE = 9;
 
     /**
      * the serial number.

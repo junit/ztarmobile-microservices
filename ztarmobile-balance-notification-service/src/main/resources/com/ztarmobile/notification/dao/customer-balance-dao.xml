@@ -9,8 +9,8 @@
     <util:properties id="customerBalanceDao">
         <prop key="insert-update.customer-balances">
             <![CDATA[
-                INSERT INTO us_customer_balances (data) 
-                VALUES (:data)
+                INSERT INTO us_customer_balances (mdn, plan_billing_id, data, low_data, high_data, voice, sms, mms, percentage_data, percentage_voice, percentage_sms, notified_data, notified_voice, notified_sms, status, status_message) 
+                VALUES (:mdn, :plan_billing_id, :data, :low_data, :high_data, :voice, :sms, :mms, :percentage_data, :percentage_voice, :percentage_sms, :notified_data, :notified_voice, notified_sms, :status, :status_message)
             ]]>
         </prop>
     </util:properties>

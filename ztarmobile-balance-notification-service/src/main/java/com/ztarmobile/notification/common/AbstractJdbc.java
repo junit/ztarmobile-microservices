@@ -30,7 +30,8 @@ public abstract class AbstractJdbc {
     /**
      * Injects the dataSource.
      *
-     * @param dataSource The dataSource.
+     * @param dataSource
+     *            The dataSource.
      */
     @Autowired
     @Qualifier(value = "cdrsDataSource")
@@ -41,7 +42,8 @@ public abstract class AbstractJdbc {
     /**
      * Injects the dataSource.
      *
-     * @param dataSource The dataSource.
+     * @param dataSource
+     *            The dataSource.
      */
     @Autowired
     @Qualifier(value = "ztarDataSource")
@@ -65,5 +67,17 @@ public abstract class AbstractJdbc {
      */
     protected NamedParameterJdbcTemplate getZtarJdbc() {
         return jdbcTemplateZtar;
+    }
+
+    /**
+     * Check the number of records affected.
+     * 
+     * @param affected
+     *            The affected records.
+     */
+    protected void checkAffected(int affected) {
+        if (affected != 1) {
+            throw new IllegalStateException("More than one record was affected");
+        }
     }
 }
