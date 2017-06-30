@@ -7,17 +7,20 @@
 package com.ztarmobile.notification.exception;
 
 /**
- * This Adds the HTTP status code in the message.
+ * Exception thown when the value of the balance cannot be calculated.
  *
  * @author armandorivas
  * @version %I%, %G%
  * @since 1.0
  */
-public interface HttpMessageErrorCode extends MessageErrorCode {
+public class BalanceValueException extends ServiceException {
+
     /**
-     * Gets the HTTP code related to the message.
-     *
-     * @return The HTTP code.
+     * The serial exception.
      */
-    int getHttpCode();
+    private static final long serialVersionUID = 4082594411545454679L;
+
+    public BalanceValueException(String msg) {
+        super(msg);
+    }
 }

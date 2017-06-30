@@ -6,7 +6,6 @@
  */
 package com.ztarmobile.notification.jms;
 
-import com.ztarmobile.notification.model.NotificationActity;
 import com.ztarmobile.notification.service.BalanceNotificationService;
 
 import org.slf4j.Logger;
@@ -47,12 +46,12 @@ public class NotificationReceiver {
      *            The request.
      */
     @JmsListener(destination = NOTIFICATION_REQ_QUEUE, containerFactory = "myFactory")
-    public void receiveMessage(NotificationActity request) {
-        log.debug("Receiving request: " + request);
+    public void receiveMessage(String mdn) {
+        log.debug("=====| Receiving request: " + mdn);
 
         try {
             // performs the notification stuff.
-            balanceNotificationService.performNotification();
+            balanceNotificationService.performNotification(mdn);
         } catch (Throwable ex) {
             log.debug("Request did not finish correctly :( ");
             // we log the error...

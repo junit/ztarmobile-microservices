@@ -71,6 +71,23 @@ public class CustomerBalanceDaoImpl extends AbstractJdbc implements CustomerBala
         params.put("status", customerBalance.getStatus().getValue());
         params.put("status_message", customerBalance.getStatusMessage());
 
-        checkAffected(this.getZtarJdbc().update(sql, new MapSqlParameterSource(params)));
+        this.getZtarJdbc().update(sql, new MapSqlParameterSource(params));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int countCustomerBalance(String mdn, CustomerBalance customerBalance) {
+        String sql = sqlStatements.getProperty("count.customer-balances");
+
+        String bundleId = customerBalance.getBundleRowId() == null ? null
+                : String.valueOf(customerBalance.getBundleRowId());
+
+        Map<String, String> params = new HashMap<>();
+        params.put("mdn", customerBalance.getMdn());
+        params.put("plan_billing_id", bundleId);
+
+        return this.getZtarJdbc().queryForObject(sql, new MapSqlParameterSource(params), Integer.class);
     }
 }

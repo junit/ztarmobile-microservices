@@ -6,21 +6,29 @@
  */
 package com.ztarmobile.notification.service;
 
-import com.ztarmobile.notification.model.NotificationActity;
-
-import java.util.List;
+import java.util.Set;
 
 /**
- * Service that handles the user profile management.
+ * Service that handles the balance notification.
  *
  * @author armandorivas
  * @version %I%, %G%
  * @since 1.0
  */
 public interface BalanceNotificationService {
+    /**
+     * Gets all MDN with recent activity.
+     * 
+     * @return All the MDN's
+     */
+    Set<String> getAllAvailableActivity();
 
-    List<NotificationActity> getAllAvailableActivity();
-
-    void performNotification();
+    /**
+     * Performs the notification to the customer.
+     * 
+     * @param mdn
+     *            The MDN to be notified.
+     */
+    void performNotification(String mdn);
 
 }

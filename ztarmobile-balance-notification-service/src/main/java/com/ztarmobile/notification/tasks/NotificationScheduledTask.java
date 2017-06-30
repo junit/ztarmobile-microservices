@@ -5,7 +5,6 @@
  */
 package com.ztarmobile.notification.tasks;
 
-import com.ztarmobile.notification.model.NotificationActity;
 import com.ztarmobile.notification.service.BalanceNotificationService;
 
 import org.slf4j.Logger;
@@ -50,11 +49,11 @@ public class NotificationScheduledTask {
     public void scheduleBalanceNotification() {
         log.debug("Requesting balance notification...");
 
-        for (NotificationActity notificationActity : balanceNotificationService.getAllAvailableActivity()) {
-            log.debug("Processing: " + notificationActity);
+        for (String mdn : balanceNotificationService.getAllAvailableActivity()) {
+            log.debug("Processing: " + mdn);
 
             // send the request to the queue
-            jmsTemplate.convertAndSend(NOTIFICATION_REQ_QUEUE, notificationActity);
+            jmsTemplate.convertAndSend(NOTIFICATION_REQ_QUEUE, mdn);
         }
     }
 }

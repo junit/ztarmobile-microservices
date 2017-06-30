@@ -23,4 +23,15 @@ public interface CustomerBalanceDao {
      *            The customer balance.
      */
     void updateBalances(CustomerBalance customerBalance);
+
+    /**
+     * Counts the total of records given an MDN and the customer balance info.
+     * 
+     * @param mdn
+     *            The MDN.
+     * @param customerBalance
+     *            The customer balance.
+     * @return Total of records found.
+     */
+    int countCustomerBalance(String mdn, CustomerBalance customerBalance);
 }

@@ -6,6 +6,8 @@
  */
 package com.ztarmobile.notification.model;
 
+import java.util.Date;
+
 /**
  * Value object.
  *
@@ -13,38 +15,46 @@ package com.ztarmobile.notification.model;
  * @since 03/10/17
  */
 public class NotificationActity {
-    private long rowId;
-    private String product;
-    
+    private String mdn;
+    private Date fileDate;
+
     /**
-     * @return the rowId
+     * @return the mdn
      */
-    public long getRowId() {
-        return rowId;
+    public String getMdn() {
+        return mdn;
     }
 
     /**
-     * @param rowId
-     *            the rowId to set
+     * @param mdn
+     *            the mdn to set
      */
-    public void setRowId(long rowId) {
-        this.rowId = rowId;
+    public void setMdn(String mdn) {
+        this.mdn = mdn;
     }
 
     /**
-     * @return the product
+     * @return the fileDate
      */
-    public String getProduct() {
-        return product;
+    public Date getFileDate() {
+        return fileDate;
     }
 
     /**
-     * @param product
-     *            the product to set
+     * @param fileDate
+     *            the fileDate to set
      */
-    public void setProduct(String product) {
-        this.product = product;
+    public void setFileDate(Date fileDate) {
+        this.fileDate = fileDate;
     }
 
-   
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "NotificationActity [mdn=" + mdn + ", fileDate=" + fileDate + "]";
+    }
 }

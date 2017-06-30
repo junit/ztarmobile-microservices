@@ -22,7 +22,9 @@ CREATE TABLE `us_customer_balances` (
   `status` char(1) NOT NULL DEFAULT 'S',
   `status_message` text,
   PRIMARY KEY (`row_id`),
-  INDEX `mdn_index` (`mdn`)
+  UNIQUE INDEX `mdn_index` (`mdn` ASC),
+  KEY `fk_us_c_b-us_rate_plan_billing_params-plan_billing_id` (`plan_billing_id`),
+  CONSTRAINT `fk_us_c_b-us_rate_plan_billing_params-plan_billing_id` FOREIGN KEY (`plan_billing_id`) REFERENCES `us_rate_plan_billing_params` (`row_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Adding more columns to support the SMS configuration.
@@ -34,4 +36,6 @@ ADD COLUMN `sms_low_balance_voice` INT(11) NOT NULL DEFAULT '0' COMMENT 'Referen
 ADD COLUMN `sms_low_balance_sms` INT(11) NOT NULL DEFAULT '0' COMMENT 'Reference from the sms_parameters' AFTER `sms_low_balance_voice`;
 
 -- Adding SMS parameters
-INSERT INTO `sms_parameters` (`row_id`, `product`, `description`, `sms`) VALUES (16, 'GOOD2GOUS', 'Low Balance', 'Your remaining Data is running low. You have ${data} MB remaining. Need More data this month? Add-ons are available at freeupmobile.com');
+INSERT INTO `sms_parameters` (`row_id`, `product`, `description`, `sms`) VALUES (16, 'FREEUP_ATT', 'Low Balance', 'Your remaining Data is running low. You have ${data} MB remaining. Need More data this month? Add-ons are available at freeupmobile.com');
+INSERT INTO `sms_parameters` (`row_id`, `product`, `description`, `sms`) VALUES (17, 'FREEUP_ATT', 'Low Balance', 'Your Minutes are running low. You have ${minutes} minutes remaining. Need More Minutes this month? Add-ons are available at freeupmobile.com');
+INSERT INTO `sms_parameters` (`row_id`, `product`, `description`, `sms`) VALUES (18, 'FREEUP_ATT', 'Low Balance', 'Your Text messages are running low. You have ${text} Texts remaining. Need More Texts this month? Add-ons are available at freeupmobile.com');

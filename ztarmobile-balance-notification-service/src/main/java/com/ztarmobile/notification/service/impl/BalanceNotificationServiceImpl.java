@@ -13,6 +13,8 @@ import static com.ztarmobile.notification.model.Bucket.VOICE;
 
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.ztarmobile.notification.dao.CustomerBalanceDao;
+import com.ztarmobile.notification.dao.CustomerCdrDao;
+import com.ztarmobile.notification.exception.BalanceValueException;
 import com.ztarmobile.notification.model.Bucket;
 import com.ztarmobile.notification.model.CustomerBalance;
 import com.ztarmobile.notification.model.NotificationActity;
@@ -25,8 +27,9 @@ import com.ztarmobile.utils.RestClientUtils;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -77,13 +80,35 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
     private CustomerBalanceDao customerBalanceDao;
 
     /**
+     * Customer Balance DAO.
+     */
+    @Autowired
+    private CustomerCdrDao customerCdrDao;
+
+    /**
      * {@inheritDoc}
      */
     @Override
-    public List<NotificationActity> getAllAvailableActivity() {
-        List<NotificationActity> list = new ArrayList<NotificationActity>();
-        list.add(new NotificationActity());
-        return list;
+    public Set<String> getAllAvailableActivity() {
+        log.debug("Retrieving latest activity...");
+
+        Set<String> allMdns = new HashSet<>();
+        List<NotificationActity> air = customerCdrDao.fetchAllMdnActivityAir();
+        log.debug("Records retrieved from air: " + air.size());
+        List<NotificationActity> data = customerCdrDao.fetchAllMdnActivityData();
+        log.debug("Records retrieved from data: " + data.size());
+
+        for (NotificationActity actity : air) {
+            allMdns.add(actity.getMdn());
+        }
+        log.debug("Total Records with air: " + allMdns.size());
+
+        for (NotificationActity actity : data) {
+            allMdns.add(actity.getMdn());
+        }
+        log.debug("Total Records with data: " + allMdns.size());
+
+        return allMdns;
     }
 
     /**
@@ -91,65 +116,65 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
      */
     @Override
     @Transactional
-    public void performNotification() {
-        log.debug(">> Starting the low balance notification process...");
-
+    public void performNotification(String mdn) {
+        log.debug(">> Starting the low balance notification process [" + mdn + "]...");
         AccountStatus accountStatus = null;
         AccountInfo accountInfo = null;
 
-        String mdn = "2142443284";
         try {
-            // check the balances in Ericsson
-            accountStatus = getAccountStatusFromProvider(mdn, "US");
+            // check the Ztar account
             accountInfo = getAccountStatusFromZtar(mdn);
+            validateInput(accountInfo, "Account Info is not valid");
+            int bundleId = accountInfo.getBundleRowId();
+            Integer threshold = accountInfo.getThreshold();
 
-            double dataPerc = 0, voicePerc = 0, smsPerc = 0;
-            CustomerBalance customerBalance = getCustomerBalance(mdn, accountStatus, accountInfo);
-            if (customerBalance != null) {
-                dataPerc = calculatePercentagePerBucket(DATA, customerBalance, accountInfo);
-                voicePerc = calculatePercentagePerBucket(VOICE, customerBalance, accountInfo);
-                smsPerc = calculatePercentagePerBucket(SMS, customerBalance, accountInfo);
+            if (threshold != null && threshold > 0 && threshold <= 100) {
+                // check the balances in Ericsson
+                accountStatus = getAccountStatusFromProvider(mdn, "US");
 
-                customerBalance.setPercentageData(dataPerc);
-                customerBalance.setPercentageVoice(voicePerc);
-                customerBalance.setPercentageSms(smsPerc);
+                double dataPerc = 0, voicePerc = 0, smsPerc = 0;
+                CustomerBalance customerBalance = getCustomerBalance(mdn, accountStatus, accountInfo);
+                if (customerBalance != null) {
+                    dataPerc = calculatePercentagePerBucket(DATA, customerBalance, accountInfo);
+                    voicePerc = calculatePercentagePerBucket(VOICE, customerBalance, accountInfo);
+                    smsPerc = calculatePercentagePerBucket(SMS, customerBalance, accountInfo);
 
-                Integer threshold = accountInfo.getThreshold();
-                if (threshold != null && threshold > 0 && threshold <= 100) {
+                    customerBalance.setPercentageData(dataPerc);
+                    customerBalance.setPercentageVoice(voicePerc);
+                    customerBalance.setPercentageSms(smsPerc);
+
                     boolean data = false, voice = false, sms = false;
                     String ratePlan = accountInfo.getPricePlan();
                     String product = accountInfo.getProduct();
 
                     log.debug("threshold: " + threshold + ", ratePlan: " + ratePlan + ", data: " + dataPerc
-                            + ", voice: " + voicePerc + ", sms: " + smsPerc);
+                            + "%, voice: " + voicePerc + "%, sms: " + smsPerc + "%");
                     // the following condition determines whether the customer
                     // will be notified by SMS or not
                     if (dataPerc > threshold) {
-                        // send SMS notification for the data.
+                        // send SMS notification for data.
                         data = sendSMS(mdn, product, ratePlan, customerBalance, DATA);
                     }
                     if (voicePerc > threshold) {
-                        // send SMS notification for the voice.
+                        // send SMS notification for voice.
                         voice = sendSMS(mdn, product, ratePlan, customerBalance, VOICE);
                     }
                     if (smsPerc > threshold) {
-                        // send SMS notification for the SMS.
+                        // send SMS notification for SMS.
                         sms = sendSMS(mdn, product, ratePlan, customerBalance, SMS);
                     }
 
                     customerBalance.setNotifiedData(data);
                     customerBalance.setNotifiedVoice(voice);
                     customerBalance.setNotifiedSms(sms);
-
                 } else {
-                    log.debug("No notification will be sent, threshold = " + threshold);
+                    log.debug("No customer balance was found for: " + mdn);
                 }
+                // Saves the status into our tables.
+                insertOrUpdateBalanceNotification(mdn, customerBalance);
             } else {
-                log.debug("No customer balance was found for: " + mdn);
+                log.debug("No notification will be sent, threshold = " + threshold + ", bundleId: " + bundleId);
             }
-
-            // Saves the status into our tables.
-            updateBalanceNotification(mdn, customerBalance);
         } catch (Throwable ex) {
             log.error(ex.toString());
             // we handle the error...
@@ -181,28 +206,41 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
      */
     private boolean sendSMS(String mdn, String product, String ratePlan, CustomerBalance myBalance, Bucket bucket)
             throws Exception {
-        log.debug("Trying to send SMS to MDN: " + mdn + " - " + bucket);
-        boolean sent = false;
-        switch (bucket) {
-        case DATA:
-            int myTotalData = getEffeBucketValue(myBalance.getData()) + getEffeBucketValue(myBalance.getHighData())
-                    + getEffeBucketValue(myBalance.getLowData());
-            // converts the usage in MB
-            double db = Double.valueOf(myTotalData) / 1024;
-            BigDecimal result = new BigDecimal(db);
-            result = result.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-            sent = sendNotificationSms(mdn, product, ratePlan, "data", String.valueOf(result.doubleValue()));
-            break;
-        case VOICE:
-            sent = sendNotificationSms(mdn, product, ratePlan, "voice", myBalance.getVoice());
-            break;
-        case SMS:
-            sent = sendNotificationSms(mdn, product, ratePlan, "sms", myBalance.getSms());
-            break;
-        }
-        if (!sent) {
-            log.debug("*** Unable to Send SMS to: " + mdn + "***");
+        boolean sent = false;
+        int total = customerBalanceDao.countCustomerBalance(mdn, myBalance);
+        if (total == 0) {
+            log.debug("Trying to send SMS to MDN: " + mdn + " - " + bucket);
+
+            try {
+                switch (bucket) {
+                case DATA:
+                    int myTotalData = getEffeBucketValue(myBalance.getData())
+                            + getEffeBucketValue(myBalance.getHighData()) + getEffeBucketValue(myBalance.getLowData());
+                    // converts the usage in MB
+                    double db = Double.valueOf(myTotalData) / 1024;
+                    BigDecimal result = new BigDecimal(db);
+                    result = result.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                    sent = sendNotificationSms(mdn, product, ratePlan, "data", String.valueOf(result.doubleValue()));
+                    break;
+                case VOICE:
+                    sent = sendNotificationSms(mdn, product, ratePlan, "voice", myBalance.getVoice());
+                    break;
+                case SMS:
+                    sent = sendNotificationSms(mdn, product, ratePlan, "sms", myBalance.getSms());
+                    break;
+                }
+            } catch (BalanceValueException ex) {
+                log.debug("No SMS was sent, there was a problem with the calculation: " + mdn);
+            }
+            if (!sent) {
+                log.debug("*** Unable to Send SMS to: " + mdn + "***");
+            } else {
+                log.debug("SMS sent to: " + mdn + " service: " + bucket);
+            }
+        } else {
+            log.debug("Skipping SMS for MDN: " + mdn + " -> " + bucket);
         }
         return sent;
     }
@@ -217,22 +255,26 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
      * @return The percentage returned.
      */
     private double calculatePercentagePerBucket(Bucket bucket, CustomerBalance myBalance, AccountInfo accountInfo) {
-        switch (bucket) {
-        case DATA:
-            int myTotalData = getEffeBucketValue(myBalance.getData()) + getEffeBucketValue(myBalance.getHighData())
-                    + getEffeBucketValue(myBalance.getLowData());
-            int allocData = Integer.parseInt(accountInfo.getAllocData());
-            // converts from MB to KB...
-            allocData = allocData * 1024;
-            return calculatePercentage(myTotalData, allocData);
-        case VOICE:
-            int myTotalVoice = getEffeBucketValue(myBalance.getVoice());
-            int allocVoice = Integer.parseInt(accountInfo.getAllocVoice());
-            return calculatePercentage(myTotalVoice, allocVoice);
-        case SMS:
-            int myTotalSms = getEffeBucketValue(myBalance.getSms());
-            int allocSms = Integer.parseInt(accountInfo.getAllocText());
-            return calculatePercentage(myTotalSms, allocSms);
+        try {
+            switch (bucket) {
+            case DATA:
+                int myTotalData = getEffeBucketValue(myBalance.getData()) + getEffeBucketValue(myBalance.getHighData())
+                        + getEffeBucketValue(myBalance.getLowData());
+                int allocData = Integer.parseInt(accountInfo.getAllocData());
+                // converts from MB to KB...
+                allocData = allocData * 1024;
+                return calculatePercentage(myTotalData, allocData);
+            case VOICE:
+                int myTotalVoice = getEffeBucketValue(myBalance.getVoice());
+                int allocVoice = Integer.parseInt(accountInfo.getAllocVoice());
+                return calculatePercentage(myTotalVoice, allocVoice);
+            case SMS:
+                int myTotalSms = getEffeBucketValue(myBalance.getSms());
+                int allocSms = Integer.parseInt(accountInfo.getAllocText());
+                return calculatePercentage(myTotalSms, allocSms);
+            }
+        } catch (BalanceValueException ex) {
+            log.debug("Imposible to calculate the percentage, defaulting to 0 then - " + bucket);
         }
         return 0;
     }
@@ -314,13 +356,14 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
      *            Representation of data.
      * @return The data in a number.
      */
-    private int getEffeBucketValue(String value) {
+    private int getEffeBucketValue(String value) throws BalanceValueException {
         String valueString = value == null ? "0" : value;
         int valueInt = 0;
         try {
             valueInt = Integer.parseInt(valueString);
         } catch (NumberFormatException e) {
             log.warn("Bucket value is not a number: " + e.getMessage());
+            throw new BalanceValueException(e.getMessage());
         }
         return valueInt;
     }
@@ -333,7 +376,7 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
      * @param customerBalance
      *            The customer balance.
      */
-    private void updateBalanceNotification(final String mdn, final CustomerBalance customerBalance) {
+    private void insertOrUpdateBalanceNotification(final String mdn, final CustomerBalance customerBalance) {
         log.debug("updating customer balance table...");
         if (customerBalance != null) {
             // updates the balances.

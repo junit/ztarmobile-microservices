@@ -11,8 +11,17 @@
             <![CDATA[
                 INSERT INTO us_customer_balances (mdn, plan_billing_id, data, low_data, high_data, voice, sms, mms, percentage_data, percentage_voice, percentage_sms, notified_data, notified_voice, notified_sms, status, status_message) 
                 VALUES (:mdn, :plan_billing_id, :data, :low_data, :high_data, :voice, :sms, :mms, :percentage_data, :percentage_voice, :percentage_sms, :notified_data, :notified_voice, notified_sms, :status, :status_message)
+                ON DUPLICATE KEY UPDATE data = :data, low_data = :low_data, high_data = :high_data, voice = :voice, sms = :sms, mms = :mms, percentage_data = :percentage_data, 
+                percentage_voice = :percentage_voice, percentage_sms = :percentage_sms, notified_data = :notified_data, notified_voice = :notified_voice, notified_sms = :notified_sms, 
+                status = :status, status_message = :status_message, update_date = NOW()
             ]]>
         </prop>
+        <prop key="count.customer-balances">
+            <![CDATA[
+                SELECT COUNT(*) FROM us_customer_balances WHERE mdn = :mdn AND plan_billing_id = :plan_billing_id
+            ]]>
+        </prop>
+        
     </util:properties>
     
 </beans>

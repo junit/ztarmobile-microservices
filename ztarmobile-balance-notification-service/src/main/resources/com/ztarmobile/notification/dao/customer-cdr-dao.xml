@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="customerCdrDao">
+        <prop key="select.activity-air">
+            <![CDATA[
+                SELECT DISTINCT subscriber_msisdn as mdn, file_date from us_att_air_record WHERE file_date >= date_add(date(now()), interval -1 day) ORDER BY row_id DESC;
+            ]]>
+        </prop>
+        <prop key="select.activity-data">
+            <![CDATA[
+                SELECT DISTINCT subscriber_msisdn as mdn, file_date from us_att_data_record WHERE file_date >= date_add(date(now()), interval -1 day) ORDER BY row_id DESC;
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>
