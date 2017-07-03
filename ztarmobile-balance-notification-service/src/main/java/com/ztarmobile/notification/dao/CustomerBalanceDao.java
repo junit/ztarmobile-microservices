@@ -34,4 +34,15 @@ public interface CustomerBalanceDao {
      * @return Total of records found.
      */
     int countCustomerBalance(String mdn, CustomerBalance customerBalance);
+
+    /**
+     * Retrieves the modified data.
+     * 
+     * @param mdn
+     *            The MDN.
+     * @param bundleRowId
+     *            The bundle row id.
+     * @return The modified data.
+     */
+    int getModifiedData(String mdn, int bundleRowId);
 }

@@ -55,5 +55,6 @@ public class NotificationScheduledTask {
             // send the request to the queue
             jmsTemplate.convertAndSend(NOTIFICATION_REQ_QUEUE, mdn);
         }
+        log.debug("Ending notifications...");
     }
 }

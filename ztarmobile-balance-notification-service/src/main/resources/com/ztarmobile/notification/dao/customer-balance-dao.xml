@@ -21,7 +21,11 @@
                 SELECT COUNT(*) FROM us_customer_balances WHERE mdn = :mdn AND plan_billing_id = :plan_billing_id
             ]]>
         </prop>
-        
+        <prop key="modified-data.customer-balances">
+            <![CDATA[
+                SELECT IFNULL(SUM(modified_data), 0) as modified_data FROM us_customer_balances WHERE mdn = :mdn limit 1
+            ]]>
+        </prop>
     </util:properties>
     
 </beans>

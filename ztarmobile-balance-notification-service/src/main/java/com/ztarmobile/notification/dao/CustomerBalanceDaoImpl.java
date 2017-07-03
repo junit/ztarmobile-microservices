@@ -90,4 +90,20 @@ public class CustomerBalanceDaoImpl extends AbstractJdbc implements CustomerBala
 
         return this.getZtarJdbc().queryForObject(sql, new MapSqlParameterSource(params), Integer.class);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getModifiedData(String mdn, int bundleRowId) {
+        int modifiedData = 0;
+        String sql = sqlStatements.getProperty("modified-data.customer-balances");
+
+        if (bundleRowId != 0) {
+            Map<String, String> params = new HashMap<>();
+            params.put("mdn", mdn);
+            return this.getZtarJdbc().queryForObject(sql, new MapSqlParameterSource(params), Integer.class);
+        }
+        return modifiedData;
+    }
 }

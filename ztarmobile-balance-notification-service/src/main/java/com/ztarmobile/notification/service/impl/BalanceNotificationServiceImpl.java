@@ -258,8 +258,15 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
         try {
             switch (bucket) {
             case DATA:
+                // converts from MB to KB... (modified data)
+                int modifiedData = myBalance.getModifiedData();
+                modifiedData = modifiedData * 1024;
+
                 int myTotalData = getEffeBucketValue(myBalance.getData()) + getEffeBucketValue(myBalance.getHighData())
                         + getEffeBucketValue(myBalance.getLowData());
+                // adds the modified data into the total data
+                myTotalData = modifiedData + myTotalData;
+
                 int allocData = Integer.parseInt(accountInfo.getAllocData());
                 // converts from MB to KB...
                 allocData = allocData * 1024;
@@ -299,6 +306,7 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
         CustomerBalance customerBalance = new CustomerBalance();
         customerBalance.setMdn(mdn);
         customerBalance.setBundleRowId(accountInfo.getBundleRowId());
+        customerBalance.setModifiedData(customerBalanceDao.getModifiedData(mdn, accountInfo.getBundleRowId()));
 
         // sets the balances for each bucket.
         if (accountStatus.getDedicatedAccounts() != null && !accountStatus.getDedicatedAccounts().isEmpty()) {

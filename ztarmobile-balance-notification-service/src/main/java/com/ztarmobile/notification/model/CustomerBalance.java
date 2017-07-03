@@ -28,6 +28,7 @@ public class CustomerBalance {
     private boolean notifiedData;
     private boolean notifiedVoice;
     private boolean notifiedSms;
+    private int modifiedData;
 
     private Status status = Status.SUCCESS;
     private String statusMessage;
@@ -243,6 +244,21 @@ public class CustomerBalance {
     }
 
     /**
+     * @return the modifiedData
+     */
+    public int getModifiedData() {
+        return modifiedData;
+    }
+
+    /**
+     * @param modifiedData
+     *            the modifiedData to set
+     */
+    public void setModifiedData(int modifiedData) {
+        this.modifiedData = modifiedData;
+    }
+
+    /**
      * @return the status
      */
     public Status getStatus() {
@@ -283,6 +299,7 @@ public class CustomerBalance {
                 + lowData + ", highData=" + highData + ", voice=" + voice + ", sms=" + sms + ", mms=" + mms
                 + ", percentageData=" + percentageData + ", percentageVoice=" + percentageVoice + ", percentageSms="
                 + percentageSms + ", notifiedData=" + notifiedData + ", notifiedVoice=" + notifiedVoice
-                + ", notifiedSms=" + notifiedSms + ", status=" + status + ", statusMessage=" + statusMessage + "]";
+                + ", notifiedSms=" + notifiedSms + ", modifiedData=" + modifiedData + ", status=" + status
+                + ", statusMessage=" + statusMessage + "]";
     }
 }
