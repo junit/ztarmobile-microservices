@@ -42,8 +42,8 @@ public class NotificationReceiver {
     /**
      * This method receives the request from the queue and process it.
      * 
-     * @param request
-     *            The request.
+     * @param mdn
+     *            The MDN.
      */
     @JmsListener(destination = NOTIFICATION_REQ_QUEUE, containerFactory = "myFactory")
     public void receiveMessage(String mdn) {
