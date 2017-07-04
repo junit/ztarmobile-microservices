@@ -1,4 +1,15 @@
-# PROFILE configuration stuff
+# BALANCE NOTIFICATION configuration stuff
+notification:
+  cron:
+    activity: 0 0 12 1 1 ?
+  ztarmobile: 
+    context: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm
+    search:
+      provider-uri: ${notification.ztarmobile.context}/account/search/provider
+      ztar-uri: ${notification.ztarmobile.context}/account/search/ztar
+    sender:
+      sms-uri: ${notification.ztarmobile.context}/notification/sms
+
 # LOGGING configuration stuff
 logging:
   level:
@@ -12,11 +23,18 @@ server:
 
 spring:
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
-  datasource:
+  datasource-cdrs:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: ztar11
+    test-while-idle: false
+    url: jdbc:mysql://localhost:3306/cdrs?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: root
+    validation-query: SELECT 1
+  datasource-ztar:
     driver-class-name: com.mysql.jdbc.Driver
     password: ztar11admin
-    test-while-idle: true
-    url: jdbc:mysql://solo.ztarmobile.local:3306/account?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    test-while-idle: false
+    url: jdbc:mysql://solo.ztarmobile.local:3306/ztar?allowMultiQueries=true&autoReconnect=true&useSSL=false
     username: ztar_db_user
     validation-query: SELECT 1
 # Email (MailProperties)

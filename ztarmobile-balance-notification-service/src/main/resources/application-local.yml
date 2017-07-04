@@ -1,13 +1,14 @@
 # BALANCE NOTIFICATION configuration stuff
 notification:
   cron:
-    activity: 0 0 0/2 1/1 * ?
-  ztarmobile:
+    activity: 0 0 7 1/1 * ? *
+  ztarmobile: 
+    context: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm
     search:
-      provider-uri: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm/account/search/provider
-      ztar-uri: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm/account/search/ztar
+      provider-uri: ${notification.ztarmobile.context}/account/search/provider
+      ztar-uri: ${notification.ztarmobile.context}/account/search/ztar
     sender:
-      sms-uri: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm/notification/sms
+      sms-uri: ${notification.ztarmobile.context}/notification/sms
 
 # LOGGING configuration stuff
 logging:
