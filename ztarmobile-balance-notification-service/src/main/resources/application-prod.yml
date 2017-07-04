@@ -22,6 +22,10 @@ server:
   address: localhost
 
 spring:
+# ACTIVEMQ (ActiveMQProperties)
+  activemq:
+    broker-url: tcp://10.0.0.122:61616
+    in-memory: false
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
   datasource-cdrs:
     driver-class-name: com.mysql.jdbc.Driver
