@@ -1,4 +1,5 @@
-nohup java -Dspring.datasource-cdrs.username=xxxxx \
+nohup java -Dinfo.notify-dev=true \
+           -Dspring.datasource-cdrs.username=xxxxx \
            -Dspring.datasource-cdrs.password=xxxxx \
            -Dspring.datasource-ztar.username=xxxxx \
            -Dspring.datasource-ztar.password=xxxxx \
