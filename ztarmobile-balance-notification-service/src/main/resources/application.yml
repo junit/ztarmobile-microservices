@@ -33,7 +33,7 @@ server:
 spring:
 # IDENTITY (ContextIdApplicationContextInitializer)
   application:
-    name: User Profile Microservice v1
+    name: Balance Notification Microservice v1
 
 # PROJECT INFORMATION (ProjectInfoProperties)
   info:
