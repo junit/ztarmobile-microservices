@@ -233,7 +233,7 @@
                         <configuration>
                             <target>
                                 <echo>*******************************************</echo>
-                                <echo>****** Current Active Profile: ${activatedProperties}</echo>
+                                <echo>****** Current Active Profile: ${activatedProperties} *******</echo>
                                 <echo>*******************************************</echo>
                             </target>
                         </configuration>

@@ -1,4 +1,4 @@
-package com.ztarmobile.profile;
+package com.ztarmobile.notification;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
