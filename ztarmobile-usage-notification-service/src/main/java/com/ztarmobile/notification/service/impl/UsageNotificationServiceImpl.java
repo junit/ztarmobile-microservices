@@ -6,15 +6,24 @@
  */
 package com.ztarmobile.notification.service.impl;
 
+import static com.ztarmobile.notification.common.ReportHelper.createHeader;
+import static com.ztarmobile.notification.common.ReportHelper.createReportName;
+import static com.ztarmobile.notification.common.ReportHelper.createRow;
+
 import com.ztarmobile.notification.dao.SubscriberUsageDao;
+import com.ztarmobile.notification.model.EmailAttachment;
 import com.ztarmobile.notification.model.SubscriberUsage;
+import com.ztarmobile.notification.model.UsageEmailNotification;
+import com.ztarmobile.notification.notification.CustomerUsageMailSender;
 import com.ztarmobile.notification.service.UsageNotificationService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,10 +47,22 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
     private SubscriberUsageDao subscriberUsageDao;
 
     /**
+     * Dependency to send notifications.
+     */
+    @Autowired
+    private CustomerUsageMailSender customerUsageMailSender;
+
+    /**
+     * The bundle Id.
+     */
+    @Value("${notification.bundle-id}")
+    private String bundleId;
+
+    /**
      * {@inheritDoc}
      */
     @Override
-    public List<SubscriberUsage> getAllSubscriberActivityByBundle(String bundleId) {
+    public List<SubscriberUsage> getAllSubscriberActivity() {
         log.debug("Retrieving subscribers by bundle: " + bundleId);
         return subscriberUsageDao.findUsageByBundle(bundleId);
     }
@@ -52,10 +73,27 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
     @Override
     public void performNotification(List<SubscriberUsage> list) {
         log.debug("Sending notification for: " + list.size() + " subscribers");
+        List<EmailAttachment> attachments = new ArrayList<>();
         try {
+            StringBuilder sb = new StringBuilder(createHeader());
+            for (SubscriberUsage detail : list) {
+                // creates the content of the attachment
+                sb.append(createRow(detail));
+            }
+            EmailAttachment report = new EmailAttachment();
+            report.setName(createReportName());
+            report.setContent(sb.toString().getBytes());
+            attachments.add(report);
 
+            // we notify the user...
+            UsageEmailNotification notification = new UsageEmailNotification();
+            notification.setTo("arivas@ztarmobile.com");
+            notification.setBundleId(bundleId);
+            notification.setContent(attachments);
+            customerUsageMailSender.sendEmail(notification);
         } catch (Throwable ex) {
             log.error(ex.toString());
+            ex.printStackTrace();
         }
         log.debug("Notification is done");
     }

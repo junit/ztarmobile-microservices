@@ -19,13 +19,11 @@ import java.util.List;
  */
 public interface UsageNotificationService {
     /**
-     * Gets all usage subscribers associated to a specific bundle.
-     * 
-     * @param bundleId
+     * Gets all usage subscribers.
      * 
      * @return All subscriber activity.
      */
-    List<SubscriberUsage> getAllSubscriberActivityByBundle(String bundleId);
+    List<SubscriberUsage> getAllSubscriberActivity();
 
     /**
      * Performs the notification to the customer.
