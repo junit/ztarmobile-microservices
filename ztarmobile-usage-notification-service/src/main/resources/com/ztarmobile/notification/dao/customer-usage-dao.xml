@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="subscriberUsageDao">
+        <prop key="select.subscriber_usage">
+            <![CDATA[
+                SELECT mdn FROM canada_bundle_billing WHERE bundle_id = :bundle_id
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>

@@ -1,0 +1,63 @@
+/* 
+ * Copyright (C) Ztar Mobile, Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Armando Rivas <arivas@ztarmobile.com>, Jun 2017.
+ */
+package com.ztarmobile.notification.service.impl;
+
+import com.ztarmobile.notification.dao.SubscriberUsageDao;
+import com.ztarmobile.notification.model.SubscriberUsage;
+import com.ztarmobile.notification.service.UsageNotificationService;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * Direct service implementation that performs the notification process.
+ *
+ * @author armandorivas
+ * @version %I%, %G%
+ * @since 1.0
+ */
+@Service
+public class UsageNotificationServiceImpl implements UsageNotificationService {
+    /**
+     * Logger for this class.
+     */
+    private static final Logger log = LoggerFactory.getLogger(UsageNotificationServiceImpl.class);
+
+    /**
+     * Customer Usage DAO.
+     */
+    @Autowired
+    private SubscriberUsageDao subscriberUsageDao;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SubscriberUsage> getAllSubscriberActivityByBundle(String bundleId) {
+        log.debug("Retrieving subscribers by bundle: " + bundleId);
+        return subscriberUsageDao.findUsageByBundle(bundleId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void performNotification(List<SubscriberUsage> list) {
+        log.debug("Sending notification for: " + list.size() + " subscribers");
+        try {
+
+        } catch (Throwable ex) {
+            log.error(ex.toString());
+        }
+        log.debug("Notification is done");
+    }
+
+}

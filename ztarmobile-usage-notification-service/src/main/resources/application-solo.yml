@@ -1,0 +1,44 @@
+# USAGE NOTIFICATION configuration stuff
+notification:
+  bundle-id: SPRINGPROMO3GB
+  cron:
+    activity: 0 0 12 1 1 ?
+
+# LOGGING configuration stuff
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+# HOST SERVER (where the service is running on)
+server:
+  address: solo.ztarmobile.local
+
+spring:
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: ztar11admin
+    test-while-idle: false
+    url: jdbc:mysql://solo.ztarmobile.local:3306/ztar?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: ztar_db_user
+    validation-query: SELECT 1
+# Email (MailProperties)
+  mail:
+    defaultEncoding: UTF-8
+    host: smtpout.secureserver.net
+    password: unlmtd45
+    port: 80
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: false
+    username: admin@good2gomobile.com
+# PROFILES
+  profiles:
+    active: "@activatedProperties@"
+    
