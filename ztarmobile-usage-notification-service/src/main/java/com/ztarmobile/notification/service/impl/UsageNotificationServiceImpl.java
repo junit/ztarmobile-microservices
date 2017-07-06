@@ -90,6 +90,7 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
             notification.setTo("arivas@ztarmobile.com");
             notification.setBundleId(bundleId);
             notification.setContent(attachments);
+            notification.setSubject("Subscriber Usage Report");
             customerUsageMailSender.sendEmail(notification);
         } catch (Throwable ex) {
             log.error(ex.toString());

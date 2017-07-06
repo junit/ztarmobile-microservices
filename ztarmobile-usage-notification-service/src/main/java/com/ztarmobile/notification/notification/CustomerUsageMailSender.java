@@ -97,7 +97,7 @@ public class CustomerUsageMailSender {
             final Context ctx = new Context();
             ctx.setVariable("plan", email.getBundleId());
 
-            final String htmlContent = this.templateEngine.process("subcriber_usage", ctx);
+            final String htmlContent = this.templateEngine.process("subscriber_usage", ctx);
             // overrides the content of the body...
             email.setMessageBody(htmlContent);
         }
