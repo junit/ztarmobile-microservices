@@ -59,6 +59,12 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
     private String bundleId;
 
     /**
+     * Recipients.
+     */
+    @Value("${notification.recipients}")
+    private String recipients;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -87,7 +93,7 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
 
             // we notify the user...
             UsageEmailNotification notification = new UsageEmailNotification();
-            notification.setTo("arivas@ztarmobile.com");
+            notification.setTo(recipients);
             notification.setBundleId(bundleId);
             notification.setContent(attachments);
             notification.setSubject("Subscriber Usage Report");

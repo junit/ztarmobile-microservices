@@ -3,6 +3,7 @@ notification:
   bundle-id: PROMOUNLTALK3GB 
   cron:
     activity: 0 0 7 1/1 * ?
+  recipients: scott_laird@ztarmobile.com,matt_callahan@ztarmobile.com
 
 # LOGGING configuration stuff
 logging:

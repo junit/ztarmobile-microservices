@@ -67,7 +67,7 @@ public class CustomerUsageMailSender {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(email.getFrom());
-            helper.setTo(email.getTo());
+            helper.setTo(join(email.getTo(), ","));
             helper.setSubject(email.getSubject());
             helper.setText(email.getMessageBody(), true);
 
@@ -83,6 +83,10 @@ public class CustomerUsageMailSender {
         } catch (MessagingException e) {
             log.warn("Unable to send email: " + e);
         }
+    }
+
+    private String[] join(String to, String separator) {
+        return to.split(separator);
     }
 
     /**

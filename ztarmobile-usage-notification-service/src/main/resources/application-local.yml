@@ -3,6 +3,7 @@ notification:
   bundle-id: SPRINGPROMO3GB
   cron:
     activity: 0 0 9 1/1 * ?
+  recipients: arivas@ztarmobile.com,rivasarmando271084@icloud.com
 
 # LOGGING configuration stuff
 logging:
