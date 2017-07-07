@@ -3,12 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>com.ztarmobile</groupId>
-    <artifactId>project-root</artifactId>
+    <artifactId>ztarmobile-microservices</artifactId>
     <version>1.0.0.RELEASE</version>
     <packaging>pom</packaging>
-    <name>Ztar</name>
+    <name>Ztar Microservices</name>
     
     <modules>
+        <module>ztarmobile-invoicing-process</module>
+        <module>ztarmobile-user-profile-service</module>
+        <module>ztarmobile-balance-notification-service</module>
         <module>ztarmobile-usage-notification-service</module>
     </modules>
 </project>
