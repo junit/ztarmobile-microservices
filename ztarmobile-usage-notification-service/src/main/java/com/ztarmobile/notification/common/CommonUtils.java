@@ -9,6 +9,10 @@ package com.ztarmobile.notification.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Utility to handle some common operations.
  *
@@ -16,6 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @since 03/01/17
  */
 public class CommonUtils {
+    /**
+     * The format.
+     */
+    private static DateFormat DF = new SimpleDateFormat("MM/dd/yyyy");
 
     /**
      * Private constructor.
@@ -99,6 +107,14 @@ public class CommonUtils {
      */
     public static void invalidInput(String msg) {
         throw new IllegalArgumentException(msg);
+    }
+
+    public static String getFormattedDate(Date date) {
+        String dateString = "";
+        if (date != null) {
+            dateString = DF.format(date);
+        }
+        return dateString;
     }
 
     /**

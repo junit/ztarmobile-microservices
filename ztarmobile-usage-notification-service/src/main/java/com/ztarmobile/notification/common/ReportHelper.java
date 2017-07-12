@@ -42,13 +42,27 @@ public class ReportHelper {
 
     /**
      * Creates the header of the usage report.
-     *
+     * 
+     * @param includeError
+     *            Include error?
      * @return The header of the reports.
      */
-    public static String createHeader() {
+    public static String createHeader(boolean includeError) {
         StringBuilder sb = new StringBuilder();
+
         sb.append("MDN").append(COMMA);
-        sb.append("MDN2").append(BL);
+        sb.append("Activation Date").append(COMMA);
+        sb.append("Balance Account").append(COMMA);
+        sb.append("DA1").append(COMMA);
+        sb.append("DA2").append(COMMA);
+        sb.append("DA4").append(COMMA);
+        sb.append("Service Class");
+
+        if (includeError) {
+            sb.append(COMMA);
+            sb.append("Error");
+        }
+        sb.append(BL);
         return sb.toString();
     }
 
@@ -62,9 +76,32 @@ public class ReportHelper {
     public static String createRow(SubscriberUsage vo) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(vo.getMdn()).append(COMMA);
-        sb.append(vo.getMdn()).append(BL);
+        sb.append(fromNullToEmpty(vo.getMdn())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getActivationDate())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getAccountBalance())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getDedicatedAccount1())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getDedicatedAccount2())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getDedicatedAccount4())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getServiceClass()));
+
+        if (vo.isError()) {
+            sb.append(COMMA);
+            sb.append(vo.getErrorDescription());
+        }
+        sb.append(BL);
         return sb.toString();
+    }
+
+    /**
+     * Utility used to convert from a null value into an empty value. If the
+     * input is not null, just return the original value.
+     * 
+     * @param value
+     *            The value.
+     * @return The converted value.
+     */
+    private static String fromNullToEmpty(String value) {
+        return value == null ? "" : value.trim();
     }
 
 }

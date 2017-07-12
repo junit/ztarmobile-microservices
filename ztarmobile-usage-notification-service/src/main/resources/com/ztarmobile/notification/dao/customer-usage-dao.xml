@@ -9,7 +9,7 @@
     <util:properties id="subscriberUsageDao">
         <prop key="select.subscriber_usage">
             <![CDATA[
-                SELECT mdn FROM canada_bundle_billing WHERE bundle_id = :bundle_id
+                SELECT mdn, service_class FROM canada_bundle_billing WHERE billing_status = 'A' AND bundle_id = :bundle_id
             ]]>
         </prop>
     </util:properties>

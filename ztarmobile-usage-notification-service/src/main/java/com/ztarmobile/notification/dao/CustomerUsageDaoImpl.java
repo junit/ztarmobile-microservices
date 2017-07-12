@@ -66,6 +66,7 @@ public class CustomerUsageDaoImpl extends AbstractJdbc implements SubscriberUsag
         public SubscriberUsage mapRow(ResultSet rs, int rowNum) throws SQLException {
             SubscriberUsage vo = new SubscriberUsage();
             vo.setMdn(rs.getString("mdn"));
+            vo.setServiceClass(rs.getString("service_class"));
             return vo;
         }
     }

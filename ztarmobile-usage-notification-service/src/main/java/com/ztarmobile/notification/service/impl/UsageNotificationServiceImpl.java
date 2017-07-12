@@ -81,7 +81,7 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
         log.debug("Sending notification for: " + list.size() + " subscribers");
         List<EmailAttachment> attachments = new ArrayList<>();
         try {
-            StringBuilder sb = new StringBuilder(createHeader());
+            StringBuilder sb = new StringBuilder(createHeader(hasError(list)));
             for (SubscriberUsage detail : list) {
                 // creates the content of the attachment
                 sb.append(createRow(detail));
@@ -99,10 +99,28 @@ public class UsageNotificationServiceImpl implements UsageNotificationService {
             notification.setSubject("Subscriber Usage Report");
             customerUsageMailSender.sendEmail(notification);
         } catch (Throwable ex) {
-            log.error(ex.toString());
+            log.error("Unable to send email notificiation due to: " + ex.toString());
             ex.printStackTrace();
+            throw ex;
         }
         log.debug("Notification is done");
+    }
+
+    /**
+     * Based on a list, it determines whether there's an error in one of its
+     * elements.
+     * 
+     * @param list
+     *            The list of items.
+     * @return has error or not.
+     */
+    private boolean hasError(List<SubscriberUsage> list) {
+        for (SubscriberUsage subscriberUsage : list) {
+            if (subscriberUsage.isError()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
