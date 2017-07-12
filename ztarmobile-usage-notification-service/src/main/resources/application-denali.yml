@@ -4,6 +4,10 @@ notification:
   cron:
     activity: 0 0 12 1 1 ?
   recipients: arivas@ztarmobile.com,rivasarmando271084@icloud.com
+  ztarmobile:
+    context: https://localhost:38181/ztarmobile/webservices/rest/internal/zrm
+    search:
+      provider-uri: ${notification.ztarmobile.context}/account/search/provider
 
 # LOGGING configuration stuff
 logging:

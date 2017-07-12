@@ -1,9 +1,13 @@
 # USAGE NOTIFICATION configuration stuff
 notification:
-  bundle-id: PROMOUNLTALK3GB 
+  bundle-id: PROMOUNLTALK3GB
   cron:
     activity: 0 0 7 1/1 * ?
   recipients: scott_laird@ztarmobile.com,matt_callahan@ztarmobile.com
+  ztarmobile:
+    context: https://10.0.0.11:9191/ztarmobile/webservices/rest/internal/zrm
+    search:
+      provider-uri: ${notification.ztarmobile.context}/account/search/provider
 
 # LOGGING configuration stuff
 logging:
