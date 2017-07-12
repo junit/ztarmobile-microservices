@@ -28,7 +28,7 @@ management:
 
 # EMBEDDED SERVER CONFIGURATION (ServerProperties)
 server:
-  port: 38080
+  port: 38075
 
 spring:
 # IDENTITY (ContextIdApplicationContextInitializer)
