@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.notification.tasks;
 
+import static com.ztarmobile.notification.common.CommonUtils.getDaysBetween;
 import static com.ztarmobile.notification.common.CommonUtils.getFormattedDate;
 
 import com.sun.jersey.core.util.MultivaluedMapImpl;
@@ -71,6 +72,7 @@ public class NotificationScheduledTask {
                 accountStatus = getAccountStatusFromProvider(detail.getMdn(), "CAN");
                 detail.setAccountBalance(accountStatus.getBalance());
                 detail.setDedicatedAccount1(accountStatus.getDedicatedAccounts().get(0).getAccountBalance()); // DA1
+                detail.setRemainingDays1(getDaysBetween(accountStatus.getDedicatedAccounts().get(0).getExpiryDate()));
                 detail.setDedicatedAccount2(accountStatus.getDedicatedAccounts().get(1).getAccountBalance()); // DA2
                 detail.setDedicatedAccount4(accountStatus.getDedicatedAccounts().get(3).getAccountBalance()); // DA4
                 detail.setActivationDate(getFormattedDate(accountStatus.getActivationDate()));

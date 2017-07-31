@@ -53,6 +53,7 @@ public class ReportHelper {
         sb.append("MDN").append(COMMA);
         sb.append("Activation Date").append(COMMA);
         sb.append("Balance Account").append(COMMA);
+        sb.append("Remaining days").append(COMMA);
         sb.append("DA1").append(COMMA);
         sb.append("DA2").append(COMMA);
         sb.append("DA4").append(COMMA);
@@ -79,6 +80,7 @@ public class ReportHelper {
         sb.append(fromNullToEmpty(vo.getMdn())).append(COMMA);
         sb.append(fromNullToEmpty(vo.getActivationDate())).append(COMMA);
         sb.append(fromNullToEmpty(vo.getAccountBalance())).append(COMMA);
+        sb.append(fromNullToEmpty(vo.getRemainingDays1())).append(COMMA);
         sb.append(fromNullToEmpty(vo.getDedicatedAccount1())).append(COMMA);
         sb.append(fromNullToEmpty(vo.getDedicatedAccount2())).append(COMMA);
         sb.append(fromNullToEmpty(vo.getDedicatedAccount4())).append(COMMA);

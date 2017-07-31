@@ -17,6 +17,7 @@ public class SubscriberUsage {
     private String mdn;
     private String activationDate;
     private String dedicatedAccount1;
+    private String remainingDays1;
     private String dedicatedAccount2;
     private String dedicatedAccount4;
     private String accountBalance;
@@ -67,6 +68,21 @@ public class SubscriberUsage {
      */
     public void setDedicatedAccount1(String dedicatedAccount1) {
         this.dedicatedAccount1 = dedicatedAccount1;
+    }
+
+    /**
+     * @return the remainingDays1
+     */
+    public String getRemainingDays1() {
+        return remainingDays1;
+    }
+
+    /**
+     * @param remainingDays1
+     *            the remainingDays1 to set
+     */
+    public void setRemainingDays1(String remainingDays1) {
+        this.remainingDays1 = remainingDays1;
     }
 
     /**
@@ -167,8 +183,8 @@ public class SubscriberUsage {
     @Override
     public String toString() {
         return "SubscriberUsage [mdn=" + mdn + ", activationDate=" + activationDate + ", dedicatedAccount1="
-                + dedicatedAccount1 + ", dedicatedAccount2=" + dedicatedAccount2 + ", dedicatedAccount4="
-                + dedicatedAccount4 + ", accountBalance=" + accountBalance + ", serviceClass=" + serviceClass
-                + ", error=" + error + ", errorDescription=" + errorDescription + "]";
+                + dedicatedAccount1 + ", remainingDays1=" + remainingDays1 + ", dedicatedAccount2=" + dedicatedAccount2
+                + ", dedicatedAccount4=" + dedicatedAccount4 + ", accountBalance=" + accountBalance + ", serviceClass="
+                + serviceClass + ", error=" + error + ", errorDescription=" + errorDescription + "]";
     }
 }

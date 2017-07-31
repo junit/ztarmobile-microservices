@@ -9,8 +9,11 @@ package com.ztarmobile.notification.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -115,6 +118,39 @@ public class CommonUtils {
             dateString = DF.format(date);
         }
         return dateString;
+    }
+
+    /**
+     * Gets the amount of days between now and the endDate.
+     * 
+     * @param endDate
+     *            The end date.
+     * @return Total of days.
+     */
+    public static String getDaysBetween(Date endDate) {
+        String days = "";
+        if (endDate == null) {
+            // for some reason Ericsson returned as null
+            days = "-1";
+        }
+        Calendar calendarToday = Calendar.getInstance();
+        Calendar calendarEndDate = Calendar.getInstance();
+        calendarEndDate.setTime(endDate);
+
+        int year = calendarEndDate.get(Calendar.YEAR);
+        if (year == 9999) {
+            // for some reason E/ returned 9999, under this scenario we don't
+            // need to calculate anything.
+            days = "N/A";
+        } else {
+            long timeElapsed = calendarEndDate.getTimeInMillis() - calendarToday.getTimeInMillis();
+            BigDecimal bd = new BigDecimal(timeElapsed);
+            bd = bd.divide(new BigDecimal(1000 * 60 * 60 * 24), 2, RoundingMode.HALF_UP);
+
+            days = String.valueOf(Math.round(bd.doubleValue()));
+        }
+
+        return days;
     }
 
     /**
