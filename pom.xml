@@ -8,10 +8,51 @@
     <packaging>pom</packaging>
     <name>Ztar Microservices</name>
     
+    <properties>
+        <project-checkstyle.failOnViolation>true</project-checkstyle.failOnViolation>
+        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+    </properties>
+    
     <modules>
         <module>ztarmobile-invoicing-process</module>
         <module>ztarmobile-user-profile-service</module>
         <module>ztarmobile-balance-notification-service</module>
         <module>ztarmobile-usage-notification-service</module>
+        
+        <module>ztarmobile-common</module>
     </modules>
+    
+    <developers>
+        <developer>
+            <id>arivas</id>
+            <name>Armando Rivas</name>
+            <email>arivas@gmail.com</email>
+        </developer>
+    </developers>
+    
+    <build>
+		<pluginManagement>
+            <!-- Usage: checkstyle:check -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <failOnViolation>${project-checkstyle.failOnViolation}</failOnViolation>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+        </pluginManagement>
+    </build>
 </project>
