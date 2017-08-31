@@ -1,0 +1,45 @@
+# USAGE NOTIFICATION configuration stuff
+notification:
+  cron:
+    activity: 0 0 10 3 * ?
+  product: FREEUP_ATT
+  recipients: arivas@ztarmobile.com,driewski@ztarmobile.com
+
+# LOGGING configuration stuff
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+# HOST SERVER (where the service is running on)
+server:
+  address: localhost
+
+spring:
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: xxxxxx
+    test-while-idle: true
+    url: jdbc:mysql://10.0.0.60:3306/ztar?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: xxxxxx
+    validation-query: SELECT 1
+# Email (MailProperties)
+  mail:
+    defaultEncoding: UTF-8
+    host: smtpout.secureserver.net
+    password: unlmtd45
+    port: 80
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: true
+    username: admin@good2gomobile.com
+# PROFILES
+  profiles:
+    active: "@activatedProperties@"
+    

@@ -1,0 +1,47 @@
+# USAGE NOTIFICATION configuration stuff
+notification:
+  cron:
+    activity: 0 0 10 3 * ?
+  product: FREEUP_ATT
+  recipients: arivas@ztarmobile.com
+
+# LOGGING configuration stuff
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+# HOST SERVER (where the service is running on)
+server:
+  address: localhost
+
+spring:
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: ztar11
+    test-while-idle: false
+    url: jdbc:mysql://localhost:3306/ztar?allowMultiQueries=true&autoReconnect=true&useSSL=false
+    username: root
+    validation-query: SELECT 1
+# Email (MailProperties)
+# http://stackoverflow.com/questions/17987334/not-able-to-send-mail-using-java-mail-api
+# https://myaccount.google.com/lesssecureapps
+  mail:
+    defaultEncoding: UTF-8
+    host: smtp.gmail.com
+    password: <<yourgmailpass>>
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: false
+    username: <<youremailaccount@gmail.com>>
+# PROFILES
+  profiles:
+    active: "@activatedProperties@"
+    

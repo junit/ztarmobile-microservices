@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" xmlns:util="http://www.springframework.org/schema/util">
+    
+    <util:properties id="paymentTransactionDao">
+        <prop key="select.payment_details">
+            <![CDATA[
+                SELECT mdn, amount, DATE_FORMAT(payment_timestamp, '%Y-%m-%d %H:%i:%s') as payment_timestamp 
+                FROM payment_details 
+                WHERE type = 'CREDIT CARD' AND mdn <> '0000000000' AND product = :product
+                AND payment_timestamp BETWEEN :init_date AND :end_date
+                ORDER BY row_id desc
+            ]]>
+        </prop>
+    </util:properties>
+    
+</beans>
