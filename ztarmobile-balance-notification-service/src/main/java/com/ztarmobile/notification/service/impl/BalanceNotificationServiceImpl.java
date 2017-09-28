@@ -208,7 +208,7 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
             throws Exception {
 
         boolean sent = false;
-        int total = customerBalanceDao.countCustomerBalance(mdn, myBalance);
+        int total = customerBalanceDao.countCustomerBalance(mdn, myBalance, bucket);
         if (total == 0) {
             log.debug("Trying to send SMS to MDN: " + mdn + " - " + bucket);
 
@@ -241,6 +241,8 @@ public class BalanceNotificationServiceImpl implements BalanceNotificationServic
             }
         } else {
             log.debug("Skipping SMS for MDN: " + mdn + " -> " + bucket);
+            log.debug("Message already sent, we marked it as sent: " + mdn + " -> " + bucket);
+            sent = true;
         }
         return sent;
     }

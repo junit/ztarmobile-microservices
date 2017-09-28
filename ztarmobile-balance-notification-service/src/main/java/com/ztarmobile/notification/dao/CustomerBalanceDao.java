@@ -6,6 +6,7 @@
  */
 package com.ztarmobile.notification.dao;
 
+import com.ztarmobile.notification.model.Bucket;
 import com.ztarmobile.notification.model.CustomerBalance;
 
 /**
@@ -31,9 +32,11 @@ public interface CustomerBalanceDao {
      *            The MDN.
      * @param customerBalance
      *            The customer balance.
+     * @param bucket
+     *            The bucket.
      * @return Total of records found.
      */
-    int countCustomerBalance(String mdn, CustomerBalance customerBalance);
+    int countCustomerBalance(String mdn, CustomerBalance customerBalance, Bucket bucket);
 
     /**
      * Retrieves the modified data.

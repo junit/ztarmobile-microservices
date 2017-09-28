@@ -7,6 +7,7 @@
 package com.ztarmobile.notification.dao;
 
 import com.ztarmobile.notification.common.AbstractJdbc;
+import com.ztarmobile.notification.model.Bucket;
 import com.ztarmobile.notification.model.CustomerBalance;
 
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class CustomerBalanceDaoImpl extends AbstractJdbc implements CustomerBala
      * {@inheritDoc}
      */
     @Override
-    public int countCustomerBalance(String mdn, CustomerBalance customerBalance) {
+    public int countCustomerBalance(String mdn, CustomerBalance customerBalance, Bucket bucket) {
         String sql = sqlStatements.getProperty("count.customer-balances");
 
         String bundleId = customerBalance.getBundleRowId() == null ? null
@@ -87,8 +88,26 @@ public class CustomerBalanceDaoImpl extends AbstractJdbc implements CustomerBala
         Map<String, String> params = new HashMap<>();
         params.put("mdn", customerBalance.getMdn());
         params.put("plan_billing_id", bundleId);
+        String column = "";
 
-        return this.getZtarJdbc().queryForObject(sql, new MapSqlParameterSource(params), Integer.class);
+        // we found those ones that was already sent
+        switch (bucket) {
+        case DATA:
+            column = "notified_data = 1";
+            break;
+        case SMS:
+            column = "notified_sms = 1";
+            break;
+        case VOICE:
+            column = "notified_voice = 1";
+            break;
+        default:
+            break;
+        }
+        sql += " AND " + column;
+
+        int totalFound = this.getZtarJdbc().queryForObject(sql, new MapSqlParameterSource(params), Integer.class);
+        return totalFound;
     }
 
     /**
