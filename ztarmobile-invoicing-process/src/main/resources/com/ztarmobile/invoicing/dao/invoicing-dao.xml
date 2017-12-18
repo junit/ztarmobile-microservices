@@ -16,7 +16,7 @@
         </prop>
         <prop key="select.insert.invoicing_report_details">
             <![CDATA[
-                INSERT INTO invoicing_report_details (product_id, year, month, day, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms) 
+                INSERT INTO invoicing_report_details (product_id, year, month, day, mdn, rate_plan, wholesale_plan, days_on_plan, mou, mbs, sms, mms) 
                     SELECT * FROM (
                     SELECT (SELECT row_id FROM invoicing_catalog_product WHERE product = :product AND invoicing_enabled = 1),
                            year(call_date) as 'Year',
@@ -24,6 +24,7 @@
                            day(call_date) as 'Day',
                            mdn as mdn,
                            rate_plan as 'Rate-Plan',
+                           wholesale_plan as 'WholeSale-Plan',
                            ROUND((SUM(TIME_TO_SEC(TIMEDIFF(duration_end, duration_start))/3600)/24)) AS 'Days_On_Plan',
                            FLOOR(sum(actual_mou / :seconds )) as 'Actual_MOU',
                            ROUND(sum((actual_kbs/1024) / :kiloBytes ),0) as 'Actual_MBS',
@@ -47,7 +48,7 @@
         </prop>
         <prop key="select.invoicing_report_details">
             <![CDATA[
-                SELECT row_id, year, month, mdn, rate_plan, days_on_plan, mou, mbs, sms, mms
+                SELECT row_id, year, month, mdn, rate_plan, wholesale_plan, days_on_plan, mou, mbs, sms, mms
                   FROM invoicing_report_details
                  WHERE product_id = (SELECT row_id FROM invoicing_catalog_product WHERE product = :product)
                    AND STR_TO_DATE(CONCAT(year, '-', month, '-', day), '%Y-%m-%d') between :init_date and :end_date 

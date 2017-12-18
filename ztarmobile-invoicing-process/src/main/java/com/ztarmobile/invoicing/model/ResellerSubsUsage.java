@@ -21,6 +21,7 @@ public class ResellerSubsUsage {
     private long rowId;
     private Date callDate;
     private String ratePlan;
+    private String wholeSalePlan;
     private String mdn;
     private double allocMou; // maps to 'alloc_voice' field
     private double allocSms;
@@ -80,6 +81,21 @@ public class ResellerSubsUsage {
      */
     public void setRatePlan(String ratePlan) {
         this.ratePlan = ratePlan;
+    }
+
+    /**
+     * @return the wholeSalePlan
+     */
+    public String getWholeSalePlan() {
+        return wholeSalePlan;
+    }
+
+    /**
+     * @param wholeSalePlan
+     *            the wholeSalePlan to set
+     */
+    public void setWholeSalePlan(String wholeSalePlan) {
+        this.wholeSalePlan = wholeSalePlan;
     }
 
     /**
@@ -343,12 +359,11 @@ public class ResellerSubsUsage {
      */
     @Override
     public String toString() {
-        return "ResellerSubsUsage [rowId=" + rowId + ", callDate=" + callDate + ", ratePlan=" + ratePlan + ", mdn="
-                + mdn + ", allocMou=" + allocMou + ", allocSms=" + allocSms + ", allocMms=" + allocMms + ", allocMbs="
-                + allocMbs + ", actualMou=" + actualMou + ", actualSms=" + actualSms + ", actualMms=" + actualMms
-                + ", actualKbs=" + actualKbs + ", durationStart=" + durationStart + ", durationEnd=" + durationEnd
-                + ", newAddInd=" + newAddInd + ", renewalInd=" + renewalInd + ", lstUpdDate=" + lstUpdDate
-                + ", isUpdated=" + isUpdated + "]";
+        return "ResellerSubsUsage [rowId=" + rowId + ", callDate=" + callDate + ", ratePlan=" + ratePlan
+                + ", wholeSalePlan=" + wholeSalePlan + ", mdn=" + mdn + ", allocMou=" + allocMou + ", allocSms="
+                + allocSms + ", allocMms=" + allocMms + ", allocMbs=" + allocMbs + ", actualMou=" + actualMou
+                + ", actualSms=" + actualSms + ", actualMms=" + actualMms + ", actualKbs=" + actualKbs
+                + ", durationStart=" + durationStart + ", durationEnd=" + durationEnd + ", newAddInd=" + newAddInd
+                + ", renewalInd=" + renewalInd + ", lstUpdDate=" + lstUpdDate + ", isUpdated=" + isUpdated + "]";
     }
-
 }

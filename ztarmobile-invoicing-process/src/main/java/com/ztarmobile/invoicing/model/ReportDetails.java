@@ -18,6 +18,7 @@ public class ReportDetails {
     private int month;
     private String mdn;
     private String ratePlan;
+    private String wholeSalePlan;
     private int dayOnPlans;
     private double mou;
     private double mbs;
@@ -100,6 +101,21 @@ public class ReportDetails {
     }
 
     /**
+     * @return the wholeSalePlan
+     */
+    public String getWholeSalePlan() {
+        return wholeSalePlan;
+    }
+
+    /**
+     * @param wholeSalePlan
+     *            the wholeSalePlan to set
+     */
+    public void setWholeSalePlan(String wholeSalePlan) {
+        this.wholeSalePlan = wholeSalePlan;
+    }
+
+    /**
      * @return the dayOnPlans
      */
     public int getDayOnPlans() {
@@ -174,16 +190,14 @@ public class ReportDetails {
         this.mms = mms;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
         return "ReportDetails [rowId=" + rowId + ", year=" + year + ", month=" + month + ", mdn=" + mdn + ", ratePlan="
-                + ratePlan + ", dayOnPlans=" + dayOnPlans + ", mou=" + mou + ", mbs=" + mbs + ", sms=" + sms + ", mms="
-                + mms + "]";
+                + ratePlan + ", wholeSalePlan=" + wholeSalePlan + ", dayOnPlans=" + dayOnPlans + ", mou=" + mou
+                + ", mbs=" + mbs + ", sms=" + sms + ", mms=" + mms + "]";
     }
 
 }

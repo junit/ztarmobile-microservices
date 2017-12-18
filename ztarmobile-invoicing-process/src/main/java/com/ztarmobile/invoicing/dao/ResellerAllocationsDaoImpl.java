@@ -97,6 +97,7 @@ public class ResellerAllocationsDaoImpl extends AbstractJdbc implements Reseller
                 vo.setRowId(rs.getLong(++rcnt));
                 vo.setCallDate(new Date(rs.getDate(++rcnt).getTime()));
                 vo.setRatePlan(rs.getString(++rcnt));
+                vo.setWholeSalePlan(rs.getString(++rcnt));
                 vo.setMdn(rs.getString(++rcnt));
                 vo.setAllocMou(rs.getFloat(++rcnt));
                 vo.setAllocSms(rs.getFloat(++rcnt));

@@ -68,6 +68,7 @@ public class ReportHelper {
         sb.append("Month").append(COMMA);
         sb.append("MDN").append(COMMA);
         sb.append("Rate-Plan").append(COMMA);
+        sb.append("Wholesale-Plan").append(COMMA);
         sb.append("Days-On-Plan").append(COMMA);
         sb.append("Actual-MOU").append(COMMA);
         sb.append("Actual-MBS").append(COMMA);
@@ -89,6 +90,7 @@ public class ReportHelper {
         sb.append(vo.getMonth()).append(COMMA);
         sb.append(vo.getMdn()).append(COMMA);
         sb.append(vo.getRatePlan()).append(COMMA);
+        sb.append(vo.getWholeSalePlan()).append(COMMA);
         sb.append(vo.getDayOnPlans()).append(COMMA);
         sb.append(vo.getMou()).append(COMMA);
         sb.append(vo.getMbs()).append(COMMA);

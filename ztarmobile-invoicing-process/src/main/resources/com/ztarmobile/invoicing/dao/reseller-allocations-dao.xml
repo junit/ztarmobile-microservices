@@ -10,10 +10,10 @@
         <prop key="select.insert.reseller_subs_usage">
             <![CDATA[
                 INSERT INTO reseller_subs_usage( 
-                    row_id, product, call_date, rate_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
+                    row_id, product, call_date, rate_plan, wholesale_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
                     actual_mou, actual_sms, actual_mms, actual_kbs, duration_start, duration_end,
                     new_add_ind, renewal_ind, lst_upd_date)
-                SELECT  null, rpb.product, :call_dt as call_date, rpb.rate_plan, rpb.mdn,
+                SELECT  null, rpb.product, :call_dt as call_date, rpb.rate_plan, pln.att_rate_plan, rpb.mdn,
                         pln.dly_mou, pln.dly_sms, pln.dly_mms,
                         pln.dly_mbs, 0,0,0,0, 
                         (SELECT case when :duration_start < rpb.billing_start_date THEN rpb.billing_start_date ELSE :duration_start END) duration_start,
@@ -36,11 +36,11 @@
                 UPDATE    duration_end = (SELECT case when :duration_end > rpb.billing_end_date THEN rpb.billing_end_date ELSE :duration_end END);
                 
                 INSERT INTO reseller_subs_usage( 
-                    row_id, product, call_date, rate_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
+                    row_id, product, call_date, rate_plan, wholesale_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
                     actual_mou, actual_sms, actual_mms, actual_kbs, duration_start, duration_end,
                     new_add_ind, renewal_ind, lst_upd_date)
                     
-                SELECT null, rpb.product, :call_dt as call_date, rpb.rate_plan, rpb.mdn, 
+                SELECT null, rpb.product, :call_dt as call_date, rpb.rate_plan, pln.att_rate_plan, rpb.mdn, 
                         pln.dly_mou, pln.dly_sms, pln.dly_mms, 
                         pln.dly_mbs, 0,0,0,0, 
                         (SELECT case when :duration_start < rpb.billing_start_date THEN rpb.billing_start_date ELSE :duration_start END) duration_start,
@@ -71,11 +71,11 @@
                 UPDATE    renewal_ind = renewal_ind + if (isnull(note.note_timestamp), 0, 1);
                 
                 INSERT INTO reseller_subs_usage( 
-                    row_id, product, call_date, rate_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
+                    row_id, product, call_date, rate_plan, wholesale_plan, mdn, alloc_mou, alloc_sms, alloc_mms, alloc_mbs,
                     actual_mou, actual_sms, actual_mms, actual_kbs, duration_start, duration_end,
                     new_add_ind, renewal_ind, lst_upd_date)
                     
-                SELECT null, rpb.product, :call_dt as call_date, rpb.rate_plan, rpb.mdn, 
+                SELECT null, rpb.product, :call_dt as call_date, rpb.rate_plan, pln.att_rate_plan, rpb.mdn, 
                         pln.dly_mou, pln.dly_sms, pln.dly_mms, 
                         pln.dly_mbs, 0,0,0,0, 
                         (SELECT case when :duration_start < rpb.billing_start_date THEN rpb.billing_start_date ELSE :duration_start END) duration_start,
@@ -117,7 +117,7 @@
         </prop>
         <prop key="select.reseller_subs_usage">
             <![CDATA[
-                SELECT usg.row_id, usg.call_date, usg.rate_plan, usg.mdn, usg.alloc_mou, usg.alloc_sms,
+                SELECT usg.row_id, usg.call_date, usg.rate_plan, rrp.att_rate_plan, usg.mdn, usg.alloc_mou, usg.alloc_sms,
                        usg.alloc_mms, usg.alloc_mbs, usg.actual_mou, usg.actual_sms, usg.actual_mms,
                        usg.actual_kbs, usg.duration_start, usg.duration_end,
                        usg.new_add_ind, usg.renewal_ind, usg.lst_upd_date
